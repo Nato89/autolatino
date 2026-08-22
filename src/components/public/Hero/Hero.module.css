@@ -1,0 +1,46 @@
+.hero {
+    height: calc(100vh - 80px);
+    margin-top: 80px;
+    background-color: var(--bg-main);
+    background-image: url('../../../assets/images/hero/auto.png');
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-size: 60% 100%;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;  
+    max-width: 40%;
+    width: 100%;
+    padding-left: 4rem;
+    padding-right: 4rem;
+}
+
+.content .buttonWrapper {
+    align-self: center;  /* Solo el botón se centra */
+}
+
+.title {
+    font-family: var(--font-body);
+    font-size: 2rem;
+    color: var(--text-dark);    
+}
+
+.title .gold {
+    color: var(--gold-primary);
+    font-family: var(--font-title);    
+}
+
+.subtitle {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--text-dark);
+    line-height: 1.5;
+    font-weight: 600;
+}

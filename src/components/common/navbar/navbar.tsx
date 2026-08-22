@@ -1,6 +1,7 @@
 import styles from './Navbar.module.css';
 import logoIcon from '../../../assets/images/SVG/logo-icon.svg';
 import logoText from '../../../assets/images/SVG/logo-text.svg';
+import Button from '../Button/Button.tsx';
 
 const Navbar = () => {
     return (    
@@ -20,7 +21,7 @@ const Navbar = () => {
             </ul>
 
             {/* Botón de contacto */}
-            <button className={styles.contactButton}>Contáctanos</button>
+            <Button size="medium">Contáctanos</Button>
         </nav>
     );
 };
