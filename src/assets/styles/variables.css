@@ -1,0 +1,11 @@
+:root {
+  --bg-main: #FFFFFF;
+  --bg-nav: #07142B;
+  --gold-primary: #D8B45A;
+  --text-dark: #000000;
+  --text-light: #FFFFFF;
+  --hover-gold: #B89335;
+
+  --font-title: 'Oleo Script', cursive;
+  --font-body: 'Open Sans', sans-serif;
+}
