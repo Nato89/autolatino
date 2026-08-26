@@ -1,0 +1,86 @@
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-size: 60% 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 4rem;
+}
+
+.active {
+    display: flex;
+}
+
+.hidden {
+    display: none;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 30%;
+    width: 100%;
+}
+
+.content .buttonWrapper {
+    align-self: center;
+}
+
+.buttonWithIcon {
+    padding-right: 0px;
+}
+
+.whatsappIcon {
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
+}
+
+.buttonWrapperRelative {
+    position: relative;
+}
+
+.whatsappIconFloat {
+    position: absolute;
+    right: -42px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+}
+
+.title,
+.title2 {
+    font-family: var(--font-body);
+    font-size: 2rem;
+    color: var(--text-dark);
+}
+
+.title :global(.gold),
+.title2 :global(.gold) {
+    color: var(--gold-primary);
+    font-family: var(--font-title);
+}
+
+.subtitle {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--text-dark);
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+.title,
+.title2,
+.subtitle {
+    margin-left: 20%;
+    padding: 0;    
+    width: 100%;
+}
