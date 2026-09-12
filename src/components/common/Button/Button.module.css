@@ -14,11 +14,19 @@
   width: auto;
 }
 
+/* Para escritorio */
 .button:hover {
   background-color: var(--hover-gold);
   color: var(--text-light);
   transform: scale(1.08);
   border-color: 2px solid var(--text-light); 
+}
+
+/* Para móbil */
+.button:active {
+    background-color: var(--hover-gold);
+    color: var(--text-light);
+    transform: scale(0.95);  /* Se hace un poco más pequeño al tocar */
 }
 
 .small {

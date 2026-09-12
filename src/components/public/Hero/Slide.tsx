@@ -22,7 +22,7 @@ const Slide = ({ title, title2, subtitle, buttonText, hasIcon, image, isActive }
                 {title2 && <h1 className={styles.title2} dangerouslySetInnerHTML={{ __html: title2 }} />}
                 {subtitle && <p className={styles.subtitle} dangerouslySetInnerHTML={{ __html: subtitle }} />}                
                 <div className={`${styles.buttonWrapper} ${styles.buttonWrapperRelative}`}>
-                    <Button size="medium">
+                    <Button size="large">
                         {buttonText}
                         {hasIcon && (
                             <img 

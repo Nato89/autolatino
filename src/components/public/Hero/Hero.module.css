@@ -66,3 +66,11 @@
 .dot:hover {
     transform: scale(1.1);
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .arrowLeft,
+    .arrowRight {
+        display: none;
+    }
+}

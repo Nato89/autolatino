@@ -52,14 +52,14 @@
     right: -42px;
     top: 50%;
     transform: translateY(-50%);
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
 }
 
 .title,
 .title2 {
     font-family: var(--font-body);
-    font-size: 2rem;
+    font-size: 3rem;
     color: var(--text-dark);
 }
 
@@ -71,7 +71,7 @@
 
 .subtitle {
     font-family: var(--font-body);
-    font-size: 0.8rem;
+    font-size: 1.5rem;
     color: var(--text-dark);
     line-height: 1.5;
     font-weight: 600;
@@ -84,3 +84,49 @@
     padding: 0;    
     width: 100%;
 }
+
+@media (max-width: 768px) {
+   .content {
+    max-width: 100%;
+    padding: 0.1rem;
+    padding-top: 10%;
+    align-items: flex-start;
+    text-align: left;
+    gap: 4rem;
+   }
+
+    .title,
+    .title2 {
+        font-size: 3.2rem;
+    }
+    
+    .subtitle {
+        font-size: 1.5rem;
+    }
+
+    .title,
+    .title2,
+    .subtitle {
+        margin-left: 0;
+    }
+
+    .slide {
+        background-position: center;
+        background-size: cover;
+        align-items: flex-start;
+        background-color: rgba(255, 255, 255, 0.3);
+        background-blend-mode: overlay;    
+    }
+
+    .dot {
+        width: 10px;
+        height: auto;
+    }
+    
+    .buttonWrapper button {
+        font-size: 1.5rem;    /* Hace el texto más grande */
+        padding: 1rem 2rem;   /* Aumenta el tamaño del botón */
+    }
+}
+
+

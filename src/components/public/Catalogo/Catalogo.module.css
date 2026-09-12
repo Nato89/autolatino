@@ -1,0 +1,267 @@
+/* ============================================
+   1. CONTENEDORES PRINCIPALES
+   ============================================ */
+
+.Catalogo {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem 2rem 2rem 0;
+    background-color: var(--bg-main);
+}
+
+.row {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+/* ============================================
+   2. COLUMNA IZQUIERDA (FILTROS + LOGO)
+   ============================================ */
+
+.left {
+    flex: 0 0 30%;
+    max-width: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ============================================
+   3. FILTROS
+   ============================================ */
+
+.filtros {
+    background-color: var(--bg-nav);
+    padding: 1.5rem;
+    border-radius: 0 10px 10px 0;
+    color: var(--text-light);
+}
+
+.filtros h2 {
+    font-family: var(--font-body);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 400;
+    text-align: center;
+}
+
+/* ============================================
+   4. BOTONES DE TRANSMISIÓN
+   ============================================ */
+
+.buttonGroup {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.filterBtn {
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 15px;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-weight: 600;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.filterBtn.active {
+    background-color: var(--gold-primary);
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+}
+
+.filterBtn:hover {
+    background-color: var(--gold-primary);
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+}
+
+/* ============================================
+   5. LOGO
+   ============================================ */
+
+.logo {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    margin-left: 0;
+    margin-top: 2rem;
+    display: block;
+    border-radius: 0 20px 20px 0;
+}
+
+/* ============================================
+   6. COLUMNA DERECHA (TARJETAS)
+   ============================================ */
+
+.cards {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    gap: 2rem;
+    align-items: start;
+}
+
+/* ============================================
+   7. TARJETAS
+   ============================================ */
+
+.card {
+    background-color: var(--bg-nav);
+    display: flex;
+    flex-direction: column;
+    height: 520px;
+    padding: 0;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cardContent {
+    padding: 0.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 1rem;
+}
+
+.card img {
+    width: 100%;
+    height: 50%;
+    object-fit: cover;
+}
+
+.card h3 {
+    font-family: var(--font-body);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0.3rem 0 0.1rem 0;
+    text-align: left;
+}
+
+.card .details {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: #FFFFFF;
+    margin: 0.2rem 0 0.6rem 0;
+    text-align: left;
+}
+
+.badge {
+    display: inline-block;
+    background: transparent;
+    color: var(--gold-primary);
+    padding: 0.2rem 1rem;
+    border: 2px solid var(--gold-primary);
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    align-self: flex-start;
+    width: auto;
+}
+
+.priceRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0.2rem 0 0.4rem 0;
+}
+
+.priceColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--gold-primary);
+    margin: 0.2rem auto;
+}
+
+.priceLabel {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 400;
+    color: #FFFFFF;
+    letter-spacing: 0.5px;
+}
+
+.priceValue {
+    font-family: var(--font-title);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--gold-primary);
+    letter-spacing: 0.25rem;
+}
+
+.verMas {
+    background-color: transparent;
+    color: var(--gold-primary);
+    border: 2px solid var(--gold-primary);
+    border-radius: 5px;
+    padding: 0.4rem 1.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 0;
+}
+
+.verMas:hover {
+    background-color: var(--hover-gold);
+    color: #FFFFFF;
+    transform: scale(1.05);
+}
+
+/* ============================================
+   8. TÍTULO DE LA SECCIÓN
+   ============================================ */
+
+.titulo {
+    font-family: var(--font-title);
+    color: var(--gold-primary);
+    font-size: 3rem;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-bottom: 2px solid var(--gold-primary);
+    padding-bottom: 20px;
+}
+
+/* ============================================
+   9. BOTÓN "VER TODOS"
+   ============================================ */
+
+.verTodosBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: block;
+    margin: 2rem auto 0;
+    width: 150px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.6;    
+}
+
+.verTodosBtn:hover {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.verTodosBtn img {
+    display: block;
+    width: 100%;
+    height: auto;
+}

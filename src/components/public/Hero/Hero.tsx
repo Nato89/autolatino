@@ -10,39 +10,39 @@ const Hero = () => {
   const slides = [
     {
         id: 1,
-        title: 'El auto<br /><span class="gold">perfecto</span><br />te espera',        
-        subtitle: 'Compra, vende o financia tu vehículo<br />con las mejores condiciones del<br />mercado.<br />Más de 200 vehículos disponibles y<br />créditos desde el 1.4% mensual.',
+        title: 'El auto <span class="gold">perfecto</span> te espera',
+        subtitle: 'Compra, vende o financia tu vehículo con las mejores condiciones del mercado. Más de 200 vehículos disponibles y créditos desde el 1.4% mensual.',
         buttonText: 'VER CATÁLOGO',
         image: '/src/assets/images/hero/auto.png',
         hasIcon: false,
     },
     {
         id: 2,
-        title: 'Financiación<br />hasta el<br /><span class="gold">100% sin<br />cuota inicial</span>',       
-        subtitle: 'Has la viabilidad ya mismo, sin<br />costo alguno, y te damos respuesta<br />de 1 a 2 días hábiles.',
+        title: 'Financiación hasta el <span class="gold">100% sin cuota inicial</span>',
+        subtitle: 'Has la viabilidad ya mismo, sin costo alguno, y te damos respuesta de 1 a 2 días hábiles.',
         buttonText: 'REALÍZALA AQUÍ',
         image: '/src/assets/images/hero/financiacion.png',
         hasIcon: false,
     },
     {
         id: 3,
-        title: 'Seguro todo<br />riesgo para<br />tu vehículo',        
-        subtitle: 'Has la viabilidad ya mismo, sin<br />costo alguno, y te damos respuesta<br />de 1 a 2 días hábiles.',
+        title: 'Seguro todo riesgo para tu vehículo',
+        subtitle: 'Has la viabilidad ya mismo, sin costo alguno, y te damos respuesta de 1 a 2 días hábiles.',
         buttonText: 'COTIZA AQUÍ',
         image: '/src/assets/images/hero/seguro.png',
         hasIcon: false,
     },
     {
         id: 4,
-        title: 'Quieres<br />vender tu<br />auto?',
-        title2: '<span class="gold">nosotros te <br />ayudamos!!!</span>',
+        title: '¿Quieres vender tu auto?',
+        title2: '<span class="gold">nosotros te ayudamos!!!</span>',
         buttonText: 'VENDE AQUÍ',
         image: '/src/assets/images/hero/vender.png',
         hasIcon: true,
     },
     {
         id: 5,
-        title: 'Déjanos un<br />mensaje y<br />nosotros te<br />contactamos',
+        title: 'Déjanos un mensaje y nosotros te contactamos',
         title2: '<span class="gold">Te esperamos!</span>',
         buttonText: 'CONTÁCTANOS',
         image: '/src/assets/images/hero/contacto.png',
@@ -119,3 +119,45 @@ const Hero = () => {
 }   
 
 export default Hero;
+
+
+// {
+//         id: 1,
+//         title: 'El auto<br /><span class="gold">perfecto</span><br />te espera',        
+//         subtitle: 'Compra, vende o financia tu vehículo<br />con las mejores condiciones del<br />mercado.<br />Más de 200 vehículos disponibles y<br />créditos desde el 1.4% mensual.',
+//         buttonText: 'VER CATÁLOGO',
+//         image: '/src/assets/images/hero/auto.png',
+//         hasIcon: false,
+//     },
+//     {
+//         id: 2,
+//         title: 'Financiación<br />hasta el<br /><span class="gold">100% sin<br />cuota inicial</span>',       
+//         subtitle: 'Has la viabilidad ya mismo, sin<br />costo alguno, y te damos respuesta<br />de 1 a 2 días hábiles.',
+//         buttonText: 'REALÍZALA AQUÍ',
+//         image: '/src/assets/images/hero/financiacion.png',
+//         hasIcon: false,
+//     },
+//     {
+//         id: 3,
+//         title: 'Seguro todo<br />riesgo para<br />tu vehículo',        
+//         subtitle: 'Has la viabilidad ya mismo, sin<br />costo alguno, y te damos respuesta<br />de 1 a 2 días hábiles.',
+//         buttonText: 'COTIZA AQUÍ',
+//         image: '/src/assets/images/hero/seguro.png',
+//         hasIcon: false,
+//     },
+//     {
+//         id: 4,
+//         title: 'Quieres<br />vender tu<br />auto?',
+//         title2: '<span class="gold">nosotros te <br />ayudamos!!!</span>',
+//         buttonText: 'VENDE AQUÍ',
+//         image: '/src/assets/images/hero/vender.png',
+//         hasIcon: true,
+//     },
+//     {
+//         id: 5,
+//         title: 'Déjanos un<br />mensaje y<br />nosotros te<br />contactamos',
+//         title2: '<span class="gold">Te esperamos!</span>',
+//         buttonText: 'CONTÁCTANOS',
+//         image: '/src/assets/images/hero/contacto.png',
+//         hasIcon: false,
+//     }

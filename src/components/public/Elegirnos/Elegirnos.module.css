@@ -1,0 +1,90 @@
+.Elegirnos {
+    height: 100vh;    
+    background-color: var(--bg-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;      
+    justify-content: center;  
+    padding: 0 2rem;
+}
+
+.title1 {
+    color: var(--gold-primary);
+    font-family: var(--font-title);
+    text-align: center;
+    font-size: 3rem;
+}
+
+.title2 {
+    color: var(--bg-nav);
+    font-family: var(--font-body);
+    text-align: center;
+    margin-bottom: 4rem;
+    font-size: 3rem;
+}
+
+.cards {
+    display: flex;
+    gap: 1.8rem;
+    justify-content: center;
+    flex-wrap: nowrap;  
+    max-width: 800px;
+    width: 100%;
+}
+
+.card {
+    background-color: var(--bg-nav);
+    border: 4px solid transparent;
+    border-radius: 10px;
+    padding: 1rem;
+    flex: 1;
+    min-width: 200px;  
+    max-width: 280px;
+    text-align: center;
+    transition: transform 0.3s ease;    
+}
+
+.card:hover {
+    transform: scale(1.05);
+    border-color: var(--gold-primary);
+}
+
+.ctitle {
+    color: var(--gold-primary);
+    font-family: var(--font-title);
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+}
+
+.ctext {
+    color: var(--text-light);
+    font-family: var(--font-body);
+    font-size: 1.4rem;
+}
+
+@media (max-width: 768px) {
+    .cards {
+        flex-wrap: wrap;
+    }
+
+    .card {
+        max-width: 90%;        
+        width: 90%;
+    }
+
+    .title1 {
+        font-size: 3rem;
+    }
+
+    .title2 {
+        font-size: 2rem;
+    }
+
+    .ctitle {
+        font-size: 1.5rem;
+    }
+
+    .ctext {
+        font-size: 1rem;
+    }
+}
