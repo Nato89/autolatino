@@ -6,6 +6,8 @@ import RangeFilter from '../../common/RangeFilter/RangeFilter';
 import logo from '../../../assets/images/Catalogo/Autolatino-logo.jpg';
 import verTodosIcon from '../../../assets/images/Iconos/ver-todos.svg';
 import contraerIcon from '../../../assets/images/Iconos/contraer.svg';
+import filterIcon from '../../../assets/images/Iconos/filter.svg';
+import Button from '../../common/Button/Button';
 
 const Catalogo = () => {
     const [transmision, setTransmision] = useState('todos');
@@ -13,6 +15,7 @@ const Catalogo = () => {
     const [modelo, setModelo] = useState({ min: 2000, max: 2027 });
     const [kilometraje, setKilometraje] = useState({ min: 0, max: 200000 });
     const [mostrarTodos, setMostrarTodos] = useState(false);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
     const navigate = useNavigate();
 
     const vehiclesFiltrados = vehicles.filter((vehicle) => {
@@ -29,9 +32,21 @@ const Catalogo = () => {
     return (
         <section className={styles.Catalogo}>
             <h1 className={styles.titulo}>Catálogo</h1>
-
+            <button 
+                className={styles.filtrosBtn}
+                onClick={() => setIsFilterOpen(true)}
+            >
+                <img src={filterIcon} alt="Filtros" />
+                Filtros
+            </button>
             <div className={styles.row}>
-                <div className={styles.left}>
+                <div className={`${styles.left} ${isFilterOpen ? styles.filterOpen : ''}`}>
+                    <button 
+                        className={styles.closeFilterBtn}
+                        onClick={() => setIsFilterOpen(false)}
+                    >
+                        ✕
+                    </button>
                     <div className={styles.filtros}>
                         <h2>Filtros</h2>
                         {/* Botones de transmisión */}
@@ -91,6 +106,11 @@ const Catalogo = () => {
                             onChange={(nuevoKilometraje) => setKilometraje(nuevoKilometraje)}
                             formatValue={(val) => `${val.toLocaleString()} km`}
                         />
+                        <div className={styles.applyBtnWrapper}>
+                            <Button size="large" onClick={() => setIsFilterOpen(false)}>
+                                Aplicar filtros
+                            </Button>
+                        </div>
                     </div>
                     <img className={styles.logo} src={logo} alt="Logo Autolatino" />
                 </div>

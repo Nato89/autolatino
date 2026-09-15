@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { vehicles } from '../../data/vehicles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './VehicleDetailPage.module.css';
 import flechaIzquierda from '../../assets/images/Iconos/arrow-prev.svg';
 import flechaDerecha from '../../assets/images/Iconos/arrow-next.svg';
@@ -17,6 +17,22 @@ const VehicleDetailPage = () => {
     const nextIndex = currentIndex + 1;
     const [selectedImage, setSelectedImage] = useState(0);
     const [isZoomed, setIsZoomed] = useState(false);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+    
+    useEffect(() => {
+        if (isZoomed) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [isZoomed]);
 
     if (!vehicle) {
         return <p>Vehículo no encontrado</p>;
@@ -100,7 +116,15 @@ const VehicleDetailPage = () => {
                         <Button size="large">
                             Viabilidad de crédito
                         </Button>
-                        <button className={styles.volverBtn} onClick={() => navigate(-1)}>
+                        <button 
+                            className={styles.volverBtn} 
+                            onClick={() => {
+                                navigate('/');
+                                setTimeout(() => {
+                                    document.getElementById('catalogo')?.scrollIntoView({ behavior: 'auto' });
+                                }, 300);
+                            }}
+                        >
                             <img src={flechaVolver} alt="Volver atrás" />
                             Volver atrás
                         </button>

@@ -5,14 +5,16 @@ import Hero from "../../components/public/Hero/Hero.tsx";
 
 const HomePage = () => {
   return (
-    <>   
+    <>
       <Hero />
       <Elegirnos />
+      <div id="catalogo">
+        <Catalogo />
+      </div>
       <WhatsAppButton />
-      <Catalogo />
     </>
   );
-}
+};
 
 export default HomePage;
 

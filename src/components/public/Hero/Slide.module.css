@@ -1,3 +1,7 @@
+/* ============================================
+   1. CONTENEDOR PRINCIPAL DEL SLIDE
+   ============================================ */
+
 .slide {
     position: absolute;
     top: 0;
@@ -20,6 +24,10 @@
     display: none;
 }
 
+/* ============================================
+   2. CONTENIDO DEL SLIDE
+   ============================================ */
+
 .content {
     display: flex;
     flex-direction: column;
@@ -32,6 +40,10 @@
 .content .buttonWrapper {
     align-self: center;
 }
+
+/* ============================================
+   3. BOTONES CON ÍCONO
+   ============================================ */
 
 .buttonWithIcon {
     padding-right: 0px;
@@ -55,6 +67,10 @@
     width: 80px;
     height: 80px;
 }
+
+/* ============================================
+   4. TEXTOS
+   ============================================ */
 
 .title,
 .title2 {
@@ -81,25 +97,29 @@
 .title2,
 .subtitle {
     margin-left: 20%;
-    padding: 0;    
+    padding: 0;
     width: 100%;
 }
 
+/* ============================================
+   5. RESPONSIVE (MÓVIL)
+   ============================================ */
+
 @media (max-width: 768px) {
-   .content {
-    max-width: 100%;
-    padding: 0.1rem;
-    padding-top: 10%;
-    align-items: flex-start;
-    text-align: left;
-    gap: 4rem;
-   }
+    .content {
+        max-width: 100%;
+        padding: 0.1rem;
+        padding-top: 10%;
+        align-items: flex-start;
+        text-align: left;
+        gap: 4rem;
+    }
 
     .title,
     .title2 {
         font-size: 3.2rem;
     }
-    
+
     .subtitle {
         font-size: 1.5rem;
     }
@@ -115,18 +135,16 @@
         background-size: cover;
         align-items: flex-start;
         background-color: rgba(255, 255, 255, 0.3);
-        background-blend-mode: overlay;    
+        background-blend-mode: overlay;
     }
 
     .dot {
         width: 10px;
         height: auto;
     }
-    
+
     .buttonWrapper button {
-        font-size: 1.5rem;    /* Hace el texto más grande */
-        padding: 1rem 2rem;   /* Aumenta el tamaño del botón */
+        font-size: 1.5rem;
+        padding: 1rem 2rem;
     }
 }
-
-

@@ -53,15 +53,21 @@
     width: 600px;
     height: 400px;
     object-fit: cover;
-    border-radius: 5px;
+    border-radius: 5px;    
+}
+
+.mainImage > img {
     cursor: zoom-in;
 }
 
 .zoomed {
     transform: scale(1.5);
     cursor: zoom-out;
-    z-index: 10;
-    position: relative;
+    z-index: 1001;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.5);
     transition: transform 0.3s ease;
 }
 
