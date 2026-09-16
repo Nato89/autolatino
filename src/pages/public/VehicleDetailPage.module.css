@@ -248,3 +248,44 @@
 .volverBtn:hover {
     transform: translateX(-4px);
 }
+
+@media (max-width: 768px) {
+    .arrowLeft,
+    .arrowRight {
+        display: none;
+    }
+
+    .bottomSection {
+        flex-direction: column;   
+        gap: 2rem;
+    }
+
+    .info {
+        width: 100%;
+        flex: none;         
+        padding: 2rem; 
+    }        
+
+    .actions {
+        width: 100%;             
+        padding-left: 0;         
+        align-items: center;     
+    }
+}
+
+@media (max-width: 460px) {
+    .yearKmRow {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .priceRow {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .thumbnails {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+}

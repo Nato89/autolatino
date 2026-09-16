@@ -17,7 +17,27 @@ const VehicleDetailPage = () => {
     const nextIndex = currentIndex + 1;
     const [selectedImage, setSelectedImage] = useState(0);
     const [isZoomed, setIsZoomed] = useState(false);
+    const [touchStart, setTouchStart] = useState(0);
+    const [touchEnd, setTouchEnd] = useState(0);
 
+
+    const handleTouchEnd = () => {
+        const distance = touchStart - touchEnd;
+        const minSwipeDistance = 50; // píxeles mínimos para considerar un deslizamiento
+
+        if (distance > minSwipeDistance) {
+            // Deslizó hacia la izquierda → siguiente vehículo
+            if (nextIndex < vehicles.length) {
+                navigate(`/vehiculo/${vehicles[nextIndex].id}`);
+            }
+        } else if (distance < -minSwipeDistance) {
+            // Deslizó hacia la derecha → vehículo anterior
+            if (prevIndex >= 0) {
+                navigate(`/vehiculo/${vehicles[prevIndex].id}`);
+            }
+        }
+    };
+    
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -55,12 +75,17 @@ const VehicleDetailPage = () => {
                         >
                             <img src={flechaIzquierda} alt="Anterior" />
                         </button>
-                        <img 
-                            src={selectedImage === 0 ? vehicle.image : imagenReverse} 
-                            alt={vehicle.model} 
-                            onClick={() => setIsZoomed(!isZoomed)}
-                            className={isZoomed ? styles.zoomed : ''}
-                        />
+                            <img 
+                                src={selectedImage === 0 ? vehicle.image : imagenReverse} 
+                                alt={vehicle.model} 
+                                onClick={() => setIsZoomed(!isZoomed)}
+                                className={isZoomed ? styles.zoomed : ''}
+                                onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
+                                onTouchEnd={(e) => {
+                                    setTouchEnd(e.changedTouches[0].clientX);
+                                    handleTouchEnd();
+                                }}
+                            />
                         <button 
                             className={`${styles.arrowRight} ${nextIndex >= vehicles.length ? styles.disabled : ''}`}
                             onClick={() => {

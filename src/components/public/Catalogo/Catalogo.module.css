@@ -118,7 +118,7 @@
     background-color: var(--bg-nav);
     display: flex;
     flex-direction: column;
-    height: 520px;
+    min-height: 520px;
     padding: 0;
     text-align: center;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -252,7 +252,7 @@
     margin: 2rem auto 0;
     width: 150px;
     transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 0.6;    
+    opacity: 0.6;
 }
 
 .verTodosBtn:hover {
@@ -267,35 +267,35 @@
 }
 
 /* ============================================
-   BOTÓN "FILTROS" (solo visible en móvil)
+   10. BOTÓN "FILTROS" (solo visible en móvil)
    ============================================ */
 
-   .filtrosBtn {
+.filtrosBtn {
     display: none;
     align-items: center;
     gap: 0.5rem;
     background: none;
-    border: none;   
+    border: none;
+    color: var(--gold-primary);
     font-family: var(--font-body);
-    font-size: 2.5rem;
+    font-size: 1.2rem;
     font-weight: 600;
     cursor: pointer;
     padding: 0.5rem 1rem;
     margin-bottom: 1rem;
-    justify-content: center;
-   }
+}
 
-   .filtrosBtn img {
-    width: 50px;
-    height: 50px;
-   }
+.filtrosBtn img {
+    width: 24px;
+    height: 24px;
+}
 
-   /* ============================================
-   BOTÓN "X" PARA CERRAR EL PANEL (solo móvil)
+/* ============================================
+   11. BOTÓN "X" PARA CERRAR EL PANEL (solo móvil)
    ============================================ */
 
-   .closeFilterBtn {
-    display: none;                
+.closeFilterBtn {
+    display: none;
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -309,56 +309,63 @@
 }
 
 .applyBtnWrapper {
-    display: none;   /* Oculto en escritorio */
+    display: none;
 }
 
 /* ============================================
-   RESPONSIVE (MÓVIL)
+   12. RESPONSIVE (MÓVIL)
    ============================================ */
 
-   @media (max-width: 768px) {
-    /* Mostrar botón "Filtros" */
+@media (max-width: 768px) {
     .filtrosBtn {
         display: flex;
     }
 
     .applyBtnWrapper {
-        display: block;   /* Visible en móvil */
+        display: block;
     }
 
-    /* Mostrar botón "X" */
     .closeFilterBtn {
         display: block;
     }
 
-     /* Ocultar el div con clase left por defecto */
     .left {
         display: none;
     }
 
-     /* Mostrar el panel superpuesto cuando isFilterOpen sea true */
     .left.filterOpen {
-    display: flex;
-    position: fixed;
-    top: 80px;
-    left: 0;
-    width: 100vw;
-    max-width: 100vw;
-    flex: none;               
-    height: calc(100vh - 80px);
-    background-color: var(--bg-nav);
-    z-index: 999;
-    overflow-y: auto;
-    padding: 2rem;
-    flex-direction: column;
-}
-    
+        display: flex;
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100vw;
+        max-width: 100vw;
+        flex: none;
+        height: calc(100vh - 80px);
+        background-color: var(--bg-nav);
+        z-index: 999;
+        overflow-y: auto;
+        padding: 2rem;
+        flex-direction: column;
+    }
+
     .left.filterOpen .logo {
         display: none;
     }
 
-    /* Las cards se apilan en una columna */
     .cards {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 460px) {
+    .priceRow {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .verMas {
+        align-self: center;
+        margin-top: 0.5rem;
     }
 }
