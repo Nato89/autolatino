@@ -2,6 +2,7 @@ import WhatsAppButton from "../../components/common/whatsAppButton/whatsAppButto
 import Catalogo from "../../components/public/Catalogo/Catalogo.tsx";
 import Elegirnos from "../../components/public/Elegirnos/Elegirnos.tsx";
 import Hero from "../../components/public/Hero/Hero.tsx";
+import Credito from "../../components/public/Credito/Credito.tsx";
 
 const HomePage = () => {
   return (
@@ -11,6 +12,7 @@ const HomePage = () => {
       <div id="catalogo">
         <Catalogo />
       </div>
+      <Credito />
       <WhatsAppButton />
     </>
   );
