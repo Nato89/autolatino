@@ -314,3 +314,62 @@
 .removeFileBtn:hover {
     background-color: #B91C1C;
 }
+
+/* ============================================
+   RESPONSIVE (MÓVIL)
+   ============================================ */
+
+@media (max-width: 768px) {
+    .credito {
+        flex-direction: column;
+        padding: 2rem 1rem;
+        gap: 2rem;
+    }
+
+    .left {
+        flex: 1;
+        padding: 0;
+        width: 100%;
+        align-items: center;
+        text-align: center;
+    }
+
+    .right {
+        width: 100%;
+    }
+
+    .titulo {
+        font-size: 2.5rem;
+    }
+
+    .texto {
+        font-size: 1.2rem;
+    }
+
+    .formRow {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .dropZone {
+        min-height: 150px;
+        padding: 1rem;
+    }
+
+    .uploadIcon {
+        width: 40px;
+    }
+
+    .paperclipIcon {
+        width: 24px;
+    }
+
+    .checkboxRow label {
+        max-width: 100%;
+        font-size: 0.8rem;
+    }
+
+    .enviarBtn {
+        width: 100%;
+    }
+}

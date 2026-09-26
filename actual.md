@@ -39,6 +39,9 @@ Actualmente el proyecto tiene una estructura funcional básica, pero aún no est
 │  │     ├─ Button/
 │  │     │  ├─ Button.module.css
 │  │     │  └─ Button.tsx
+│  │     ├─ InputField/
+│  │     │  ├─ InputField.module.css
+│  │     │  └─ InputField.tsx
 │  │     ├─ navbar/
 │  │     │  ├─ Navbar.module.css
 │  │     │  └─ navbar.tsx
@@ -52,9 +55,15 @@ Actualmente el proyecto tiene una estructura funcional básica, pero aún no est
 │  │     ├─ Catalogo/
 │  │     │  ├─ Catalogo.module.css
 │  │     │  └─ Catalogo.tsx
+│  │     ├─ Credito/
+│  │     │  ├─ Credito.module.css
+│  │     │  └─ Credito.tsx
 │  │     ├─ Elegirnos/
 │  │     │  ├─ Elegirnos.module.css
 │  │     │  └─ Elegirnos.tsx
+│  │     ├─ FileUploader/
+│  │     │  ├─ FileUploader.module.css
+│  │     │  └─ FileUploader.tsx
 │  │     └─ Hero/
 │  │        ├─ Hero.module.css
 │  │        ├─ Hero.tsx
@@ -73,6 +82,7 @@ Actualmente el proyecto tiene una estructura funcional básica, pero aún no est
 │  │     └─ VehicleDetailPage.tsx
 │  ├─ services/
 │  └─ types/
+│     ├─ credit.ts
 │     └─ vehicle.ts
 └─ borrar/
 ```
@@ -137,17 +147,16 @@ Incluye:
 - botón de regreso a la sección de catálogo
 - botones de contacto y crédito
 
-### 4) Datos de autos
-Archivo: src/data/vehicles.ts
+### 4) Datos de autos y Tipado
+Archivo: src/data/vehicles.ts y src/types/
 
 - Hay un array estático de vehículos.
-- Cada vehículo tiene: id, brand, model, year, price, km, transmission, image.
-- Los datos actuales están definidos en memoria y no provienen de backend ni API.
+- Se han definido tipos para `Vehicle` y para el flujo de `Credit` (crédito).
 
-### 5) Tipado
-Archivo: src/types/vehicle.ts
-
-- Define la interfaz Vehicle.
+### 5) Nuevos componentes de UI
+- **InputField**: Componente de entrada de texto reutilizable.
+- **FileUploader**: Componente para subida de archivos (documentación para créditos).
+- **Credito**: Módulo para la gestión/solicitud de viabilidad de crédito.
 
 ### 6) Bootstrap de la app
 Archivo: src/main.tsx
@@ -162,10 +171,11 @@ Archivo: src/main.tsx
 ### Implementado
 - Estructura base del proyecto React + Vite
 - Routing básico de navegación
-- Landing page pública
-- Catalogo visual
-- Página de detalle del vehículo
-- Componentes reutilizables básicos
+- Landing page pública (Hero, Elegirnos, Catalogo)
+- Página de detalle del vehículo con galería y navegación
+- Sistema de filtros por rango (RangeFilter)
+- Componentes de formulario (InputField, FileUploader)
+- Componente de viabilidad de crédito (en desarrollo/integración)
 - Datos mock de vehículos
 
 ### No evidenciado como terminado
