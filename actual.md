@@ -1,9 +1,9 @@
 # Proyecto AutoLatino - Estado actual del proyecto
 
 ## Visión general
-Este proyecto es una aplicación web de React + Vite para una concesionaria/autos, con una landing page pública y un detalle de vehículo por ruta.
+Este proyecto es una aplicación web de React + Vite orientada a una concesionaria de vehículos, con una landing page pública, catálogo, detalle de vehículo y módulos de contacto y crédito.
 
-Actualmente el proyecto tiene una estructura funcional básica, pero aún no está consolidado como proyecto final productivo.
+El proyecto ya tiene una base funcional clara, pero todavía corresponde a un MVP o prototipo front-end, no a un producto final completamente integrado ni listo para producción.
 
 ---
 
@@ -25,36 +25,39 @@ Actualmente el proyecto tiene una estructura funcional básica, pero aún no est
 │  ├─ main.tsx
 │  ├─ assets/
 │  │  ├─ fonts/
-│  │  ├─ images/
-│  │  │  ├─ Catalogo/
-│  │  │  ├─ Hero/
-│  │  │  ├─ Iconos/
-│  │  │  └─ SVG/
-│  │  └─ styles/
-│  │     ├─ global.css
-│  │     └─ variables.css
+│  │  └─ images/
+│  │     ├─ Catalogo/
+│  │     ├─ Hero/
+│  │     ├─ Iconos/
+│  │     └─ SVG/
+│  ├─ styles/
+│  │  ├─ global.css
+│  │  └─ variables.css
 │  ├─ components/
 │  │  ├─ admin/
-│  │  └─ common/
-│  │     ├─ Button/
-│  │     │  ├─ Button.module.css
-│  │     │  └─ Button.tsx
-│  │     ├─ InputField/
-│  │     │  ├─ InputField.module.css
-│  │     │  └─ InputField.tsx
-│  │     ├─ navbar/
-│  │     │  ├─ Navbar.module.css
-│  │     │  └─ navbar.tsx
-│  │     ├─ RangeFilter/
-│  │     │  ├─ RangeFilter.module.css
-│  │     │  └─ RangeFilter.tsx
-│  │     └─ whatsAppButton/
-│  │        ├─ whatsAppButton.module.css
-│  │        └─ whatsAppButton.tsx
+│  │  ├─ common/
+│  │  │  ├─ Button/
+│  │  │  │  ├─ Button.module.css
+│  │  │  │  └─ Button.tsx
+│  │  │  ├─ InputField/
+│  │  │  │  ├─ InputField.module.css
+│  │  │  │  └─ InputField.tsx
+│  │  │  ├─ navbar/
+│  │  │  │  ├─ Navbar.module.css
+│  │  │  │  └─ navbar.tsx
+│  │  │  ├─ RangeFilter/
+│  │  │  │  ├─ RangeFilter.module.css
+│  │  │  │  └─ RangeFilter.tsx
+│  │  │  └─ whatsAppButton/
+│  │  │     ├─ whatsAppButton.module.css
+│  │  │     └─ whatsAppButton.tsx
 │  │  └─ public/
 │  │     ├─ Catalogo/
 │  │     │  ├─ Catalogo.module.css
 │  │     │  └─ Catalogo.tsx
+│  │     ├─ Contacto/
+│  │     │  ├─ Contacto.module.css
+│  │     │  └─ Contacto.tsx
 │  │     ├─ Credito/
 │  │     │  ├─ Credito.module.css
 │  │     │  └─ Credito.tsx
@@ -82,16 +85,18 @@ Actualmente el proyecto tiene una estructura funcional básica, pero aún no est
 │  │     └─ VehicleDetailPage.tsx
 │  ├─ services/
 │  └─ types/
+│     ├─ contact.ts
 │     ├─ credit.ts
 │     └─ vehicle.ts
-└─ borrar/
+├─ borrar/
+└─ actual.md
 ```
 
 ---
 
 ## Estado real de dependencias
 
-El proyecto usa React 19, Vite y React Router.
+El proyecto usa React 19, Vite y React Router DOM.
 
 ```json
 {
@@ -120,7 +125,7 @@ El proyecto usa React 19, Vite y React Router.
 ### 1) Enrutamiento principal
 Archivo: src/App.tsx
 
-- La app renderiza una Navbar global.
+- La app renderiza una navbar global.
 - Tiene dos rutas principales:
   - `/` → HomePage
   - `/vehiculo/:id` → VehicleDetailPage
@@ -132,6 +137,8 @@ La página principal compone estos bloques:
 - Hero
 - Elegirnos
 - Catalogo
+- Credito
+- Contacto
 - WhatsAppButton
 
 ### 3) Detalle del vehículo
@@ -140,29 +147,31 @@ Archivo: src/pages/public/VehicleDetailPage.tsx
 Incluye:
 - búsqueda del vehículo por id
 - información de marca, modelo, año, kilometraje, transmisión y precio
-- galería con imágenes principales y miniaturas
+- galería con imagen principal y miniaturas
 - navegación anterior/siguiente entre vehículos
-- swipe táctil para cambiar vehículos
+- swipe táctil para cambiar de vehículo
 - zoom de imagen
-- botón de regreso a la sección de catálogo
-- botones de contacto y crédito
+- botón de regreso a la sección del catálogo
+- botones de contacto y viabilidad de crédito
 
-### 4) Datos de autos y Tipado
-Archivo: src/data/vehicles.ts y src/types/
+### 4) Datos de autos y tipado
+Archivos: src/data/vehicles.ts y src/types/
 
-- Hay un array estático de vehículos.
-- Se han definido tipos para `Vehicle` y para el flujo de `Credit` (crédito).
+- Existe un array estático de vehículos mock.
+- Se han definido tipos para `Vehicle`, `Credit` y `Contact`.
 
 ### 5) Nuevos componentes de UI
-- **InputField**: Componente de entrada de texto reutilizable.
-- **FileUploader**: Componente para subida de archivos (documentación para créditos).
-- **Credito**: Módulo para la gestión/solicitud de viabilidad de crédito.
+- **InputField**: campo reutilizable para formularios.
+- **FileUploader**: componente para carga de archivos, pensado para créditos.
+- **Credito**: módulo para gestión y solicitud de viabilidad de crédito.
+- **Contacto**: módulo para consultas y formulario de contacto.
+- **RangeFilter**: filtro por rango de precios o valores del catálogo.
 
 ### 6) Bootstrap de la app
 Archivo: src/main.tsx
 
-- Se monta la app dentro de BrowserRouter.
-- Se incluye la hoja global de estilos.
+- La app se monta dentro de `BrowserRouter`.
+- Se carga la hoja global de estilos.
 
 ---
 
@@ -171,28 +180,33 @@ Archivo: src/main.tsx
 ### Implementado
 - Estructura base del proyecto React + Vite
 - Routing básico de navegación
-- Landing page pública (Hero, Elegirnos, Catalogo)
+- Landing page pública con Hero, Elegirnos, Catálogo, Crédito y Contacto
 - Página de detalle del vehículo con galería y navegación
-- Sistema de filtros por rango (RangeFilter)
-- Componentes de formulario (InputField, FileUploader)
-- Componente de viabilidad de crédito (en desarrollo/integración)
-- Datos mock de vehículos
+- Swipe táctil y ajustes visuales en detalle del vehículo
+- Sistema de filtros por rango
+- Componentes reutilizables de formulario y UI
+- Datos mock de vehículos para demo
 
 ### No evidenciado como terminado
-- conexión real a base de datos o backend
+- conexión real a backend o base de datos
 - flujo real de administración de vehículos
-- formulario funcional de contacto / crédito
-- integración real con WhatsApp o CRM
-- carga dinámica de imágenes desde fuente real
-- validación de UX final en responsive/mobile
+- formularios de contacto y crédito funcionales
+- integración real con WhatsApp, CRM o email
+- carga dinámica de imágenes desde una fuente real
+- validación final de UX responsive/mobile
 - limpieza final de assets y referencias rotas
-- revisión definitiva de visual/branding y contenido real de la concesionaria
+- revisión definitiva de branding, contenido y datos reales de la concesionaria
 
 ---
 
 ## Conclusión
 
-El proyecto está en una etapa de desarrollo inicial-medio: tiene la base funcional para mostrar una landing page y catálogo de vehículos, pero aún no está completamente terminado ni listo para producción.
+El proyecto se encuentra en una etapa de desarrollo inicial-medio: tiene la base funcional para mostrar una landing page, catálogo y detalle de vehículos, pero aún no está completamente terminado ni listo para producción.
 
-La estructura actual del repositorio y el código reflejan un MVP o prototipo funcional, no un paquete final cerrado del proyecto.
+La estructura actual del repositorio y el código reflejan un MVP o prototipo frontend funcional, no un paquete final cerrado del proyecto.
 
+---
+
+## Resumen corto
+
+AutoLatino es un frontend de concesionaria en React + Vite con navegación básica, catálogo público, detalle de vehículo y módulos de contacto y crédito. La base está bien planteada, pero faltan integración real con backend, validaciones finales y pulido de producto.

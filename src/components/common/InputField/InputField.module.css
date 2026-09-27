@@ -3,16 +3,16 @@
    ============================================ */
 
 .inputField {
-display: flex;
-flex-direction: column;
-gap: 0.5rem;
-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
 }
 
 /* ============================================
    LABEL
    ============================================ */
-   
+
 .inputField label {
     font-family: var(--font-body);
     font-size: 1rem;
@@ -22,11 +22,12 @@ width: 100%;
 }
 
 /* ============================================
-   INPUT Y SELECT
+   INPUT, SELECT Y TEXTAREA
    ============================================ */
 
 .inputField input,
-.inputField select {
+.inputField select,
+.inputField textarea {
     width: 100%;
     padding: 0.6rem 0.8rem;
     border: none;
@@ -40,11 +41,19 @@ width: 100%;
 }
 
 .inputField input:focus,
-.inputField select:focus {
+.inputField select:focus,
+.inputField textarea:focus {
     box-shadow: 0 0 0 2px var(--gold-primary);
 }
 
+/* Textarea */
+.inputField textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
 /* Placeholder */
-.inputField input::placeholder {
+.inputField input::placeholder,
+.inputField textarea::placeholder {
     color: #999999;
 }

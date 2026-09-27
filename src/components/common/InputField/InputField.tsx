@@ -2,7 +2,7 @@ import styles from './InputField.module.css';
 
 interface InputFieldProps {
     label: string;
-    type: 'text' | 'email' | 'tel' | 'select';
+    type: 'text' | 'email' | 'tel' | 'select' | 'textarea';
     placeholder?: string;
     value: string;
     onChange: (value: string) => void;
@@ -39,6 +39,13 @@ const InputField = ({
                         </option>
                     ))}
                 </select>
+                ) : type === 'textarea' ? (
+                <textarea
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                    required={required}
+                />
             ) : (
                 <input
                     type={type}
