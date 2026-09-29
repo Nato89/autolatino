@@ -1,0 +1,223 @@
+/* ============================================
+   1. CONTENEDOR PRINCIPAL
+   ============================================ */
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* ============================================
+   2. FRANJA SUPERIOR
+   ============================================ */
+
+.topBanner {
+    background-color: #FFFFFF;
+    padding: 1rem 2rem;
+    text-align: center;
+}
+
+.topBanner h2 {
+    font-family: var(--font-body);
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #000;
+    margin: 0;
+}
+
+.gold {
+    color: var(--gold-primary);
+    font-family: var(--font-title);
+    font-size: 2rem;
+}
+
+/* ============================================
+   3. RECUADRO AZUL (COLUMNAS)
+   ============================================ */
+
+.mainFooter {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    background-color: var(--bg-nav);
+    padding: 3rem 4rem;
+    gap: 3rem;
+}
+
+/* --- Columna 1: Logo --- */
+
+.colLogo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    padding-right: 2rem;
+}
+
+.logo {
+    width: 300px;
+    height: auto;
+}
+
+/* --- Columna 2: Servicios + Contacto --- */
+
+.colServicios {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    padding-right: 2rem;
+}
+
+.serviciosBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.contactoBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 2rem;
+}
+
+.colServicios h3 {
+    font-family: var(--font-body);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 1rem 0;
+}
+
+.colServicios p {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+/* --- Columna 3: Redes sociales --- */
+
+.colRedes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    flex: 1;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    padding-right: 2rem;
+}
+
+.colRedes h3 {
+    font-family: var(--font-body);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.socialIcons {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.socialIcons img {
+    width: 80px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.socialIcons img:hover {
+    transform: scale(1.15);
+}
+
+/* --- Columna 4: Empleados --- */
+
+.colEmpleados {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    flex: 1;
+}
+
+.colEmpleados h3 {
+    font-family: var(--font-body);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.avatar {
+    width: 130px;
+    height: 130px;
+    margin-top: 1rem;
+}
+
+/* ============================================
+   4. FRANJA INFERIOR (COPYRIGHT)
+   ============================================ */
+
+.bottomBanner {
+    background-color: var(--bg-nav);
+    padding: 1rem 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.bottomBanner p {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+/* ============================================
+   5. RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .mainFooter {
+        flex-direction: column;
+        padding: 2rem 1rem;
+        gap: 2rem;
+    }
+
+    .colLogo,
+    .colServicios,
+    .colRedes {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        padding-right: 0;
+        padding-bottom: 2rem;
+        width: 100%;
+    }
+
+    .colEmpleados {
+        border-right: none;
+        padding-right: 0;
+        width: 100%;
+    }
+
+    .logo {
+        width: 200px;
+    }
+
+    .topBanner h2 {
+        font-size: 1.4rem;
+    }
+
+    .gold {
+        font-size: 1.6rem;
+    }
+}

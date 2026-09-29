@@ -1,212 +1,166 @@
-# Proyecto AutoLatino - Estado actual del proyecto
+# Proyecto AutoLatino - Estado actual
 
 ## Visión general
-Este proyecto es una aplicación web de React + Vite orientada a una concesionaria de vehículos, con una landing page pública, catálogo, detalle de vehículo y módulos de contacto y crédito.
+AutoLatino es un proyecto frontend en React + Vite para una concesionaria de vehículos. Actualmente cuenta con una base sólida para una landing page comercial, un catálogo de autos y una vista de detalle por vehículo, pero sigue siendo un prototipo funcional y no un sistema completo de producción.
 
-El proyecto ya tiene una base funcional clara, pero todavía corresponde a un MVP o prototipo front-end, no a un producto final completamente integrado ni listo para producción.
+El enfoque actual está en presentar la marca, mostrar inventario mock, facilitar la navegación del usuario y dejar preparados módulos de contacto y crédito para continuar desarrollo.
 
 ---
 
-## Estructura actual del proyecto
+## Estado actual del repositorio
+
+### Stack principal
+- React 19
+- Vite 8
+- TypeScript
+- React Router DOM
+- CSS Modules para componentes y secciones
+- lucide-react para iconografía
+
+### Scripts disponibles
+- `npm run dev` → iniciar desarrollo local
+- `npm run build` → compilar para producción
+- `npm run lint` → revisión estática con Oxlint
+- `npm run preview` → vista previa del build
+
+---
+
+## Estructura real del proyecto
 
 ```text
-.
-├─ index.html
-├─ package.json
-├─ README.md
-├─ tsconfig.json
-├─ tsconfig.app.json
-├─ tsconfig.node.json
-├─ vite.config.ts
-├─ public/
-│  └─ SVG/
-├─ src/
-│  ├─ App.tsx
-│  ├─ main.tsx
-│  ├─ assets/
-│  │  ├─ fonts/
-│  │  └─ images/
-│  │     ├─ Catalogo/
-│  │     ├─ Hero/
-│  │     ├─ Iconos/
-│  │     └─ SVG/
-│  ├─ styles/
-│  │  ├─ global.css
-│  │  └─ variables.css
-│  ├─ components/
-│  │  ├─ admin/
-│  │  ├─ common/
-│  │  │  ├─ Button/
-│  │  │  │  ├─ Button.module.css
-│  │  │  │  └─ Button.tsx
-│  │  │  ├─ InputField/
-│  │  │  │  ├─ InputField.module.css
-│  │  │  │  └─ InputField.tsx
-│  │  │  ├─ navbar/
-│  │  │  │  ├─ Navbar.module.css
-│  │  │  │  └─ navbar.tsx
-│  │  │  ├─ RangeFilter/
-│  │  │  │  ├─ RangeFilter.module.css
-│  │  │  │  └─ RangeFilter.tsx
-│  │  │  └─ whatsAppButton/
-│  │  │     ├─ whatsAppButton.module.css
-│  │  │     └─ whatsAppButton.tsx
-│  │  └─ public/
-│  │     ├─ Catalogo/
-│  │     │  ├─ Catalogo.module.css
-│  │     │  └─ Catalogo.tsx
-│  │     ├─ Contacto/
-│  │     │  ├─ Contacto.module.css
-│  │     │  └─ Contacto.tsx
-│  │     ├─ Credito/
-│  │     │  ├─ Credito.module.css
-│  │     │  └─ Credito.tsx
-│  │     ├─ Elegirnos/
-│  │     │  ├─ Elegirnos.module.css
-│  │     │  └─ Elegirnos.tsx
-│  │     ├─ FileUploader/
-│  │     │  ├─ FileUploader.module.css
-│  │     │  └─ FileUploader.tsx
-│  │     └─ Hero/
-│  │        ├─ Hero.module.css
-│  │        ├─ Hero.tsx
-│  │        ├─ Slide.module.css
-│  │        └─ Slide.tsx
-│  ├─ context/
-│  ├─ data/
-│  │  └─ vehicles.ts
-│  ├─ hooks/
-│  ├─ layouts/
-│  ├─ pages/
-│  │  ├─ admin/
-│  │  └─ public/
-│  │     ├─ HomePage.tsx
-│  │     ├─ VehicleDetailPage.module.css
-│  │     └─ VehicleDetailPage.tsx
-│  ├─ services/
-│  └─ types/
-│     ├─ contact.ts
-│     ├─ credit.ts
-│     └─ vehicle.ts
-├─ borrar/
-└─ actual.md
+src/
+├─ App.tsx
+├─ main.tsx
+├─ assets/
+│  ├─ fonts/
+│  └─ images/
+│     ├─ Catalogo/
+│     ├─ Hero/
+│     ├─ Iconos/
+│     └─ SVG/
+├─ components/
+│  ├─ admin/
+│  ├─ common/
+│  │  ├─ Button/
+│  │  ├─ Footer/
+│  │  ├─ InputField/
+│  │  ├─ navbar/
+│  │  ├─ RangeFilter/
+│  │  └─ whatsAppButton/
+│  └─ public/
+│     ├─ Catalogo/
+│     ├─ Contacto/
+│     ├─ Credito/
+│     ├─ Elegirnos/
+│     ├─ FileUploader/
+│     └─ Hero/
+├─ context/
+├─ data/
+│  └─ vehicles.ts
+├─ hooks/
+├─ layouts/
+├─ pages/
+│  ├─ admin/
+│  └─ public/
+│     ├─ HomePage.tsx
+│     └─ VehicleDetailPage.tsx
+├─ services/
+├─ styles/
+│  ├─ global.css
+│  └─ variables.css
+└─ types/
+   ├─ contact.ts
+   ├─ credit.ts
+   └─ vehicle.ts
 ```
+
+> La carpeta `admin/` aparece presente como base estructural, pero no se evidencia una gestión administrativa completa ni funcionalidad end-to-end implementada.
 
 ---
 
-## Estado real de dependencias
+## Funcionalidades implementadas
 
-El proyecto usa React 19, Vite y React Router DOM.
+### 1) Routing básico
+El archivo `src/App.tsx` define la navegación principal:
+- `/` → HomePage
+- `/vehiculo/:id` → VehicleDetailPage
 
-```json
-{
-  "dependencies": {
-    "lucide-react": "^1.30.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.3"
-  },
-  "devDependencies": {
-    "@types/node": "^24.13.3",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.4",
-    "oxlint": "^1.75.0",
-    "typescript": "~6.0.2",
-    "vite": "^8.2.0"
-  }
-}
-```
+La app monta el navbar global y renderiza las rutas principales dentro de `BrowserRouter` en `src/main.tsx`.
 
----
-
-## Componentes y funcionalidades actuales
-
-### 1) Enrutamiento principal
-Archivo: src/App.tsx
-
-- La app renderiza una navbar global.
-- Tiene dos rutas principales:
-  - `/` → HomePage
-  - `/vehiculo/:id` → VehicleDetailPage
-
-### 2) Inicio público
-Archivo: src/pages/public/HomePage.tsx
-
-La página principal compone estos bloques:
+### 2) Landing page pública
+La página principal reúne secciones clave para una concesionaria:
 - Hero
 - Elegirnos
-- Catalogo
-- Credito
+- Catálogo
+- Crédito
 - Contacto
-- WhatsAppButton
+- Botón de WhatsApp
 
-### 3) Detalle del vehículo
-Archivo: src/pages/public/VehicleDetailPage.tsx
+Esto deja una primera experiencia comercial con estructura clara y visualmente coherente.
 
-Incluye:
-- búsqueda del vehículo por id
-- información de marca, modelo, año, kilometraje, transmisión y precio
-- galería con imagen principal y miniaturas
-- navegación anterior/siguiente entre vehículos
-- swipe táctil para cambiar de vehículo
+### 3) Catálogo de vehículos
+Se cuenta con una lista mock de vehículos en `src/data/vehicles.ts` y con tipado definido en `src/types/vehicle.ts`.
+
+La UI del catálogo está preparada para mostrar vehículos con información relevante, filtros y navegación hacia detalle.
+
+### 4) Detalle de vehículo
+La vista `VehicleDetailPage` incluye:
+- búsqueda de vehículo por id
+- nombre, año, precio, kilometraje y especificaciones
+- galería principal con miniaturas
+- navegación entre vehículos
+- gesto táctil para cambiar de auto
 - zoom de imagen
-- botón de regreso a la sección del catálogo
-- botones de contacto y viabilidad de crédito
+- retorno al catálogo
+- acciones de contacto y crédito
 
-### 4) Datos de autos y tipado
-Archivos: src/data/vehicles.ts y src/types/
+### 5) Componentes reutilizables
+Se han creado componentes de UI para reforzar la base de la plataforma, como:
+- `Button`
+- `InputField`
+- `RangeFilter`
+- `FileUploader`
+- `Footer`
+- `whatsAppButton`
 
-- Existe un array estático de vehículos mock.
-- Se han definido tipos para `Vehicle`, `Credit` y `Contact`.
+Estos componentes están orientados a una experiencia orientada a ventas y lead generation.
 
-### 5) Nuevos componentes de UI
-- **InputField**: campo reutilizable para formularios.
-- **FileUploader**: componente para carga de archivos, pensado para créditos.
-- **Credito**: módulo para gestión y solicitud de viabilidad de crédito.
-- **Contacto**: módulo para consultas y formulario de contacto.
-- **RangeFilter**: filtro por rango de precios o valores del catálogo.
-
-### 6) Bootstrap de la app
-Archivo: src/main.tsx
-
-- La app se monta dentro de `BrowserRouter`.
-- Se carga la hoja global de estilos.
+### 6) Formularios y módulos de negocio
+Hay módulos de `Credito` y `Contacto`, hechos con un enfoque de front-end demo. La intención es dejar listos los flujos de lead, pero no existe integración real con backend ni envío funcional.
 
 ---
 
-## Estado funcional actual
+## Estado real de desarrollo
 
-### Implementado
-- Estructura base del proyecto React + Vite
-- Routing básico de navegación
-- Landing page pública con Hero, Elegirnos, Catálogo, Crédito y Contacto
-- Página de detalle del vehículo con galería y navegación
-- Swipe táctil y ajustes visuales en detalle del vehículo
-- Sistema de filtros por rango
-- Componentes reutilizables de formulario y UI
-- Datos mock de vehículos para demo
+### Implementado y funcional
+- Estructura base de React + Vite
+- Navegación principal con rutas
+- Página de inicio comercial
+- Catálogo de vehículos con datos simulados
+- Detalle de vehículo con galería y navegación
+- Componentes reutilizables de UI
+- Formularios esperados para contacto y crédito
+- Estilos base y layout visual coherente
 
-### No evidenciado como terminado
-- conexión real a backend o base de datos
-- flujo real de administración de vehículos
-- formularios de contacto y crédito funcionales
-- integración real con WhatsApp, CRM o email
-- carga dinámica de imágenes desde una fuente real
-- validación final de UX responsive/mobile
-- limpieza final de assets y referencias rotas
-- revisión definitiva de branding, contenido y datos reales de la concesionaria
+### Pendiente / no concluido
+- Backend real o base de datos
+- CRUD de vehículos para administración
+- Integración real con WhatsApp, email o CRM
+- Envío de formularios funcionando
+- Datos reales de inventario y marcas
+- Autenticación/admin para gestión interna
+- Validación de responsive y UX final
+- Limpieza final de assets y referencias rotas
+- Preparación para producción y despliegue real
 
 ---
 
 ## Conclusión
+El proyecto está en una etapa intermedia de desarrollo. Tiene una base muy útil para una landing page de concesionaria con catálogo y detalle de autos, pero todavía funciona como un MVP frontend más que como una solución comercial terminada.
 
-El proyecto se encuentra en una etapa de desarrollo inicial-medio: tiene la base funcional para mostrar una landing page, catálogo y detalle de vehículos, pero aún no está completamente terminado ni listo para producción.
-
-La estructura actual del repositorio y el código reflejan un MVP o prototipo frontend funcional, no un paquete final cerrado del proyecto.
+La intención actual es presentar una demo visual y funcional de venta de vehículos, no un sistema productivo con integración completa y flujo operativo real.
 
 ---
 
 ## Resumen corto
-
-AutoLatino es un frontend de concesionaria en React + Vite con navegación básica, catálogo público, detalle de vehículo y módulos de contacto y crédito. La base está bien planteada, pero faltan integración real con backend, validaciones finales y pulido de producto.
+AutoLatino es un frontend de concesionaria en React + Vite con estructura de landing page, catálogo, detalle de vehículo, formularios y componentes reutilizables. La base es buena y funcional, pero falta integración real, gestión de datos y pulido final para convertirlo en un producto listo para producción.

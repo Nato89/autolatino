@@ -4,6 +4,7 @@ import Elegirnos from "../../components/public/Elegirnos/Elegirnos.tsx";
 import Hero from "../../components/public/Hero/Hero.tsx";
 import Credito from "../../components/public/Credito/Credito.tsx";
 import Contacto from "../../components/public/Contacto/Contacto.tsx";
+import Footer from "../../components/common/Footer/Footer.tsx";
 
 const HomePage = () => {
   return (
@@ -15,6 +16,7 @@ const HomePage = () => {
       </div>
       <Credito />
       <Contacto />
+      <Footer />
       <WhatsAppButton />
     </>
   );
