@@ -129,7 +129,14 @@ const VehicleDetailPage = () => {
                     {/* Columna derecha: botones */}
                     <div className={styles.actions}>
                         <div className={`${styles.buttonWrapper} ${styles.buttonWrapperRelative}`}>
-                            <Button size="large">
+                            <Button 
+                                size="large"
+                                onClick={() => {
+                                    const url = `${window.location.origin}/vehiculo/${vehicle.id}`;
+                                    const message = `Hola, estoy interesado en el ${vehicle.brand} ${vehicle.model}. ¿Me puedes dar más información? ${url}`;
+                                    window.open(`https://wa.me/573162489745?text=${encodeURIComponent(message)}`, '_blank');
+                                }}
+                            >
                                 Contacta a un asesor
                                 <img 
                                     src="/src/assets/images/Iconos/wa.png" 
@@ -138,7 +145,18 @@ const VehicleDetailPage = () => {
                                 />
                             </Button>
                         </div>
-                        <Button size="large">
+                        <Button 
+                            size="large"
+                            onClick={() => {
+                                navigate('/');
+                                setTimeout(() => {
+                                    const element = document.getElementById('credito');
+                                    if (element) {
+                                        element.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                }, 100);
+                            }}
+                        >
                             Viabilidad de crédito
                         </Button>
                         <button 

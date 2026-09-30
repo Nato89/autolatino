@@ -14,8 +14,12 @@ const HomePage = () => {
       <div id="catalogo">
         <Catalogo />
       </div>
-      <Credito />
-      <Contacto />
+      <div id="credito">
+        <Credito />
+      </div>
+      <div id="contacto">
+        <Contacto />
+      </div>  
       <Footer />
       <WhatsAppButton />
     </>

@@ -31,7 +31,7 @@ const Footer = () => {
                     <div className={styles.contactoBlock}>
                         <h3>Contacto:</h3>
                         <p>whatsapp:</p>
-                        <p>300 000 00 00</p>
+                        <p>316 248 97 45</p>
                     </div>
                 </div>
 
