@@ -65,7 +65,12 @@ const Credito = () => {
                         <Button size="large">Revisar proceso</Button>
                     </div>
                     <div className={`${styles.dudaWrapper} ${styles.dudaWrapperRelative}`}>
-                        <Button size="large">
+                        <Button 
+                            size="large"
+                            onClick={() => {
+                                window.open('https://wa.me/573162489745?text=Hola,%20tengo%20una%20duda%20sobre%20el%20proceso%20de%20crédito', '_blank');
+                            }}
+                        >
                             Tienes alguna duda?
                             <img 
                                 src="/src/assets/images/Iconos/wa.png" 

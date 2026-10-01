@@ -21,8 +21,8 @@
 }
 
 .logoIcon {
-    height: 40px;    
-    width: auto;    
+    height: 40px;
+    width: auto;
 }
 
 .logoText {
@@ -31,14 +31,27 @@
     margin-top: 0.2rem;
 }
 
-.menu  {
+.menuWrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.menu {
+    position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 2rem;
     list-style: none;
     margin: 0;
     padding: 0;
-    margin-left: 10rem;
+    width: 100%;
+}
+
+.menu li:last-child {
+    position: absolute;
+    right: 0;
 }
 
 .menu li a {
@@ -47,7 +60,7 @@
     font-family: var(--font-body);
     font-size: 1rem;
     display: inline-block;
-    transition: transform 0.2s ease, color 0.2s ease;    
+    transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .menu li a:hover {
@@ -55,25 +68,60 @@
     transform: scale(1.15);
 }
 
-/* Se eliminó este código, pues se creo un componente botón, de igual forma lo dejo en caso de */
-/* .ctaBtn {
-    background-color: var(--gold-primary);
-    color: var(--text-dark);
-    border: 2px solid transparent;
-    height: 40px;
-    padding: 0.5rem 1.5rem;
-    border-radius: 10px;
-    font-weight: 700;
+.menuBtn {
+    display: none;
+    background: none;
+    border: none;
     cursor: pointer;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    align-items: center;
-    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;    
+    padding: 0;
 }
 
-.ctaBtn:hover {
-  background-color: var(--hover-gold);
-  color: #ffffff;
-  transform: scale(1.08);
-  border-color: #ffffff;
-} */
+.menuBtn img {
+    width: 40px;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .menuBtn {
+        display: block;
+        margin-left: auto;
+    }
+
+    .menuWrapper {
+        flex: none;
+    }
+
+    .menu {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100vw;
+        height: calc(100vh - 80px);
+        background-color: var(--bg-nav);
+        padding: 3rem 2rem;
+        gap: 2.5rem;
+        margin-left: 0;
+        z-index: 999;
+        align-items: flex-end;
+        justify-content: flex-start;
+    }
+
+    .menu li:last-child {
+        position: static;
+    }
+
+    .menuOpen {
+        display: flex;
+    }
+
+    .menu li a {
+        font-size: 1.8rem;
+    }
+
+    .menu li button {
+        font-size: 1.8rem;
+        padding: 1rem 2rem;
+    }
+}

@@ -1,0 +1,100 @@
+/* ============================================
+   1. NO SE QUE VA AQUÍ
+   ============================================ */
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: #FFFFFF;
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    position: relative;
+    max-width: 400px;
+    width: 90%;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    width: 100%;
+}
+
+.field label {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--bg-nav);
+}
+
+.field input {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--bg-nav);
+    color: #FFFFFF;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    outline: none;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: #000000;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+    border-color: #000000;
+    transform: scale(1.15);
+}
+
+.field input::placeholder {
+    color: #666666;
+}
+
+.loginBtnWrapper button {
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 2px solid #000000;
+}
+
+.loginBtnWrapper button:hover {
+    background-color: var(--gold-primary);
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+}

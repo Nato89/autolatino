@@ -4,8 +4,11 @@ import instagramIcon from '../../../assets/images/Iconos/instagram.svg';
 import facebookIcon from '../../../assets/images/Iconos/facebook.svg';
 import avatarIcon from '../../../assets/images/Iconos/avatar.svg';
 import Button from '../Button/Button';
+import { useState } from 'react';
+import LoginModal from '../../admin/LoginModal/LoginModal';
 
 const Footer = () => {
+    const [showLogin, setShowLogin] = useState(false);
     return (
         <footer className={styles.footer}>
             {/* Franja superior */}
@@ -51,7 +54,7 @@ const Footer = () => {
                 <div className={styles.colEmpleados}>
                     <h3>Empleados:</h3>
                     <img src={avatarIcon} alt="Empleado" className={styles.avatar} />
-                    <Button size="small">Ingreso</Button>
+                    <Button size="small" onClick={() => setShowLogin(true)}>Ingreso</Button>
                 </div>
             </div>
 
@@ -59,6 +62,7 @@ const Footer = () => {
             <div className={styles.bottomBanner}>
                 <p>® 2026 Autolatino. Todos los derechos reservados</p>
             </div>
+            {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
         </footer>
     );
 };
