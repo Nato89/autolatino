@@ -114,53 +114,7 @@
 }
 
 /* ============================================
-   4. ZONA DE DRAG & DROP
-   ============================================ */
-
-.dropZone {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    background-color: #FFFFFF;
-    border: 2px solid transparent;
-    border-radius: 8px;
-    padding: 2rem;
-    min-height: 200px;
-    cursor: pointer;
-    position: relative;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-.dropZone:hover {
-    background-color: #f9f9f9;
-    border-color: var(--hover-gold);
-}
-
-.uploadIcon {
-    width: 60px;
-    height: auto;
-}
-
-.dropZone p {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    color: #333333;
-    margin: 0;
-    text-align: center;
-}
-
-.paperclipIcon {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    width: 40px;
-    height: auto;
-}
-
-/* ============================================
-   5. ÚLTIMA FILA: TEXTO + CHECKBOX + BOTÓN ENVIAR
+   4. ÚLTIMA FILA: TEXTO + CHECKBOX + BOTÓN ENVIAR
    ============================================ */
 
 .fileText {
@@ -195,7 +149,7 @@
     cursor: pointer;
     text-align: left;
     flex: 1;
-    max-width: 240px;   
+    max-width: 240px;
 }
 
 .enviarBtn {
@@ -209,7 +163,7 @@
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
-    align-self: center;   
+    align-self: center;
 }
 
 .enviarBtn:hover {
@@ -224,7 +178,7 @@
 }
 
 /* ============================================
-   MODAL DE CONFIRMACIÓN
+   5. MODAL DE CONFIRMACIÓN
    ============================================ */
 
 .modalOverlay {
@@ -287,36 +241,8 @@
     transform: scale(1.05);
 }
 
-
 /* ============================================
-   BOTON PARA ELIMINAR ARCHIVOS
-   ============================================ */
-
-.removeFileBtn {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background-color: #DC2626;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s ease;
-}
-
-.removeFileBtn:hover {
-    background-color: #B91C1C;
-}
-
-/* ============================================
-   RESPONSIVE (MÓVIL)
+   6. RESPONSIVE (MÓVIL)
    ============================================ */
 
 @media (max-width: 768px) {
@@ -349,19 +275,6 @@
     .formRow {
         flex-direction: column;
         gap: 0.5rem;
-    }
-
-    .dropZone {
-        min-height: 150px;
-        padding: 1rem;
-    }
-
-    .uploadIcon {
-        width: 40px;
-    }
-
-    .paperclipIcon {
-        width: 24px;
     }
 
     .checkboxRow label {

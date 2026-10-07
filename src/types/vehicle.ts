@@ -6,7 +6,8 @@ export interface Vehicle {
      year: number;
      price: number;
      km: number;
+     images: string[];
      transmission: string;
-     image: string;
+     features?: string;
 }
 

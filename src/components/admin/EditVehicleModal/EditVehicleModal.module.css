@@ -1,0 +1,189 @@
+/* ============================================
+   1. MODAL
+   ============================================ */
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: var(--bg-nav);
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    border: 2px solid var(--gold-primary);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    max-width: 700px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modalTitle {
+    font-family: var(--font-body);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-align: center;    
+}
+
+.closeBtn {
+    position: absolute;
+    top: 1.5rem;
+    right: 2.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+    border-color: #ffffff;
+    transform: scale(1.15);
+}
+
+/* ============================================
+   2. FORMULARIO
+   ============================================ */
+
+.formRow {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.buttonsContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+/* ============================================
+   3. IMÁGENES DEL VEHÍCULO
+   ============================================ */
+
+.existingImagesWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.fileLabel {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 400;
+    color: #FFFFFF;
+    margin-left: 0.2rem;
+}
+
+.existingImages {
+    display: flex;
+    flex-direction: row;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.existingImageWrapper {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.existingImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #DABF78;
+}
+
+.removeExistingImageBtn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #DC2626;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.removeExistingImageBtn:hover {
+    background-color: #B91C1C;
+}
+
+.addImageBtn {
+    width: 80px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: 2px dashed #DABF78;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #DABF78;
+    transition: all 0.2s ease;
+}
+
+.addImageBtn:hover {
+    background-color: rgba(218, 191, 120, 0.1);
+    transform: scale(1.05);
+}
+
+/* ============================================
+   4. RESPONSIVE DESIGN
+   ============================================ */
+
+   @media (max-width: 768px) {
+    .modalContent {
+        padding: 1.5rem;
+        max-height: 90vh;
+    }
+
+    .formRow {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .buttonsContainer {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .existingImages {
+        justify-content: center;
+    }
+}

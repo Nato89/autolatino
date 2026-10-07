@@ -1,7 +1,6 @@
 /* ============================================
-   1. NO SE QUE VA AQUÍ
+   1. CONTENEDOR DE LA VENTANA MODAL (OVERLAY)
    ============================================ */
-
 .modalOverlay {
     position: fixed;
     top: 0;
@@ -15,9 +14,12 @@
     z-index: 1000;
 }
 
+/* ============================================
+   2. CAJA Y CONTENIDO PRINCIPAL DEL MODAL
+   ============================================ */
 .modalContent {
     background-color: #FFFFFF;
-    padding: 2rem 3rem;
+    padding: 2.5rem 3rem 2rem 3rem;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -33,6 +35,36 @@
     height: 100px;
 }
 
+/* ============================================
+   3. BOTÓN DE CIERRE (X)
+   ============================================ */
+.closeBtn {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: #000000;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+    border-color: #000000;
+    transform: scale(1.15);
+}
+
+/* ============================================
+   4. CAMPOS DE FORMULARIO (INPUTS Y LABELS)
+   ============================================ */
 .field {
     display: flex;
     flex-direction: column;
@@ -59,34 +91,13 @@
     outline: none;
 }
 
-.closeBtn {
-    position: absolute;
-    top: 1rem;
-    right: 2rem;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: transparent;
-    border: 1px solid transparent;
-    color: #000000;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
-
-.closeBtn:hover {
-    border-color: #000000;
-    transform: scale(1.15);
-}
-
 .field input::placeholder {
     color: #666666;
 }
 
+/* ============================================
+   5. BOTONES DE ACCIÓN (LOGIN)
+   ============================================ */
 .loginBtnWrapper button {
     background-color: #FFFFFF;
     color: #000000;

@@ -6,7 +6,6 @@ import flechaIzquierda from '../../assets/images/Iconos/arrow-prev.svg';
 import flechaDerecha from '../../assets/images/Iconos/arrow-next.svg';
 import flechaVolver from '../../assets/images/Iconos/arrow-return.svg';
 import Button from '../../components/common/Button/Button';
-import imagenReverse from '../../assets/images/Catalogo/renault-reverse.jpg';
 
 const VehicleDetailPage = () => {
     const { id } = useParams();
@@ -20,10 +19,9 @@ const VehicleDetailPage = () => {
     const [touchStart, setTouchStart] = useState(0);
     const [touchEnd, setTouchEnd] = useState(0);
 
-
     const handleTouchEnd = () => {
         const distance = touchStart - touchEnd;
-        const minSwipeDistance = 50; // píxeles mínimos para considerar un deslizamiento
+        const minSwipeDistance = 50;
 
         if (distance > minSwipeDistance) {
             // Deslizó hacia la izquierda → siguiente vehículo
@@ -37,11 +35,11 @@ const VehicleDetailPage = () => {
             }
         }
     };
-    
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
-    
+
     useEffect(() => {
         if (isZoomed) {
             document.body.style.overflow = 'hidden';
@@ -75,17 +73,17 @@ const VehicleDetailPage = () => {
                         >
                             <img src={flechaIzquierda} alt="Anterior" />
                         </button>
-                            <img 
-                                src={selectedImage === 0 ? vehicle.image : imagenReverse} 
-                                alt={vehicle.model} 
-                                onClick={() => setIsZoomed(!isZoomed)}
-                                className={isZoomed ? styles.zoomed : ''}
-                                onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
-                                onTouchEnd={(e) => {
-                                    setTouchEnd(e.changedTouches[0].clientX);
-                                    handleTouchEnd();
-                                }}
-                            />
+                        <img 
+                            src={vehicle.images[selectedImage]} 
+                            alt={vehicle.model} 
+                            onClick={() => setIsZoomed(!isZoomed)}
+                            className={isZoomed ? styles.zoomed : ''}
+                            onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
+                            onTouchEnd={(e) => {
+                                setTouchEnd(e.changedTouches[0].clientX);
+                                handleTouchEnd();
+                            }}
+                        />
                         <button 
                             className={`${styles.arrowRight} ${nextIndex >= vehicles.length ? styles.disabled : ''}`}
                             onClick={() => {
@@ -98,10 +96,14 @@ const VehicleDetailPage = () => {
                         </button>
                     </div>
                     <div className={styles.thumbnails}>
-                        <img src={vehicle.image} alt={vehicle.model} onClick={() => setSelectedImage(0)} />
-                        <img src={imagenReverse} alt={vehicle.model} onClick={() => setSelectedImage(1)} />
-                        <img src={imagenReverse} alt={vehicle.model} onClick={() => setSelectedImage(1)} />
-                        <img src={imagenReverse} alt={vehicle.model} onClick={() => setSelectedImage(1)} />
+                        {vehicle.images.map((img, index) => (
+                            <img 
+                                key={index}
+                                src={img} 
+                                alt={vehicle.model} 
+                                onClick={() => setSelectedImage(index)} 
+                            />
+                        ))}
                     </div>
                 </div>
 
@@ -120,9 +122,9 @@ const VehicleDetailPage = () => {
                         </div>
                         <div className={styles.divider}></div>
                         <div className={styles.features}>
-                            <p>Soat</p>
-                            <p>Tecno</p>
-                            <p>Asientos de cuero, aire acondicionado, etc.</p>
+                            {vehicle.features && vehicle.features.split(',').map((feature, index) => (
+                                <p key={index}>{feature.trim()}</p>
+                            ))}
                         </div>
                     </div>
 

@@ -1,0 +1,85 @@
+.dropZone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    background-color: #FFFFFF;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 2rem;
+    min-height: 200px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.dropZone:hover {
+    background-color: #f9f9f9;
+    border-color: var(--gold-primary);
+}
+
+.uploadIcon {
+    width: 60px;
+    height: auto;
+}
+
+.dropZone p {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: #333333;
+    margin: 0;
+    text-align: center;
+}
+
+.paperclipIcon {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: auto;
+}
+
+.removeFileBtn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background-color: #DC2626;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.removeFileBtn:hover {
+    background-color: #B91C1C;
+}
+
+.fileList {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.fileItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #333;
+}

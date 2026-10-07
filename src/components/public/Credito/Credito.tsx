@@ -1,9 +1,8 @@
 import styles from './Credito.module.css';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import Button from '../../common/Button/Button';
 import InputField from '../../common/InputField/InputField';
-import uploadIcon from '../../../assets/images/Iconos/upload.svg';
-import paperclipIcon from '../../../assets/images/Iconos/paperclip.svg';
+import FileUploader from '../FileUploader/FileUploader';
 
 
 const Credito = () => {
@@ -21,8 +20,7 @@ const Credito = () => {
         aceptaTerminos: false,
     });
     const [showModal, setShowModal] = useState(false);
-    const [file, setFile] = useState<File | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [files, setFiles] = useState<File[]>([]);    
     
     const handleChange = (field: string, value: string | boolean) => {
         setFormData((prev) => ({
@@ -30,30 +28,7 @@ const Credito = () => {
             [field]: value,
         }));
     };
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-            setFile(e.target.files[0]);
-        }
-    };
-
-    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            setFile(e.dataTransfer.files[0]);
-        }
-    };
-
-    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-    };
-
-    const handleRemoveFile = () => {
-        setFile(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-    };
-
+    
     return (
         <section className={styles.credito}>
             <div className={styles.left}>
@@ -83,7 +58,7 @@ const Credito = () => {
             </div>
             <form className={styles.right} onSubmit={(e) => { 
                 e.preventDefault(); 
-                if (!file) {
+                if (files.length === 0) {
                     alert('Por favor adjunta la foto de tu cédula');
                     return;
                 }
@@ -242,37 +217,10 @@ const Credito = () => {
                             Enviar
                         </button>
                     </div>
-
+                    
                     {/* Columna derecha: zona de drag & drop */}
                     <div className={styles.formCol}>
-                        <div 
-                        className={styles.dropZone}
-                        onDrop={handleDrop}
-                        onDragOver={handleDragOver}
-                        onClick={() => fileInputRef.current?.click()}
-                    >
-                        <img src={uploadIcon} alt="Subir" className={styles.uploadIcon} />
-                        <p>{file ? file.name : 'Arrastra la foto aquí'}</p>
-                        <img src={paperclipIcon} alt="Buscar archivo" className={styles.paperclipIcon} />
-                        {file && (
-                            <button 
-                                className={styles.removeFileBtn}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleRemoveFile();
-                                }}
-                            >
-                                ✕
-                            </button>
-                        )}
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={handleFileChange}
-                            accept=".jpg,.jpeg,.png,.pdf"
-                            style={{ display: 'none' }}
-                        />
-                    </div>
+                        <FileUploader files={files} setFiles={setFiles} maxFiles={2} />
                     </div>
                 </div>
             </form>

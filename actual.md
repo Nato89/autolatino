@@ -1,166 +1,121 @@
 # Proyecto AutoLatino - Estado actual
 
 ## Visión general
-AutoLatino es un proyecto frontend en React + Vite para una concesionaria de vehículos. Actualmente cuenta con una base sólida para una landing page comercial, un catálogo de autos y una vista de detalle por vehículo, pero sigue siendo un prototipo funcional y no un sistema completo de producción.
+AutoLatino es un proyecto frontend para una concesionaria de vehículos. Su propósito actual es presentar la marca, mostrar un inventario de demostración, permitir explorar vehículos y ofrecer formularios de contacto y solicitud de crédito.
 
-El enfoque actual está en presentar la marca, mostrar inventario mock, facilitar la navegación del usuario y dejar preparados módulos de contacto y crédito para continuar desarrollo.
+El proyecto es un prototipo frontend, no un sistema de producción. No cuenta con backend, base de datos, autenticación real ni persistencia de solicitudes. Las funciones nuevas de administración o consulta de procesos deben tratarse como simulaciones locales mientras no se integre un servidor.
 
----
+## Stack y convenciones
+- React 19, TypeScript y Vite 8.
+- React Router DOM 7 para las rutas.
+- CSS Modules para estilos por componente.
+- lucide-react está disponible para iconografía.
+- Estilos globales y variables en `src/assets/styles/`.
+- La paleta definida usa azul oscuro, dorado y blanco; las fuentes configuradas son Oleo Script y Open Sans.
 
-## Estado actual del repositorio
+Scripts disponibles:
+- `npm run dev`: iniciar el servidor de desarrollo.
+- `npm run build`: ejecutar TypeScript y compilar para producción.
+- `npm run lint`: revisión estática con Oxlint.
+- `npm run preview`: servir localmente el build.
 
-### Stack principal
-- React 19
-- Vite 8
-- TypeScript
-- React Router DOM
-- CSS Modules para componentes y secciones
-- lucide-react para iconografía
-
-### Scripts disponibles
-- `npm run dev` → iniciar desarrollo local
-- `npm run build` → compilar para producción
-- `npm run lint` → revisión estática con Oxlint
-- `npm run preview` → vista previa del build
-
----
-
-## Estructura real del proyecto
-
+## Estructura relevante
 ```text
 src/
 ├─ App.tsx
 ├─ main.tsx
 ├─ assets/
 │  ├─ fonts/
-│  └─ images/
-│     ├─ Catalogo/
-│     ├─ Hero/
-│     ├─ Iconos/
-│     └─ SVG/
+│  ├─ images/
+│  └─ styles/
 ├─ components/
 │  ├─ admin/
+│  │  ├─ AddVehicleModal/
+│  │  ├─ EditVehicleModal/
+│  │  └─ LoginModal/
 │  ├─ common/
 │  │  ├─ Button/
+│  │  ├─ ConfirmModal/
 │  │  ├─ Footer/
 │  │  ├─ InputField/
 │  │  ├─ navbar/
-│  │  ├─ RangeFilter/
 │  │  └─ whatsAppButton/
 │  └─ public/
 │     ├─ Catalogo/
 │     ├─ Contacto/
 │     ├─ Credito/
 │     ├─ Elegirnos/
-│     ├─ FileUploader/
 │     └─ Hero/
-├─ context/
 ├─ data/
+│  ├─ auth.ts
 │  └─ vehicles.ts
-├─ hooks/
-├─ layouts/
 ├─ pages/
 │  ├─ admin/
+│  │  ├─ AdminDashboard/
+│  │  └─ AdminVehiclesPage/
 │  └─ public/
 │     ├─ HomePage.tsx
 │     └─ VehicleDetailPage.tsx
-├─ services/
-├─ styles/
-│  ├─ global.css
-│  └─ variables.css
 └─ types/
    ├─ contact.ts
    ├─ credit.ts
    └─ vehicle.ts
 ```
 
-> La carpeta `admin/` aparece presente como base estructural, pero no se evidencia una gestión administrativa completa ni funcionalidad end-to-end implementada.
+`src/pages/admin` contiene un panel y una pantalla de gestión de vehículos con datos mock. No se ha verificado una integración de backend, base de datos, contexto, hooks ni servicios. `Empaquetado.md` describe una estructura objetivo/futura y no debe tomarse como prueba de que esos módulos ya existen.
 
----
+## Funcionalidades actuales
 
-## Funcionalidades implementadas
+### Navegación y páginas
+`src/main.tsx` monta la aplicación dentro de `BrowserRouter`. Actualmente, `src/App.tsx` define estas rutas:
+- `/`: página principal.
+- `/vehiculo/:id`: detalle de vehículo.
+- `/admin`: panel de administración inicial.
+- `/admin/vehiculos`: pantalla de gestión del catálogo de demostración.
 
-### 1) Routing básico
-El archivo `src/App.tsx` define la navegación principal:
-- `/` → HomePage
-- `/vehiculo/:id` → VehicleDetailPage
+La página principal reúne Hero, Elegirnos, Catálogo, Crédito, Contacto, Footer y el botón de WhatsApp. El catálogo usa vehículos mock tipados en `src/data/vehicles.ts` y `src/types/vehicle.ts`.
 
-La app monta el navbar global y renderiza las rutas principales dentro de `BrowserRouter` en `src/main.tsx`.
+La vista de detalle presenta información y galería del vehículo, navegación entre vehículos y acciones de contacto/crédito. Verificar la implementación concreta en el código antes de modificar o ampliar ese flujo.
 
-### 2) Landing page pública
-La página principal reúne secciones clave para una concesionaria:
-- Hero
-- Elegirnos
-- Catálogo
-- Crédito
-- Contacto
-- Botón de WhatsApp
+### Login de empleados
+El modal está en `src/components/admin/LoginModal/LoginModal.tsx` y sus estilos en el CSS Module contiguo. Se abre desde el botón “Ingreso” del Footer, mediante estado local. `src/data/auth.ts` contiene un usuario de prueba definido en el cliente.
 
-Esto deja una primera experiencia comercial con estructura clara y visualmente coherente.
+El formulario compara las credenciales ingresadas con ese usuario mock y muestra un error si no coinciden. Al aceptar, guarda el nombre del asesor en `localStorage` como `autolatino_user`, cierra el modal y navega a `/admin`. Esto es únicamente una demostración en frontend: no hay autenticación, autorización ni sesión seguras, y el dato guardado por el cliente se puede modificar.
 
-### 3) Catálogo de vehículos
-Se cuenta con una lista mock de vehículos en `src/data/vehicles.ts` y con tipado definido en `src/types/vehicle.ts`.
+El Footer muestra el nombre y avatar del asesor cuando encuentra ese dato local, permite cargar una imagen de perfil y la guarda como dato local, y ofrece accesos al panel y a salir. Cerrar sesión elimina `autolatino_user`. Si el almacenamiento local contiene JSON inválido, el Footer informa el error en consola.
 
-La UI del catálogo está preparada para mostrar vehículos con información relevante, filtros y navegación hacia detalle.
+### Panel y gestión de vehículos
+`src/pages/admin/AdminDashboard/AdminDashboard.tsx` presenta un saludo al asesor, una acción para cerrar sesión y tarjetas informativas para vehículos, procesos de crédito y clientes para contactar. La tarjeta de vehículos lleva a `/admin/vehiculos`; las de crédito y clientes siguen siendo informativas.
 
-### 4) Detalle de vehículo
-La vista `VehicleDetailPage` incluye:
-- búsqueda de vehículo por id
-- nombre, año, precio, kilometraje y especificaciones
-- galería principal con miniaturas
-- navegación entre vehículos
-- gesto táctil para cambiar de auto
-- zoom de imagen
-- retorno al catálogo
-- acciones de contacto y crédito
+`src/pages/admin/AdminVehiclesPage/AdminVehiclesPage.tsx` muestra el inventario mock en una tabla y abre interfaces para agregar, editar o confirmar la eliminación de vehículos. Los formularios de agregar/editar solo conservan temporalmente sus campos mientras están abiertos; guardar o confirmar eliminación únicamente escribe en consola y cierra el modal. No modifica `src/data/vehicles.ts`, no persiste cambios ni incorpora operaciones CRUD reales. La confirmación de eliminación se presenta con `src/components/common/ConfirmModal/ConfirmModal.tsx`.
 
-### 5) Componentes reutilizables
-Se han creado componentes de UI para reforzar la base de la plataforma, como:
-- `Button`
-- `InputField`
-- `RangeFilter`
-- `FileUploader`
-- `Footer`
-- `whatsAppButton`
+El panel comprueba de forma básica la presencia de un nombre en el estado de navegación o de `autolatino_user` en `localStorage` y redirige al inicio si no lo encuentra; no constituye un control de acceso seguro.
 
-Estos componentes están orientados a una experiencia orientada a ventas y lead generation.
+### Solicitud de crédito
+El formulario está en `src/components/public/Credito/Credito.tsx`. Recoge datos del solicitante, referencias, aceptación de términos y un archivo de cédula. Al enviarlo, valida que haya un archivo y muestra un modal local de agradecimiento; no guarda ni transmite los datos.
 
-### 6) Formularios y módulos de negocio
-Hay módulos de `Credito` y `Contacto`, hechos con un enfoque de front-end demo. La intención es dejar listos los flujos de lead, pero no existe integración real con backend ni envío funcional.
+El botón “Revisar proceso” existe, pero todavía no abre un modal ni consulta solicitudes. Los archivos `src/types/credit.ts` y `src/types/contact.ts` existen, pero están vacíos.
 
----
+### Contacto y datos
+El sitio incluye una sección de contacto y enlaces directos de WhatsApp/redes. No hay una integración de CRM o backend verificada. El inventario de vehículos es de demostración, no un inventario conectado a datos reales.
 
-## Estado real de desarrollo
+La navegación permite desplazarse a Catálogo, Crédito y Contacto desde la página principal, incluido el menú móvil; al pulsar esos enlaces desde otra ruta, vuelve al inicio antes de buscar la sección. El Footer incluye enlaces sociales y accesos al login/panel. El tamaño del botón flotante de WhatsApp fue ajustado.
 
-### Implementado y funcional
-- Estructura base de React + Vite
-- Navegación principal con rutas
-- Página de inicio comercial
-- Catálogo de vehículos con datos simulados
-- Detalle de vehículo con galería y navegación
-- Componentes reutilizables de UI
-- Formularios esperados para contacto y crédito
-- Estilos base y layout visual coherente
+## Próximas funcionalidades planeadas
+1. Implementar operaciones funcionales para crear, editar y eliminar vehículos, con persistencia definida.
+2. Implementar en el panel la consulta de solicitudes mock y el cambio de su estado.
+3. Crear el modal “Revisar proceso” para que el cliente consulte el estado usando su cédula.
+4. Conectar la gestión de leads a un flujo funcional, si forma parte del alcance.
 
-### Pendiente / no concluido
-- Backend real o base de datos
-- CRUD de vehículos para administración
-- Integración real con WhatsApp, email o CRM
-- Envío de formularios funcionando
-- Datos reales de inventario y marcas
-- Autenticación/admin para gestión interna
-- Validación de responsive y UX final
-- Limpieza final de assets y referencias rotas
-- Preparación para producción y despliegue real
+Estas son tareas pendientes, no funciones ya implementadas. El login y el panel actuales son una base visual/mock, no una autenticación o administración funcional. Como primera versión, definir un modelo tipado de solicitud y una fuente mock coherente que puedan consultar tanto el panel como el modal del cliente, sin simular persistencia entre recargas salvo que se decida explícitamente usar almacenamiento local.
 
----
+## Pendiente para una versión de producción
+- Backend, base de datos y persistencia segura.
+- Autenticación y autorización reales para empleados.
+- Envío y tratamiento seguro de solicitudes y archivos.
+- Inventario real y gestión administrativa de vehículos.
+- Integraciones reales con CRM, correo u otros servicios.
+- Validación final de responsive, accesibilidad, UX y despliegue.
 
-## Conclusión
-El proyecto está en una etapa intermedia de desarrollo. Tiene una base muy útil para una landing page de concesionaria con catálogo y detalle de autos, pero todavía funciona como un MVP frontend más que como una solución comercial terminada.
-
-La intención actual es presentar una demo visual y funcional de venta de vehículos, no un sistema productivo con integración completa y flujo operativo real.
-
----
-
-## Resumen corto
-AutoLatino es un frontend de concesionaria en React + Vite con estructura de landing page, catálogo, detalle de vehículo, formularios y componentes reutilizables. La base es buena y funcional, pero falta integración real, gestión de datos y pulido final para convertirlo en un producto listo para producción.
+## Resumen
+AutoLatino es una aplicación React + TypeScript + Vite para una concesionaria, con landing pública, navegación responsive, catálogo mock, detalle de vehículo, formularios y componentes reutilizables. Cuenta con login mock conectado al Footer, presentación local del perfil del asesor, panel administrativo y pantalla de gestión vehicular. Esta pantalla permite explorar visualmente opciones para agregar, editar y eliminar, pero no aplica ni persiste esos cambios; el acceso tampoco es seguro para producción. El formulario de crédito solo confirma el envío en pantalla y el flujo de consulta por cédula sigue pendiente. La siguiente etapa es hacer funcionales esos flujos con datos mock y límites explícitos de demo, sin presentarlos como integración de producción.

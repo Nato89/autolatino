@@ -40,13 +40,14 @@ const InputField = ({
                     ))}
                 </select>
                 ) : type === 'textarea' ? (
-                <textarea
-                    placeholder={placeholder}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                    required={required}
-                />
-            ) : (
+                    <textarea
+                        placeholder={placeholder}
+                        value={value}
+                        onChange={(e) => onChange(e.target.value)}
+                        required={required}
+                        maxLength={maxLength}
+                    />
+                ) : (
                 <input
                     type={type}
                     placeholder={placeholder}

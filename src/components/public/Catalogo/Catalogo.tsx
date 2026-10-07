@@ -118,7 +118,7 @@ const Catalogo = () => {
                 <div className={styles.cards}>
                     {vehiculosAMostrar.map((vehicle) => (
                         <div key={vehicle.id} className={styles.card}>
-                            <img src={vehicle.image} alt={vehicle.model} />
+                            <img src={vehicle.images[0]} alt={vehicle.model} />
                             <div className={styles.cardContent}>
                                 <h3>{vehicle.brand} {vehicle.model}</h3>
                                 <p className={styles.details}>{vehicle.year} - {vehicle.km} km</p>

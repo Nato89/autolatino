@@ -9,17 +9,29 @@ export const vehicles: Vehicle[] = [
         price: 45000000,
         km: 6000,
         transmission: 'Mecánico',
-        image: '/src/assets/images/Catalogo/renault-sandero1.jpg'
+        images: [
+            '/src/assets/images/Catalogo/renault-sandero1.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+        ],
+        features: 'Soat, Tecno, Asientos de cuero, Aire acondicionado'
     },
     {
-        id:2,
+        id: 2,
         brand: 'Renault',
         model: 'Sandero',
         year: 2020,
         price: 50000000,
         km: 6000,
         transmission: 'Mecánico',
-        image: '/src/assets/images/Catalogo/renault-sandero1.jpg'
+        images: [
+            '/src/assets/images/Catalogo/renault-sandero1.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+        ],
+        features: 'Soat, Tecno, Asientos de cuero, Aire acondicionado'
     },
     {
         id: 3,
@@ -29,7 +41,13 @@ export const vehicles: Vehicle[] = [
         price: 55000000,
         km: 6000,
         transmission: 'Automático',
-        image: '/src/assets/images/Catalogo/renault-sandero1.jpg'
+        images: [
+            '/src/assets/images/Catalogo/renault-sandero1.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+        ],
+        features: 'Soat, Tecno, Asientos de cuero, Aire acondicionado'
     },
     {
         id: 4,
@@ -39,7 +57,13 @@ export const vehicles: Vehicle[] = [
         price: 60000000,
         km: 6000,
         transmission: 'Automático',
-        image: '/src/assets/images/Catalogo/renault-sandero1.jpg'
+        images: [
+            '/src/assets/images/Catalogo/renault-sandero1.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+        ],
+        features: 'Soat, Tecno, Asientos de cuero, Aire acondicionado'
     },
     {
         id: 5,
@@ -49,7 +73,13 @@ export const vehicles: Vehicle[] = [
         price: 65000000,
         km: 6000,
         transmission: 'Automático',
-        image: '/src/assets/images/Catalogo/renault-sandero1.jpg'
+        images: [
+            '/src/assets/images/Catalogo/renault-sandero1.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+        ],
+        features: 'Soat, Tecno, Asientos de cuero, Aire acondicionado'
     },
     {
         id: 6,
@@ -59,7 +89,13 @@ export const vehicles: Vehicle[] = [
         price: 70000000,
         km: 6000,
         transmission: 'Mecánico',
-        image: '/src/assets/images/Catalogo/renault-sandero1.jpg'
+        images: [
+            '/src/assets/images/Catalogo/renault-sandero1.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+        ],
+        features: 'Soat, Tecno, Asientos de cuero, Aire acondicionado'
     },
     {
         id: 7,
@@ -69,7 +105,13 @@ export const vehicles: Vehicle[] = [
         price: 75000000,
         km: 6000,
         transmission: 'Mecánico',
-        image: '/src/assets/images/Catalogo/renault-sandero1.jpg'
+        images: [
+            '/src/assets/images/Catalogo/renault-sandero1.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+        ],
+        features: 'Soat, Tecno, Asientos de cuero, Aire acondicionado'
     },
     {
         id: 8,
@@ -79,6 +121,12 @@ export const vehicles: Vehicle[] = [
         price: 80000000,
         km: 6000,
         transmission: 'Automático',
-        image: '/src/assets/images/Catalogo/renault-sandero1.jpg'
+        images: [
+            '/src/assets/images/Catalogo/renault-sandero1.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+            '/src/assets/images/Catalogo/renault-reverse.jpg',
+        ],
+        features: 'Soat, Tecno, Asientos de cuero, Aire acondicionado'
     },
 ];

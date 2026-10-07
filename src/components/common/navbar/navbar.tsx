@@ -2,13 +2,37 @@ import styles from './Navbar.module.css';
 import logoIcon from '../../../assets/images/SVG/logo-icon.svg';
 import logoText from '../../../assets/images/SVG/logo-text.svg';
 import Button from '../Button/Button.tsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import menuIcon from '../../../assets/images/Iconos/menu.svg';
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const handleScrollToSection = (sectionId: string) => {
+        setIsMenuOpen(false);
+
+        if (location.pathname !== '/') {
+                navigate('/');
+                // Damos un pequeño respiro para que cargue la página principal antes de buscar el elemento
+                setTimeout(() => {
+                    const element = document.getElementById(sectionId);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 100);
+            } else {
+                // Si ya estamos en el Home, solo hacemos scroll directo
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    const offset = 80;
+                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                    window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+                }
+            }
+        };
 
     return (    
         <nav className={styles.navbar}>
@@ -38,13 +62,7 @@ const Navbar = () => {
                             href="#catalogo" 
                             onClick={(e) => {
                                 e.preventDefault();
-                                setIsMenuOpen(false);
-                                const element = document.getElementById('catalogo');
-                                if (element) {
-                                    const offset = 80; 
-                                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-                                    window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
-                                }
+                                handleScrollToSection('catalogo');
                             }}
                         >
                             Catálogo
@@ -57,11 +75,7 @@ const Navbar = () => {
                             href="#credito" 
                             onClick={(e) => {
                                 e.preventDefault();
-                                setIsMenuOpen(false);
-                                const element = document.getElementById('credito');
-                                if (element) {
-                                    element.scrollIntoView({ behavior: 'smooth' });
-                                }
+                                handleScrollToSection('credito');
                             }}
                         >
                             Crédito
@@ -95,11 +109,7 @@ const Navbar = () => {
                         <Button 
                             size="medium" 
                             onClick={() => {
-                                setIsMenuOpen(false);
-                                const element = document.getElementById('contacto');
-                                if (element) {
-                                    element.scrollIntoView({ behavior: 'smooth' });
-                                }
+                                handleScrollToSection('contacto');
                             }}
                         >
                             Contáctanos
