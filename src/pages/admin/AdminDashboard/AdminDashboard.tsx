@@ -71,7 +71,11 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Tarjeta Centro */}
-                <div className={styles.actionCard}>
+                <div 
+                    className={styles.actionCard}
+                    onClick={() => navigate('/admin/estudios')}
+                    style={{ cursor: 'pointer' }}
+                >
                     <h3 className={styles.cardTitle}>Procesos de crédito</h3>
                     <p className={styles.cardDescription}>
                         Revisa el estado de las solicitudes de financiamiento y haz seguimiento a los expedientes.
