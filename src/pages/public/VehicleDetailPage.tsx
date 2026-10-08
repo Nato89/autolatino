@@ -6,6 +6,9 @@ import flechaIzquierda from '../../assets/images/Iconos/arrow-prev.svg';
 import flechaDerecha from '../../assets/images/Iconos/arrow-next.svg';
 import flechaVolver from '../../assets/images/Iconos/arrow-return.svg';
 import Button from '../../components/common/Button/Button';
+import { Pencil, Trash2 } from 'lucide-react';
+import EditVehicleModal from '../../components/admin/EditVehicleModal/EditVehicleModal';
+import ConfirmModal from '../../components/common/ConfirmModal/ConfirmModal';
 
 const VehicleDetailPage = () => {
     const { id } = useParams();
@@ -18,6 +21,9 @@ const VehicleDetailPage = () => {
     const [isZoomed, setIsZoomed] = useState(false);
     const [touchStart, setTouchStart] = useState(0);
     const [touchEnd, setTouchEnd] = useState(0);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const handleTouchEnd = () => {
         const distance = touchStart - touchEnd;
@@ -38,6 +44,13 @@ const VehicleDetailPage = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('autolatino_user');
+        if (storedUser) {
+            setIsLoggedIn(true);
+        }
     }, []);
 
     useEffect(() => {
@@ -111,7 +124,27 @@ const VehicleDetailPage = () => {
                 <div className={styles.bottomSection}>
                     {/* Columna izquierda: info del vehículo */}
                     <div className={styles.info}>
-                        <h1>{vehicle.brand} {vehicle.model}</h1>
+                        <div className={styles.infoHeader}>
+                            <h1>{vehicle.brand} {vehicle.model}</h1>
+                            {isLoggedIn && (
+                                <div className={styles.adminActions}>
+                                    <button 
+                                        className={styles.editBtn} 
+                                        title="Editar vehículo"
+                                        onClick={() => setShowEditModal(true)}
+                                    >
+                                        <Pencil size={20} />
+                                    </button>
+                                    <button 
+                                        className={styles.deleteBtn} 
+                                        title="Eliminar vehículo"
+                                        onClick={() => setShowDeleteModal(true)}
+                                    >
+                                        <Trash2 size={20} />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                         <div className={styles.yearKmRow}>
                             <p>{vehicle.year} - {vehicle.km} km</p>
                             <span className={styles.badge}>{vehicle.transmission}</span>
@@ -176,6 +209,24 @@ const VehicleDetailPage = () => {
                     </div>
                 </div>
             </div>
+
+            {showEditModal && (
+                <EditVehicleModal
+                    vehicle={vehicle}
+                    onClose={() => setShowEditModal(false)}
+                />
+            )}
+
+            {showDeleteModal && (
+                <ConfirmModal
+                    message={`¿Estás seguro de que quieres eliminar el vehículo ${vehicle.brand} ${vehicle.model}?`}
+                    onConfirm={() => {
+                        console.log('Eliminar vehículo:', vehicle.id);
+                        setShowDeleteModal(false);
+                    }}
+                    onCancel={() => setShowDeleteModal(false)}
+                />
+            )}
         </div>
     );
 };

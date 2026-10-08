@@ -1,6 +1,6 @@
 import styles from './Catalogo.module.css';
 import { vehicles } from '../../../data/vehicles';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RangeFilter from '../../common/RangeFilter/RangeFilter';
 import logo from '../../../assets/images/Catalogo/Autolatino-logo.jpg';
@@ -8,6 +8,9 @@ import verTodosIcon from '../../../assets/images/Iconos/ver-todos.svg';
 import contraerIcon from '../../../assets/images/Iconos/contraer.svg';
 import filterIcon from '../../../assets/images/Iconos/filter.svg';
 import Button from '../../common/Button/Button';
+import { Pencil, Trash2 } from 'lucide-react';
+import EditVehicleModal from '../../admin/EditVehicleModal/EditVehicleModal';
+import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
 
 const Catalogo = () => {
     const [transmision, setTransmision] = useState('todos');
@@ -17,6 +20,23 @@ const Catalogo = () => {
     const [mostrarTodos, setMostrarTodos] = useState(false);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [editingVehicle, setEditingVehicle] = useState<number | null>(null);
+    const [deletingVehicle, setDeletingVehicle] = useState<number | null>(null);
+
+    useEffect(() => {
+        const checkAuth = () => {
+            const storedUser = localStorage.getItem('autolatino_user');
+            setIsLoggedIn(!!storedUser);
+        };
+
+        checkAuth();
+        window.addEventListener('authChange', checkAuth);
+
+        return () => {
+            window.removeEventListener('authChange', checkAuth);
+        };
+    }, []);
 
     const vehiclesFiltrados = vehicles.filter((vehicle) => {
         const cumpleTransmision = transmision === 'todos' || vehicle.transmission === transmision;
@@ -120,9 +140,32 @@ const Catalogo = () => {
                         <div key={vehicle.id} className={styles.card}>
                             <img src={vehicle.images[0]} alt={vehicle.model} />
                             <div className={styles.cardContent}>
-                                <h3>{vehicle.brand} {vehicle.model}</h3>
-                                <p className={styles.details}>{vehicle.year} - {vehicle.km} km</p>
-                                <span className={styles.badge}>{vehicle.transmission}</span>
+                                <div className={styles.cardHeader}>
+                                    <div>
+                                        <h3>{vehicle.brand} {vehicle.model}</h3>
+                                        <p className={styles.details}>{vehicle.year} - {vehicle.km} km</p>
+                                        <span className={styles.badge}>{vehicle.transmission}</span>
+                                    </div>
+
+                                    {isLoggedIn && (
+                                        <div className={styles.adminActions}>
+                                            <button 
+                                                className={styles.editBtn} 
+                                                title="Editar vehículo"
+                                                onClick={() => setEditingVehicle(vehicle.id)}
+                                            >
+                                                <Pencil size={20} />
+                                            </button>
+                                            <button 
+                                                className={styles.deleteBtn} 
+                                                title="Eliminar vehículo"
+                                                onClick={() => setDeletingVehicle(vehicle.id)}
+                                            >
+                                                <Trash2 size={20} />
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className={styles.divider}></div>
                                 <div className={styles.priceRow}>
                                     <div className={styles.priceColumn}>
@@ -157,8 +200,26 @@ const Catalogo = () => {
                     <img src={contraerIcon} alt="Contraer" />
                 </button>
             )}
-                    </section>
-                );
+
+            {editingVehicle !== null && (
+                <EditVehicleModal
+                    vehicle={vehicles.find(v => v.id === editingVehicle)!}
+                    onClose={() => setEditingVehicle(null)}
+                />
+            )}
+
+            {deletingVehicle !== null && (
+                <ConfirmModal
+                    message={`¿Estás seguro de que quieres eliminar el vehículo ${vehicles.find(v => v.id === deletingVehicle)?.brand} ${vehicles.find(v => v.id === deletingVehicle)?.model}?`}
+                    onConfirm={() => {
+                        console.log('Eliminar vehículo:', deletingVehicle);
+                        setDeletingVehicle(null);
+                    }}
+                    onCancel={() => setDeletingVehicle(null)}
+                />
+            )}
+        </section>
+    );
 };
 
 export default Catalogo;

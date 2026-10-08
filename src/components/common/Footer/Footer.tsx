@@ -43,6 +43,13 @@ const Footer = () => {
         }
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('autolatino_user');
+        setUser(null);
+        window.dispatchEvent(new Event('authChange'));
+        navigate('/');
+    };
+
     return (
         <footer className={styles.footer}>
             {/* Franja superior */}
@@ -114,11 +121,7 @@ const Footer = () => {
 
                             <div className={styles.authButtons}>
                                 <Button size="small" onClick={() => navigate('/admin')}>Dashboard</Button>
-                                <Button size="small" onClick={() => {
-                                    localStorage.removeItem('autolatino_user');
-                                    setUser(null);
-                                    navigate('/');
-                                }}>Salir</Button>
+                                <Button size="small" onClick={handleLogout}>Salir</Button>
                             </div>
                         </>
                     ) : (

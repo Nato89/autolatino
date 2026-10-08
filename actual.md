@@ -10,10 +10,11 @@ La base del proyecto ya está levantada como prototipo frontend de concesionaria
 
 Los entregables ya visibles en la app incluyen:
 - landing page completa con secciones públicas y navegación responsive.
-- catálogo de vehículos con datos mock y vista detallada por unidad.
+- catálogo de vehículos con datos mock, filtros de transmisión/precio/modelo/kilometraje y vista detallada por unidad.
 - formulario de crédito con validación de archivo y feedback local.
 - login de empleados simulado con almacenamiento local.
-- dashboard y gestión administrativa visual de vehículos con acciones mock.
+- dashboard y gestión administrativa visual de vehículos con acciones mock disponibles también desde el catálogo y el detalle al iniciar sesión.
+- página administrativa de procesos de crédito con solicitudes mock, cambio local de estado, detalle y eliminación local.
 
 Los elementos aún no funcionales o no integrados con backend se mantienen explícitamente como demo y deben tratarse como tal durante cualquier ampliación del proyecto.
 
@@ -51,6 +52,7 @@ src/
 │  │  ├─ ConfirmModal/
 │  │  ├─ Footer/
 │  │  ├─ InputField/
+│  │  ├─ RangeFilter/
 │  │  ├─ navbar/
 │  │  └─ whatsAppButton/
 │  └─ public/
@@ -58,6 +60,7 @@ src/
 │     ├─ Contacto/
 │     ├─ Credito/
 │     ├─ Elegirnos/
+│     ├─ FileUploader/
 │     └─ Hero/
 ├─ data/
 │  ├─ auth.ts
@@ -77,7 +80,7 @@ src/
    └─ vehicle.ts
 ```
 
-`src/pages/admin` contiene un panel y una pantalla de gestión de vehículos con datos mock. No se ha verificado una integración de backend, base de datos, contexto, hooks ni servicios. `Empaquetado.md` describe una estructura objetivo/futura y no debe tomarse como prueba de que esos módulos ya existen.
+`src/components/common/RangeFilter/` implementa el control reutilizable para rangos del catálogo, y `src/components/public/FileUploader/` ofrece selección/arrastre de archivos y se reutiliza en el formulario de crédito y el modal para agregar vehículos. `Empaquetado.md` describe una estructura objetivo/futura y no debe tomarse como prueba de que esos módulos ya existen.
 
 ## Funcionalidades actuales
 
@@ -89,21 +92,21 @@ src/
 - `/admin/vehiculos`: pantalla de gestión del catálogo de demostración.
 - `/admin/estudios`: gestión de solicitudes de crédito mock.
 
-La página principal reúne Hero, Elegirnos, Catálogo, Crédito, Contacto, Footer y el botón de WhatsApp. El catálogo usa vehículos mock tipados en `src/data/vehicles.ts` y `src/types/vehicle.ts`.
+La página principal reúne Hero, Elegirnos, Catálogo, Crédito, Contacto, Footer y el botón de WhatsApp. El catálogo usa vehículos mock tipados en `src/data/vehicles.ts` y `src/types/vehicle.ts`; permite filtrar por transmisión, rangos de precio, año/modelo y kilometraje, y mostrar todos los resultados o contraer la lista. En móvil, los filtros se abren y cierran desde un panel.
 
-La vista de detalle presenta información y galería del vehículo, navegación entre vehículos y acciones de contacto/crédito. Verificar la implementación concreta en el código antes de modificar o ampliar ese flujo.
+La vista de detalle presenta información y galería del vehículo, navegación entre vehículos, zoom y navegación táctil, además de acciones de contacto por WhatsApp y acceso al formulario de crédito. Los controles de edición/eliminación también aparecen en el catálogo y el detalle cuando hay un usuario local; siguen siendo mock y no aplican cambios al inventario.
 
 ### Login de empleados
 El modal está en `src/components/admin/LoginModal/LoginModal.tsx` y sus estilos en el CSS Module contiguo. Se abre desde el botón “Ingreso” del Footer, mediante estado local. `src/data/auth.ts` contiene un usuario de prueba definido en el cliente.
 
 El formulario compara las credenciales ingresadas con ese usuario mock y muestra un error si no coinciden. Al aceptar, guarda el nombre del asesor en `localStorage` como `autolatino_user`, cierra el modal y navega a `/admin`. Esto es únicamente una demostración en frontend: no hay autenticación, autorización ni sesión seguras, y el dato guardado por el cliente se puede modificar.
 
-El Footer muestra el nombre y avatar del asesor cuando encuentra ese dato local, permite cargar una imagen de perfil y la guarda como dato local, y ofrece accesos al panel y a salir. Cerrar sesión elimina `autolatino_user`. Si el almacenamiento local contiene JSON inválido, el Footer informa el error en consola.
+El Footer muestra el nombre y avatar del asesor cuando encuentra ese dato local, permite cargar una imagen de perfil y la guarda como dato local, y ofrece accesos al panel y a salir. Cerrar sesión elimina `autolatino_user`, actualiza el estado del Footer y emite el evento local `authChange` para que el catálogo oculte sus controles administrativos. Si el almacenamiento local contiene JSON inválido, el Footer informa el error en consola.
 
 ### Panel y gestión de vehículos
 `src/pages/admin/AdminDashboard/AdminDashboard.tsx` presenta un saludo al asesor, una acción para cerrar sesión y tarjetas para vehículos, procesos de crédito y clientes para contactar. La tarjeta de vehículos lleva a `/admin/vehiculos` y la de procesos de crédito lleva a `/admin/estudios`; la tarjeta de clientes sigue siendo informativa.
 
-`src/pages/admin/AdminVehiclesPage/AdminVehiclesPage.tsx` muestra el inventario mock en una tabla y abre interfaces para agregar, editar o confirmar la eliminación de vehículos. Los formularios de agregar/editar solo conservan temporalmente sus campos mientras están abiertos; guardar o confirmar eliminación únicamente escribe en consola y cierra el modal. No modifica `src/data/vehicles.ts`, no persiste cambios ni incorpora operaciones CRUD reales. La confirmación de eliminación se presenta con `src/components/common/ConfirmModal/ConfirmModal.tsx`.
+`src/pages/admin/AdminVehiclesPage/AdminVehiclesPage.tsx` muestra el inventario mock en una tabla y abre interfaces para agregar, editar o confirmar la eliminación de vehículos. Los formularios de agregar/editar solo conservan temporalmente sus campos mientras están abiertos; guardar o confirmar eliminación únicamente escribe en consola y cierra el modal. No modifica `src/data/vehicles.ts`, no persiste cambios ni incorpora operaciones CRUD reales. La confirmación de eliminación se presenta con `src/components/common/ConfirmModal/ConfirmModal.tsx`. Las mismas opciones mock de edición/eliminación están disponibles desde las tarjetas del catálogo y el detalle del vehículo.
 
 `src/pages/admin/AdminStudiesPage/` contiene la página de procesos de crédito y sus estilos. Presenta las solicitudes en tablas separadas entre las pendientes/en estudio y las aprobadas/negadas, permite cambiar su estado y abrir el detalle o eliminar una solicitud. Los cambios y eliminaciones solo actualizan el estado local de la página y se pierden al recargar; no hay persistencia. Los datos iniciales proceden de `src/data/creditApplications.ts`, que contiene solicitudes de prueba.
 
@@ -112,7 +115,7 @@ El tipo `CreditApplication` de `src/types/credit.ts` define los datos de la soli
 El panel comprueba de forma básica la presencia de un nombre en el estado de navegación o de `autolatino_user` en `localStorage` y redirige al inicio si no lo encuentra; no constituye un control de acceso seguro.
 
 ### Solicitud de crédito
-El formulario está en `src/components/public/Credito/Credito.tsx`. Recoge datos del solicitante, referencias, aceptación de términos y un archivo de cédula. Al enviarlo, valida que haya un archivo y muestra un modal local de agradecimiento; no guarda ni transmite los datos.
+El formulario está en `src/components/public/Credito/Credito.tsx` y utiliza `src/components/public/FileUploader/` para adjuntar archivos. Recoge datos del solicitante, referencias y aceptación de términos. Al enviarlo, valida que haya un archivo y muestra un modal local de agradecimiento; no guarda ni transmite los datos.
 
 El botón “Revisar proceso” existe, pero todavía no abre un modal ni consulta solicitudes. `src/types/credit.ts` ahora define el tipo de las solicitudes mostradas en el panel administrativo; `src/types/contact.ts` continúa vacío.
 

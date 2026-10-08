@@ -249,6 +249,52 @@
     transform: translateX(-4px);
 }
 
+/* ============================================
+   4. ADMIN ACTIONS
+   ============================================ */
+
+.infoHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.adminActions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.editBtn,
+.deleteBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.editBtn {
+    color: #FFFFFF;
+}
+
+.deleteBtn {
+    color: #DC2626;
+}
+
+.editBtn:hover,
+.deleteBtn:hover {
+    transform: scale(1.2);
+}
+
+/* ============================================
+   4. RESPONSIVE DESIGN
+   ============================================ */
+
 @media (max-width: 768px) {
     .arrowLeft,
     .arrowRight {
