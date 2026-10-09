@@ -6,11 +6,13 @@ import { Eye, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import ConfirmModal from '../../../components/common/ConfirmModal/ConfirmModal';
 import StudyDetailModal from '../../../components/admin/StudyDetailModal/StudyDetailModal';
+import NegacionModal from '../../../components/admin/NegacionModal/NegacionModal';
 
 const AdminStudiesPage = () => {
     const [applications, setApplications] = useState<CreditApplication[]>(creditApplications);
     const [deletingApplication, setDeletingApplication] = useState<number | null>(null);
     const [viewingApplication, setViewingApplication] = useState<number | null>(null);
+    const [negatingApplication, setNegatingApplication] = useState<number | null>(null);
 
     const solicitudesNuevas = applications.filter(
         (app) => app.estado === 'Inicial' || app.estado === 'En estudio'
@@ -21,6 +23,11 @@ const AdminStudiesPage = () => {
     );
 
     const handleChangeEstado = (id: number, nuevoEstado: CreditApplication['estado']) => {
+        if (nuevoEstado === 'Negado') {
+            setNegatingApplication(id);
+            return;
+        }
+
         setApplications((prev) =>
             prev.map((app) =>
                 app.id === id
@@ -28,6 +35,20 @@ const AdminStudiesPage = () => {
                     : app
             )
         );
+    };
+
+    const handleConfirmNegacion = (razon: string) => {
+        if (negatingApplication === null) return;
+
+        setApplications((prev) =>
+            prev.map((app) =>
+                app.id === negatingApplication
+                    ? { ...app, estado: 'Negado', razonNegacion: razon, updatedAt: new Date().toISOString() }
+                    : app
+            )
+        );
+
+        setNegatingApplication(null);
     };
 
     return (
@@ -170,6 +191,14 @@ const AdminStudiesPage = () => {
                         setDeletingApplication(null);
                     }}
                     onCancel={() => setDeletingApplication(null)}
+                />
+            )}
+
+            { /* Modal de negación */ }
+            {negatingApplication !== null && (
+                <NegacionModal
+                    onConfirm={handleConfirmNegacion}
+                    onCancel={() => setNegatingApplication(null)}
                 />
             )}
         </div>

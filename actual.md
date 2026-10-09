@@ -34,53 +34,153 @@ Scripts disponibles:
 
 ## Estructura relevante
 ```text
-src/
-├─ App.tsx
-├─ main.tsx
-├─ assets/
-│  ├─ fonts/
-│  ├─ images/
-│  └─ styles/
-├─ components/
-│  ├─ admin/
-│  │  ├─ AddVehicleModal/
-│  │  ├─ EditVehicleModal/
-│  │  ├─ LoginModal/
-│  │  └─ StudyDetailModal/
-│  ├─ common/
-│  │  ├─ Button/
-│  │  ├─ ConfirmModal/
-│  │  ├─ Footer/
-│  │  ├─ InputField/
-│  │  ├─ RangeFilter/
-│  │  ├─ navbar/
-│  │  └─ whatsAppButton/
-│  └─ public/
-│     ├─ Catalogo/
-│     ├─ Contacto/
-│     ├─ Credito/
-│     ├─ Elegirnos/
-│     ├─ FileUploader/
-│     └─ Hero/
-├─ data/
-│  ├─ auth.ts
-│  ├─ creditApplications.ts
-│  └─ vehicles.ts
-├─ pages/
-│  ├─ admin/
-│  │  ├─ AdminDashboard/
-│  │  ├─ AdminStudiesPage/
-│  │  └─ AdminVehiclesPage/
-│  └─ public/
-│     ├─ HomePage.tsx
-│     └─ VehicleDetailPage.tsx
-└─ types/
-   ├─ contact.ts
-   ├─ credit.ts
-   └─ vehicle.ts
+.
+├─ .gitignore
+├─ .oxlintrc.json
+├─ Empaquetado.md
+├─ README.md
+├─ actual.md
+├─ index.html
+├─ package.json
+├─ package-lock.json
+├─ tsconfig.json
+├─ tsconfig.app.json
+├─ tsconfig.node.json
+├─ vite.config.ts
+├─ public/
+│  └─ SVG/
+│     ├─ favicon.svg
+│     ├─ flecha-derecha.svg
+│     └─ flecha-izquierda.svg
+└─ src/
+   ├─ App.tsx
+   ├─ main.tsx
+   ├─ assets/
+   │  ├─ images/
+   │  │  ├─ Catalogo/
+   │  │  │  ├─ Autolatino-logo.jpg
+   │  │  │  ├─ renault-reverse.jpg
+   │  │  │  ├─ renault-sandero1.jpg
+   │  │  │  ├─ renault-sandero2 .jpg
+   │  │  │  ├─ renault-sandero2.jpg
+   │  │  │  ├─ renault-sandero3.jpg
+   │  │  │  └─ renault-sandero4 - copia.jpg
+   │  │  ├─ Hero/
+   │  │  │  ├─ auto.png
+   │  │  │  ├─ contacto.png
+   │  │  │  ├─ financiacion.png
+   │  │  │  ├─ seguro.png
+   │  │  │  └─ vender.png
+   │  │  ├─ Iconos/
+   │  │  │  ├─ al-logo.svg
+   │  │  │  ├─ arrow-next.svg
+   │  │  │  ├─ arrow-prev.svg
+   │  │  │  ├─ arrow-return.svg
+   │  │  │  ├─ avatar.svg
+   │  │  │  ├─ camera-icon.svg
+   │  │  │  ├─ contraer.svg
+   │  │  │  ├─ facebook.svg
+   │  │  │  ├─ filter.svg
+   │  │  │  ├─ instagram.svg
+   │  │  │  ├─ menu.svg
+   │  │  │  ├─ paperclip.svg
+   │  │  │  ├─ upload.svg
+   │  │  │  ├─ ver-todos.svg
+   │  │  │  └─ wa.png
+   │  │  └─ SVG/
+   │  │     ├─ logo-icon.svg
+   │  │     └─ logo-text.svg
+   │  └─ styles/
+   │     ├─ global.css
+   │     └─ variables.css
+   ├─ components/
+   │  ├─ admin/
+   │  │  ├─ AddVehicleModal/
+   │  │  │  ├─ AddVehicleModal.module.css
+   │  │  │  └─ AddVehicleModal.tsx
+   │  │  ├─ EditVehicleModal/
+   │  │  │  ├─ EditVehicleModal.module.css
+   │  │  │  └─ EditVehicleModal.tsx
+   │  │  ├─ LoginModal/
+   │  │  │  ├─ LoginModal.module.css
+   │  │  │  └─ LoginModal.tsx
+   │  │  ├─ NegacionModal/
+   │  │  │  ├─ NegacionModal.module.css
+   │  │  │  └─ NegacionModal.tsx
+   │  │  └─ StudyDetailModal/
+   │  │     ├─ StudyDetailModal.module.css
+   │  │     └─ StudyDetailModal.tsx
+   │  ├─ common/
+   │  │  ├─ Button/
+   │  │  │  ├─ Button.module.css
+   │  │  │  └─ Button.tsx
+   │  │  ├─ ConfirmModal/
+   │  │  │  ├─ ConfirmModal.module.css
+   │  │  │  └─ ConfirmModal.tsx
+   │  │  ├─ Footer/
+   │  │  │  ├─ Footer.module.css
+   │  │  │  └─ Footer.tsx
+   │  │  ├─ InputField/
+   │  │  │  ├─ InputField.module.css
+   │  │  │  └─ InputField.tsx
+   │  │  ├─ navbar/
+   │  │  │  ├─ Navbar.module.css
+   │  │  │  └─ navbar.tsx
+   │  │  ├─ RangeFilter/
+   │  │  │  ├─ RangeFilter.module.css
+   │  │  │  └─ RangeFilter.tsx
+   │  │  └─ whatsAppButton/
+   │  │     ├─ whatsAppButton.module.css
+   │  │     └─ whatsAppButton.tsx
+   │  └─ public/
+   │     ├─ Catalogo/
+   │     │  ├─ Catalogo.module.css
+   │     │  └─ Catalogo.tsx
+   │     ├─ Contacto/
+   │     │  ├─ Contacto.module.css
+   │     │  └─ Contacto.tsx
+   │     ├─ Credito/
+   │     │  ├─ Credito.module.css
+   │     │  └─ Credito.tsx
+   │     ├─ Elegirnos/
+   │     │  ├─ Elegirnos.module.css
+   │     │  └─ Elegirnos.tsx
+   │     ├─ FileUploader/
+   │     │  ├─ FileUploader.module.css
+   │     │  └─ FileUploader.tsx
+   │     ├─ Hero/
+   │     │  ├─ Hero.module.css
+   │     │  ├─ Hero.tsx
+   │     │  ├─ Slide.module.css
+   │     │  └─ Slide.tsx
+   │     └─ StatusModal/
+   │        ├─ StatusModal.module.css
+   │        └─ StatusModal.tsx
+   ├─ data/
+   │  ├─ auth.ts
+   │  ├─ creditApplications.ts
+   │  └─ vehicles.ts
+   ├─ pages/
+   │  ├─ admin/
+   │  │  ├─ AdminDashboard/
+   │  │  │  ├─ AdminDashboard.module.css
+   │  │  │  └─ AdminDashboard.tsx
+   │  │  ├─ AdminStudiesPage/
+   │  │  │  ├─ AdminStudiesPage.module.css
+   │  │  │  └─ AdminStudiesPage.tsx
+   │  │  └─ AdminVehiclesPage/
+   │  │     ├─ AdminVehiclesPage.module.css
+   │  │     └─ AdminVehiclesPage.tsx
+   │  └─ public/
+   │     ├─ HomePage.tsx
+   │     ├─ VehicleDetailPage.module.css
+   │     └─ VehicleDetailPage.tsx
+   └─ types/
+      ├─ credit.ts
+      └─ vehicle.ts
 ```
 
-`src/components/common/RangeFilter/` implementa el control reutilizable para rangos del catálogo, y `src/components/public/FileUploader/` ofrece selección/arrastre de archivos y se reutiliza en el formulario de crédito y el modal para agregar vehículos. `Empaquetado.md` describe una estructura objetivo/futura y no debe tomarse como prueba de que esos módulos ya existen.
+El árbol enumera archivos no vacíos que forman parte de la aplicación, su configuración, documentación y recursos estáticos. Se omiten las carpetas vacías, `src/types/contact.ts` (vacío), dependencias instaladas (`node_modules`), el resultado generado de compilación (`dist`) y la carpeta de material archivado `borrar/`. `src/components/common/RangeFilter/` implementa el control reutilizable para rangos del catálogo, y `src/components/public/FileUploader/` ofrece selección/arrastre de archivos y se reutiliza en el formulario de crédito y el modal para agregar vehículos. `Empaquetado.md` describe una estructura objetivo/futura y no debe tomarse como prueba de que esos módulos ya existen.
 
 ## Funcionalidades actuales
 
@@ -117,7 +217,7 @@ El panel comprueba de forma básica la presencia de un nombre en el estado de na
 ### Solicitud de crédito
 El formulario está en `src/components/public/Credito/Credito.tsx` y utiliza `src/components/public/FileUploader/` para adjuntar archivos. Recoge datos del solicitante, referencias y aceptación de términos. Al enviarlo, valida que haya un archivo y muestra un modal local de agradecimiento; no guarda ni transmite los datos.
 
-El botón “Revisar proceso” existe, pero todavía no abre un modal ni consulta solicitudes. `src/types/credit.ts` ahora define el tipo de las solicitudes mostradas en el panel administrativo; `src/types/contact.ts` continúa vacío.
+El botón “Revisar proceso” ya abre `src/components/public/StatusModal/StatusModal.tsx`, que solicita la cédula del solicitante, busca la solicitud en la lista mock y muestra el estado actual, el motivo de rechazo cuando aplica y un mensaje especial para solicitudes aprobadas. Esta consulta es local y de demostración; no hay backend ni persistencia real de estados. `src/types/credit.ts` define el tipo de las solicitudes mostradas en el panel administrativo; `src/types/contact.ts` continúa vacío.
 
 ### Contacto y datos
 El sitio incluye una sección de contacto y enlaces directos de WhatsApp/redes. No hay una integración de CRM o backend verificada. El inventario de vehículos es de demostración, no un inventario conectado a datos reales.
@@ -126,10 +226,10 @@ La navegación permite desplazarse a Catálogo, Crédito y Contacto desde la pá
 
 ## Próximas funcionalidades planeadas
 1. Implementar operaciones funcionales para crear, editar y eliminar vehículos, con persistencia definida.
-2. Crear el modal “Revisar proceso” para que el cliente consulte el estado usando su cédula y una fuente de solicitudes compartida.
+2. Definir una persistencia real y un flujo de sincronización para las solicitudes, para que la consulta pública y la gestión interna no dependan solo de datos locales de demostración.
 3. Conectar la gestión de leads a un flujo funcional, si forma parte del alcance.
 
-Estas son tareas pendientes, no funciones ya implementadas. El login y el panel actuales son una base visual/mock, no una autenticación o administración funcional. La gestión de procesos de crédito ya tiene una página, un modelo tipado y datos mock, pero sus cambios solo viven en memoria de la página y no se comparten con el formulario público ni persisten entre recargas.
+Estas son tareas pendientes, no funciones ya implementadas. El login y el panel actuales son una base visual/mock, no una autenticación o administración funcional. La gestión de procesos de crédito ya tiene una página, un modelo tipado, datos mock y una consulta pública por cédula, pero sus cambios siguen siendo locales y no persisten ni se integran con un backend real.
 
 ## Pendiente para una versión de producción
 - Backend, base de datos y persistencia segura.
@@ -140,6 +240,6 @@ Estas son tareas pendientes, no funciones ya implementadas. El login y el panel 
 - Validación final de responsive, accesibilidad, UX y despliegue.
 
 ## Resumen
-AutoLatino es una aplicación React + TypeScript + Vite para una concesionaria con base visual completa y flujos públicos y administrativos de demostración. Incluye landing pública, navegación responsive, catálogo mock, detalle de vehículo, formulario de crédito, login local de asesor, dashboard, gestión visual de inventario y una página administrativa de solicitudes de crédito con detalle y actualización de estado local. El proyecto funciona como prototipo de UX/front-end, con datos simulados y comportamiento local, sin autenticación segura ni persistencia real.
+AutoLatino es una aplicación React + TypeScript + Vite para una concesionaria con base visual completa y flujos públicos y administrativos de demostración. Incluye landing pública, navegación responsive, catálogo mock, detalle de vehículo, formulario de crédito, consulta pública de estado por cédula, login local de asesor, dashboard, gestión visual de inventario y una página administrativa de solicitudes de crédito con detalle y actualización de estado local. El proyecto funciona como prototipo de UX/front-end, con datos simulados y comportamiento local, sin autenticación segura ni persistencia real.
 
 La siguiente etapa no es "producirlo" sino consolidar los flujos de negocio con datos mock y reglas explícitas de demo para que la experiencia sea coherente, sin presentar servicios o integraciones que todavía no existen. El objetivo actual sigue siendo validar diseño, navegación y lógica de interacción antes de definir backend y persistencia real.

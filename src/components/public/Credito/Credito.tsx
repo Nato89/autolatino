@@ -3,9 +3,14 @@ import { useState } from 'react';
 import Button from '../../common/Button/Button';
 import InputField from '../../common/InputField/InputField';
 import FileUploader from '../FileUploader/FileUploader';
-
+import { StatusModal } from '../StatusModal/StatusModal';
+import { creditApplications } from '../../../data/creditApplications';
 
 const Credito = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [files, setFiles] = useState<File[]>([]);     
+    const [isStatusModalOpen, setIsStatusModalOpen] = useState(false); 
+
     const [formData, setFormData] = useState({
         nombres: '',
         cedula: '',
@@ -18,9 +23,7 @@ const Credito = () => {
         refFamiliarNombre: '',
         refFamiliarTel: '',
         aceptaTerminos: false,
-    });
-    const [showModal, setShowModal] = useState(false);
-    const [files, setFiles] = useState<File[]>([]);    
+    });      
     
     const handleChange = (field: string, value: string | boolean) => {
         setFormData((prev) => ({
@@ -37,7 +40,9 @@ const Credito = () => {
                 <p className={styles.texto}>De 1 a 2 días hábiles te daremos una respuesta</p>
                 <div className={styles.buttonsContainer}>
                     <div className={styles.revisarWrapper}>
-                        <Button size="large">Revisar proceso</Button>
+                        <Button size="large" onClick={() => setIsStatusModalOpen(true)}>
+                            Revisar proceso
+                        </Button>
                     </div>
                     <div className={`${styles.dudaWrapper} ${styles.dudaWrapperRelative}`}>
                         <Button 
@@ -235,6 +240,13 @@ const Credito = () => {
                     </div>
                 </div>
             )}
+
+            {/* Modal para revisar el estado del proceso */}
+            <StatusModal
+                isOpen={isStatusModalOpen}
+                onClose={() => setIsStatusModalOpen(false)}
+                creditApplications={creditApplications}
+            />
         </section>
     );
 };
