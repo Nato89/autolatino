@@ -5,6 +5,7 @@ import VehicleDetailPage from './pages/public/VehicleDetailPage';
 import AdminDashboard from './pages/admin/AdminDashboard/AdminDashboard';
 import AdminVehiclesPage from './pages/admin/AdminVehiclesPage/AdminVehiclesPage';
 import AdminStudiesPage from './pages/admin/AdminStudiesPage/AdminStudiesPage';
+import ContactoClientes from './pages/admin/ClientesContacto/ClientesContacto';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/vehiculos" element={<AdminVehiclesPage />} />
         <Route path="/admin/estudios" element={<AdminStudiesPage />} />
+        <Route path="/admin/clientes-contacto" element={<ContactoClientes />} />
       </Routes>
     </div>
   );

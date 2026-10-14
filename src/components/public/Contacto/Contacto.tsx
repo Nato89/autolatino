@@ -4,7 +4,7 @@ import InputField from '../../common/InputField/InputField';
 
 const Contacto = () => {
     const [formData, setFormData] = useState({
-        nombres: '',        
+        nombre: '',        
         celular: '',
         email: '',
         asunto: '',
@@ -32,7 +32,7 @@ const Contacto = () => {
                 e.preventDefault(); 
                 setShowModal(true); 
                 setFormData({
-                    nombres: '',
+                    nombre: '',
                     celular: '',
                     email: '',
                     asunto: '',
@@ -40,14 +40,14 @@ const Contacto = () => {
                 });
             }}>
 
-                {/* Fila 1: Nombres */}
+                {/* Fila 1: Nombre */}
                 <div className={styles.formRow}>
                     <InputField
-                            label="Nombres"
+                            label="Nombre"
                             type="text"
                             placeholder="Juan Pérez"
-                            value={formData.nombres}
-                            onChange={(val) => handleChange('nombres', val)}
+                            value={formData.nombre}
+                            onChange={(val) => handleChange('nombre', val)}
                             required
                         />                    
                 </div>

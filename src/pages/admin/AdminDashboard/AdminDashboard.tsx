@@ -83,7 +83,11 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Tarjeta Derecha */}
-                <div className={styles.actionCard}>
+                <div 
+                    className={styles.actionCard}
+                    onClick={() => navigate('/admin/clientes-contacto')}
+                    style={{ cursor: 'pointer' }}
+                >
                     <h3 className={styles.cardTitle}>Clientes para contactar</h3>
                     <p className={styles.cardDescription}>
                         Visualiza la lista de leads y clientes interesados que requieren seguimiento comercial.
