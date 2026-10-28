@@ -60,6 +60,14 @@
     background-color: #F9F9F9;
 }
 
+.loadingText {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    color: #020D22;
+    text-align: center;
+    padding: 2rem;
+}
+
 /* ============================================
    BOTONES DE ACCIÓN EN LA TABLA
    ============================================ */

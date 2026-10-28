@@ -3,7 +3,8 @@ import avatarIcon from '../../../assets/images/Iconos/avatar.svg';
 import { useState } from 'react';
 import Button from '../../common/Button/Button';
 import { useNavigate } from 'react-router-dom';
-import { MOCK_ADMIN_USER } from '../../../data/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../../firebase';
 
 interface LoginModalProps {
     onClose: () => void;
@@ -16,16 +17,21 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const handleLogin = () => {
-        
-        if (usuario === MOCK_ADMIN_USER.email && password === MOCK_ADMIN_USER.password) {
+    const handleLogin = async () => {
+        try {
             setError('');
-            const adminData = { name: MOCK_ADMIN_USER.name };
+            const emailPrefix = usuario.split('@')[0];
+            const formattedName = emailPrefix
+            .replace('.', ' ')
+            .replace(/\b\w/g, (l) => l.toUpperCase());
+            await signInWithEmailAndPassword(auth, usuario, password);
+            const adminData = { name: formattedName };
             localStorage.setItem('autolatino_user', JSON.stringify(adminData));
             onClose();
-            navigate('/admin', { state: { adminName: MOCK_ADMIN_USER.name } }); 
-        } else {
-            setError('Usuario o contraseña incorrectos'); 
+            navigate('/admin', { state: { adminName: formattedName } });        
+        } catch (err) {
+            console.error(err);
+            setError('Usuario o contraseña incorrectos');
         }
     };
 

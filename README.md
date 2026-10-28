@@ -6,36 +6,30 @@ AutoLatino es una aplicación web para la comercialización de vehículos y la g
 
 ## Estado del proyecto y hoja de ruta
 
-> **Estado actual: Prototipo Frontend Interactivo.** La interfaz funciona al 100% dentro del alcance del prototipo, con datos locales simulados (*mock data*) definidos en TypeScript. No hay una base de datos ni un backend conectados; por lo tanto, los cambios de demostración no representan persistencia real y pueden perderse al recargar la aplicación.
+> **Estado actual: Prototipo Frontend con integración parcial de Firebase.** El catálogo público consulta vehículos desde Firestore, el formulario administrativo de alta crea documentos en la colección `vehicles` y la página de detalle permite editar y eliminar vehículos mediante Firestore. La autenticación está conectada con Firebase. La tabla administrativa de vehículos y los módulos de solicitudes de crédito y clientes siguen usando datos simulados.
 
-El siguiente paso de la hoja de ruta es integrar progresivamente la base de datos y el backend para dar persistencia real a las cuatro entidades del sistema:
+La integración pendiente incluye conectar a persistencia real las entidades y flujos que aún son simulados:
 
 - `vehicles`
 - `auth`
 - `creditApplications`
 - `clients`
 
-## Credenciales de demostración
+## Acceso de prueba
 
-Utiliza estas credenciales para abrir el panel de administración desde la opción de acceso de la aplicación:
-
-| Rol | Usuario / correo | Contraseña |
-| --- | --- | --- |
-| Administrador de demostración | `asesor@autolatino.com` | `123456` |
-
-Estas credenciales están definidas en el frontend únicamente para la demostración. No son un mecanismo de autenticación seguro para producción.
+Cuando la aplicación esté lista para pruebas, se proporcionarán las credenciales de acceso correspondientes.
 
 ## Funcionalidades y módulos activos
 
-- **Catálogo de vehículos:** listado de vehículos, filtros y acceso a páginas de detalle.
+- **Catálogo de vehículos:** listado consultado desde Firestore, filtros y acceso a páginas de detalle.
 - **Panel de administración:** navegación a los módulos de gestión de vehículos, procesos de crédito y clientes para contactar.
-- **Gestión de vehículos:** vista de catálogo administrativo, modales de alta y edición, y confirmación de eliminación. Los datos provienen del arreglo local `vehicles`.
+- **Gestión de vehículos:** la tabla administrativa muestra datos mock del arreglo local `vehicles`; desde allí, editar y eliminar son acciones simuladas. El modal de alta sí crea vehículos en Firestore, pero guarda `images: []` y la tabla no refleja esas altas. En la página de detalle, editar y eliminar sí usan Firestore.
 - **Formulario de crédito:** interfaz para recopilar datos de la solicitud y documentos asociados.
 - **Procesos de crédito:** listado de solicitudes por revisar y gestionadas, cambio de estado, consulta de detalle y acciones de aprobación o negación simuladas sobre el estado local.
 - **Clientes y contacto:** tabla de leads con datos simulados, enlace para iniciar contacto por WhatsApp y eliminación de filas durante la sesión.
-- **Acceso de demostración:** inicio de sesión contra el usuario simulado y navegación protegida por estado local del navegador.
+- **Acceso administrativo:** inicio de sesión conectado con Firebase; las credenciales de prueba se proporcionarán cuando la aplicación esté lista para pruebas.
 
-Las operaciones administrativas son interacciones de prototipo en memoria; no guardan cambios en un servidor ni garantizan que se mantengan después de recargar.
+Por lo tanto, no todas las operaciones administrativas son simuladas: las altas de vehículos y las ediciones/eliminaciones desde el detalle se guardan en Firestore. Las acciones mock y los cambios locales de los demás módulos no se guardan en un servidor y pueden perderse al recargar.
 
 ## Stack tecnológico
 
@@ -43,6 +37,7 @@ Las operaciones administrativas son interacciones de prototipo en memoria; no gu
 - **TypeScript** `~6.0.2`
 - **Vite** `^8.2.0` con `@vitejs/plugin-react` `^6.0.4`
 - **React Router DOM** `^7.18.3` para navegación
+- **Firebase / Firestore** para la lectura y algunas operaciones del inventario de vehículos
 - **CSS Modules** y hojas globales para estilos
 - **Lucide React** `^1.30.0` para iconografía
 - **Oxlint** `^1.75.0` para linting

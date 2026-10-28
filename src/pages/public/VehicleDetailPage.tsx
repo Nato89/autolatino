@@ -1,5 +1,4 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { vehicles } from '../../data/vehicles';
 import { useEffect, useState } from 'react';
 import styles from './VehicleDetailPage.module.css';
 import flechaIzquierda from '../../assets/images/Iconos/arrow-prev.svg';
@@ -9,14 +8,12 @@ import Button from '../../components/common/Button/Button';
 import { Pencil, Trash2 } from 'lucide-react';
 import EditVehicleModal from '../../components/admin/EditVehicleModal/EditVehicleModal';
 import ConfirmModal from '../../components/common/ConfirmModal/ConfirmModal';
+import type { Vehicle } from '../../types/vehicle';
+import { subscribeToVehicles, deleteVehicle } from '../../services/vehicleService';
 
 const VehicleDetailPage = () => {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const vehicle = vehicles.find(v => v.id === Number(id));
-    const currentIndex = vehicles.findIndex(v => v.id === Number(id));
-    const prevIndex = currentIndex - 1;
-    const nextIndex = currentIndex + 1;
+    const { id } = useParams();    
+    const navigate = useNavigate();    
     const [selectedImage, setSelectedImage] = useState(0);
     const [isZoomed, setIsZoomed] = useState(false);
     const [touchStart, setTouchStart] = useState(0);
@@ -24,6 +21,21 @@ const VehicleDetailPage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+    const [loading, setLoading] = useState(true);
+    const vehicle = vehicles.find(v => v.id === id);
+    const currentIndex = vehicles.findIndex(v => v.id === id);
+    const prevIndex = currentIndex > 0 ? currentIndex - 1 : -1;
+    const nextIndex = currentIndex >= 0 && currentIndex < vehicles.length - 1 ? currentIndex + 1 : -1;      
+
+    useEffect(() => {
+        const unsubscribe = subscribeToVehicles((data) => {
+            setVehicles(data);
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     const handleTouchEnd = () => {
         const distance = touchStart - touchEnd;
@@ -65,6 +77,10 @@ const VehicleDetailPage = () => {
         };
     }, [isZoomed]);
 
+    if (loading) {
+        return <div className={styles.loadingText}>Cargando vehículo...</div>;
+    }
+
     if (!vehicle) {
         return <p>Vehículo no encontrado</p>;
     }
@@ -78,6 +94,7 @@ const VehicleDetailPage = () => {
                     <div className={styles.mainImage}>
                         <button 
                             className={`${styles.arrowLeft} ${prevIndex < 0 ? styles.disabled : ''}`}
+                            title="Anterior vehículo"
                             onClick={() => {
                                 if (prevIndex >= 0) {
                                     navigate(`/vehiculo/${vehicles[prevIndex].id}`);
@@ -98,9 +115,10 @@ const VehicleDetailPage = () => {
                             }}
                         />
                         <button 
-                            className={`${styles.arrowRight} ${nextIndex >= vehicles.length ? styles.disabled : ''}`}
+                            className={`${styles.arrowRight} ${nextIndex === -1 ? styles.disabled : ''}`}
+                            title="Próximo vehículo"
                             onClick={() => {
-                                if (nextIndex < vehicles.length) {
+                                if (nextIndex >= 0 && nextIndex < vehicles.length) {
                                     navigate(`/vehiculo/${vehicles[nextIndex].id}`);
                                 }
                             }}
@@ -155,7 +173,7 @@ const VehicleDetailPage = () => {
                         </div>
                         <div className={styles.divider}></div>
                         <div className={styles.features}>
-                            {vehicle.features && vehicle.features.split(',').map((feature, index) => (
+                            {vehicle.features && vehicle.features.split('\n').map((feature, index) => (
                                 <p key={index}>{feature.trim()}</p>
                             ))}
                         </div>
@@ -220,9 +238,14 @@ const VehicleDetailPage = () => {
             {showDeleteModal && (
                 <ConfirmModal
                     message={`¿Estás seguro de que quieres eliminar el vehículo ${vehicle.brand} ${vehicle.model}?`}
-                    onConfirm={() => {
-                        console.log('Eliminar vehículo:', vehicle.id);
-                        setShowDeleteModal(false);
+                    onConfirm={async () => {
+                        try {
+                            await deleteVehicle(vehicle.id);
+                            setShowDeleteModal(false);
+                            navigate('/'); 
+                        } catch (error) {
+                            console.error("Error al eliminar:", error);
+                        }
                     }}
                     onCancel={() => setShowDeleteModal(false)}
                 />

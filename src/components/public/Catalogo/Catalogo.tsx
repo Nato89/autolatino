@@ -1,5 +1,4 @@
 import styles from './Catalogo.module.css';
-import { vehicles } from '../../../data/vehicles';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RangeFilter from '../../common/RangeFilter/RangeFilter';
@@ -11,8 +10,12 @@ import Button from '../../common/Button/Button';
 import { Pencil, Trash2 } from 'lucide-react';
 import EditVehicleModal from '../../admin/EditVehicleModal/EditVehicleModal';
 import ConfirmModal from '../../common/ConfirmModal/ConfirmModal';
+import type { Vehicle } from '../../../types/vehicle';
+import { subscribeToVehicles, deleteVehicle } from '../../../services/vehicleService';
 
 const Catalogo = () => {
+    const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+    const [loadingVehicles, setLoadingVehicles] = useState(true);
     const [transmision, setTransmision] = useState('todos');
     const [precio, setPrecio] = useState({ min: 20000000, max: 200000000 });
     const [modelo, setModelo] = useState({ min: 2000, max: 2027 });
@@ -20,9 +23,18 @@ const Catalogo = () => {
     const [mostrarTodos, setMostrarTodos] = useState(false);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [editingVehicle, setEditingVehicle] = useState<number | null>(null);
-    const [deletingVehicle, setDeletingVehicle] = useState<number | null>(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);    
+    const [editingVehicle, setEditingVehicle] = useState<string | number | null>(null);
+    const [deletingVehicle, setDeletingVehicle] = useState<string | number | null>(null);
+
+    useEffect(() => {
+        const unsubscribe = subscribeToVehicles((data) => {
+            setVehicles(data);
+            setLoadingVehicles(false);
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     useEffect(() => {
         const checkAuth = () => {
@@ -135,6 +147,9 @@ const Catalogo = () => {
                     <img className={styles.logo} src={logo} alt="Logo Autolatino" />
                 </div>
 
+            {loadingVehicles ? (
+                <p className={styles.loadingText}>Cargando vehículos...</p>
+            ) : (    
                 <div className={styles.cards}>
                     {vehiculosAMostrar.map((vehicle) => (
                         <div key={vehicle.id} className={styles.card}>
@@ -183,6 +198,7 @@ const Catalogo = () => {
                         </div>
                     ))}
                 </div>
+            )}
             </div>
 
             {!mostrarTodos ? (
@@ -211,9 +227,16 @@ const Catalogo = () => {
             {deletingVehicle !== null && (
                 <ConfirmModal
                     message={`¿Estás seguro de que quieres eliminar el vehículo ${vehicles.find(v => v.id === deletingVehicle)?.brand} ${vehicles.find(v => v.id === deletingVehicle)?.model}?`}
-                    onConfirm={() => {
-                        console.log('Eliminar vehículo:', deletingVehicle);
-                        setDeletingVehicle(null);
+                    onConfirm={async () => {
+                        if (deletingVehicle !== null) {
+                            try {
+                                await deleteVehicle(deletingVehicle);
+                                setVehicles(prev => prev.filter(v => v.id !== deletingVehicle));
+                                setDeletingVehicle(null);
+                            } catch (error) {
+                                console.error("Error al eliminar:", error);
+                            }
+                        }
                     }}
                     onCancel={() => setDeletingVehicle(null)}
                 />

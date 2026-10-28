@@ -8,6 +8,7 @@ import AdminStudiesPage from './pages/admin/AdminStudiesPage/AdminStudiesPage';
 import ContactoClientes from './pages/admin/ClientesContacto/ClientesContacto';
 
 function App() {
+  
   return (
     <div>
       <Navbar />
@@ -19,7 +20,8 @@ function App() {
         <Route path="/admin/estudios" element={<AdminStudiesPage />} />
         <Route path="/admin/clientes-contacto" element={<ContactoClientes />} />
       </Routes>
-    </div>
+      
+    </div>    
   );
 }
 

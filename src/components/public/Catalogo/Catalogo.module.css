@@ -355,6 +355,18 @@
 }
 
 /* ============================================
+   TEXTO DE CARGA VEHICULOS
+   ============================================ */
+.loadingText {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    color: #020D22;
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+}
+
+/* ============================================
    13. RESPONSIVE (MÓVIL)
    ============================================ */
 

@@ -4,6 +4,8 @@ import styles from './EditVehicleModal.module.css';
 import Button from '../../common/Button/Button';
 import InputField from '../../common/InputField/InputField';
 import type { Vehicle } from '../../../types/vehicle';
+import { updateVehicle } from '../../../services/vehicleService';
+import { uploadImage } from '../../../services/cloudinaryService';
 
 interface EditVehicleModalProps {
     vehicle: Vehicle;
@@ -28,9 +30,42 @@ const EditVehicleModal = ({ vehicle, onClose }: EditVehicleModalProps) => {
         }));
     };
 
-    const handleSave = () => {
-        console.log('Datos guardados:', formData);
-        onClose();
+    const handleSave = async () => {
+        try {
+            setLoading(true);
+
+            // 1. Subir las imágenes nuevas a Cloudinary
+            const newImageUrls: string[] = [];
+            for (const file of files) {
+                const url = await uploadImage(file, 'autolatino/vehiculos');
+                newImageUrls.push(url);
+            }
+
+           // 2. Filtrar las URLs temporales (blob:) y combinar con las nuevas
+            const validExistingImages = existingImages.filter(img => !img.startsWith('blob:'));
+            const allImages = [...validExistingImages, ...newImageUrls];
+
+            // 3. Preparar los datos a actualizar
+            const vehiclePayload = {
+                brand: formData.brand,
+                model: formData.model,
+                year: Number(formData.year),
+                price: Number(formData.price),
+                km: Number(formData.km),
+                transmission: formData.transmission,
+                features: formData.features,
+                images: allImages
+            };
+
+            // 4. Actualizar en Firestore
+            await updateVehicle(vehicle.id, vehiclePayload);
+            console.log('Vehículo actualizado exitosamente');
+            onClose();
+        } catch (error) {
+            console.error('Error al actualizar el vehículo:', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleRemoveExistingImage = (index: number) => {
@@ -42,6 +77,10 @@ const EditVehicleModal = ({ vehicle, onClose }: EditVehicleModalProps) => {
             const newFiles = Array.from(e.target.files);
             const newImageUrls = newFiles.map(file => URL.createObjectURL(file));
             
+            // Guardar los archivos reales para subirlos a Cloudinary
+            setFiles(prev => [...prev, ...newFiles]);
+
+            // Mostrar las URLs temporales en la vista previa
             const totalImages = [...existingImages, ...newImageUrls].slice(0, 5);
             setExistingImages(totalImages);
         }
@@ -49,6 +88,8 @@ const EditVehicleModal = ({ vehicle, onClose }: EditVehicleModalProps) => {
     
     const [existingImages, setExistingImages] = useState<string[]>(vehicle.images);
     const fileInputRef = useRef<HTMLInputElement>(null);  
+    const [files, setFiles] = useState<File[]>([]);
+    const [loading, setLoading] = useState(false);
 
     return (
         <div className={styles.modalOverlay}>
@@ -172,10 +213,10 @@ const EditVehicleModal = ({ vehicle, onClose }: EditVehicleModalProps) => {
                 </div>                
 
                 <div className={styles.buttonsContainer}>
-                    <Button size="medium" onClick={handleSave}>
-                        Guardar
+                    <Button size="medium" onClick={handleSave} disabled={loading}>
+                        {loading ? 'Guardando...' : 'Guardar'}
                     </Button>
-                    <Button size="medium" onClick={onClose}>
+                    <Button size="medium" onClick={onClose} disabled={loading}>
                         Cancelar
                     </Button>
                 </div>

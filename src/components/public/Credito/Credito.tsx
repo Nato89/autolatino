@@ -203,7 +203,7 @@ const Credito = () => {
                 <div className={styles.formRow}>
                     {/* Columna izquierda: texto, checkbox y botón enviar */}
                     <div className={`${styles.formCol} ${styles.centeredCol}`}>
-                        <p className={styles.fileText}>Adjuntamos la foto de tu cédula por ambos lados.</p>
+                        <p className={styles.fileText}>Adjúntanos la foto de tu cédula por ambos lados.</p>
                         
                         <div className={styles.checkboxRow}>
                             <label htmlFor="aceptaTerminos">

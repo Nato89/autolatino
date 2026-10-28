@@ -1,3 +1,7 @@
+// Este archivo contiene datos de prueba para el catálogo de vehículos
+// Ya no es útil puesto que la base de datos de los vehículos se hace a traves de firebase para el texto y cloudinary para las imagenes
+// sin embargo se guardará para futuras pruebas locales.
+
 import type { Vehicle } from '../types/vehicle';
 
 export const vehicles: Vehicle[] = [

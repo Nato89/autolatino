@@ -3,6 +3,8 @@ import styles from './AddVehicleModal.module.css';
 import Button from '../../common/Button/Button';
 import InputField from '../../common/InputField/InputField';
 import FileUploader from '../../public/FileUploader/FileUploader';
+import { addVehicle } from '../../../services/vehicleService';
+import { uploadImage } from '../../../services/cloudinaryService';
 
 interface AddVehicleModalProps {
     onClose: () => void;
@@ -18,7 +20,7 @@ const AddVehicleModal = ({ onClose }: AddVehicleModalProps) => {
         transmission: '',
         features: '',
     });
-    const [files, setFiles] = useState<File[]>([]);
+    const [files, setFiles] = useState<File[]>([]);    
 
     const handleChange = (field: string, value: string) => {
         setFormData((prev) => ({
@@ -27,9 +29,37 @@ const AddVehicleModal = ({ onClose }: AddVehicleModalProps) => {
         }));
     };
 
-    const handleSave = () => {
-        console.log('Nuevo vehículo:', formData, files);
-        onClose();
+    const [loading, setLoading] = useState(false);
+
+    const handleSave = async () => {
+        try {
+        setLoading(true);
+        // Subir cada imagen a Cloudinary y obtener las URLs
+        const imageUrls: string[] = [];
+        for (const file of files) {
+            const url = await uploadImage(file, 'autolatino/vehiculos');
+            imageUrls.push(url);
+        }
+        const vehiclePayload = {
+            id: Date.now(), 
+                brand: formData.brand,
+                model: formData.model,
+                year: Number(formData.year),
+                price: Number(formData.price),
+                km: Number(formData.km),
+                transmission: formData.transmission,
+                features: formData.features,
+                images: imageUrls
+            };
+
+            await addVehicle(vehiclePayload);
+            console.log('Vehículo guardado exitosamente en Firestore');
+            onClose();
+        } catch (error) {
+            console.error('Error al guardar el vehículo:', error);
+        } finally {
+            setLoading(false);
+        }    
     };
 
     return (
@@ -116,10 +146,10 @@ const AddVehicleModal = ({ onClose }: AddVehicleModalProps) => {
                 </div>
 
                 <div className={styles.buttonsContainer}>
-                    <Button size="medium" onClick={handleSave}>
-                        Guardar
+                    <Button size="medium" onClick={handleSave} disabled={loading}>
+                        {loading ? 'Guardando...' : 'Guardar'}
                     </Button>
-                    <Button size="medium" onClick={onClose}>
+                    <Button size="medium" onClick={onClose} disabled={loading}>
                         Cancelar
                     </Button>
                 </div>

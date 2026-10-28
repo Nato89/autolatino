@@ -1,6 +1,6 @@
 
 export interface Vehicle {
-     id: number;
+     id: string | number;
      brand: string;
      model: string;
      year: number;

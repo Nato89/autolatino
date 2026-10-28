@@ -1,18 +1,36 @@
 import styles from './AdminVehiclesPage.module.css';
-import { vehicles } from '../../../data/vehicles';
 import Button from '../../../components/common/Button/Button';
 import { Pencil, Trash2, PlusCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import EditVehicleModal from '../../../components/admin/EditVehicleModal/EditVehicleModal';
 import ConfirmModal from '../../../components/common/ConfirmModal/ConfirmModal';
 import AddVehicleModal from '../../../components/admin/AddVehicleModal/AddVehicleModal';
+import type { Vehicle } from '../../../types/vehicle';
+import { getVehicles, deleteVehicle } from '../../../services/vehicleService';
 
 const AdminVehiclesPage = () => {
     const navigate = useNavigate();
-    const [editingVehicle, setEditingVehicle] = useState<number | null>(null);
-    const [deletingVehicle, setDeletingVehicle] = useState<number | null>(null);
+    const [editingVehicle, setEditingVehicle] = useState<string | number | null>(null);
+    const [deletingVehicle, setDeletingVehicle] = useState<string | number | null>(null);
     const [showAddModal, setShowAddModal] = useState(false);
+    const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+    const [loading, setLoading] = useState(true);
+    
+    const fetchVehicles = async () => {
+        try {
+            const data = await getVehicles();
+            setVehicles(data);
+        } catch (error) {
+            console.error('Error al cargar vehículos:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchVehicles();
+    }, []);    
 
     return (
         <div className={styles.pageContainer}>
@@ -35,6 +53,9 @@ const AdminVehiclesPage = () => {
                     </button>
                 </div>
 
+            {loading ? (
+                <p className={styles.loadingText}>Cargando vehículos...</p>
+            ) : (    
                 <table className={styles.table}>
                     <thead>
                         <tr>
@@ -88,10 +109,16 @@ const AdminVehiclesPage = () => {
                         ))}
                     </tbody>
                 </table>
+            )}
             </div>
 
             {showAddModal && (
-                <AddVehicleModal onClose={() => setShowAddModal(false)} />
+                <AddVehicleModal 
+                    onClose={() => {
+                        setShowAddModal(false);
+                        fetchVehicles(); 
+                    }} 
+                />
             )}
 
             {editingVehicle !== null && (
@@ -104,13 +131,20 @@ const AdminVehiclesPage = () => {
             {deletingVehicle !== null && (
                 <ConfirmModal
                     message={`¿Estás seguro de que quieres eliminar el vehículo ${vehicles.find(v => v.id === deletingVehicle)?.brand} ${vehicles.find(v => v.id === deletingVehicle)?.model}?`}
-                    onConfirm={() => {
-                        console.log('Eliminar vehículo:', deletingVehicle);
-                        setDeletingVehicle(null);
+                    onConfirm={async () => {
+                        if (deletingVehicle !== null) {
+                            try {
+                                await deleteVehicle(deletingVehicle);
+                                setVehicles(prev => prev.filter(v => v.id !== deletingVehicle));
+                                setDeletingVehicle(null);
+                            } catch (error) {
+                                console.error("Error al eliminar:", error);
+                            }
+                        }
                     }}
                     onCancel={() => setDeletingVehicle(null)}
                 />
-            )}            
+            )}          
         </div>
     );
 };
