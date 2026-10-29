@@ -50,6 +50,11 @@
     font-size: 0.95rem;
 }
 
+.table td {
+    word-break: break-all;      
+    overflow-wrap: break-word;  
+}
+
 .table th {
     background-color: #F5F5F5;
     font-weight: 700;
@@ -156,10 +161,9 @@
 
     .cardHeader {
         display: flex;
-        flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        gap: 1rem;
+        gap: 1.5rem; 
     }
 
     .cardTitle {
@@ -211,5 +215,10 @@
     .actionsButtons {
         display: flex;
         gap: 0.5rem;
-    }    
+    }
+    
+    .addBtn {
+        position: static;
+        right: auto;
+    }
 }

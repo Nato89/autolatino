@@ -4,12 +4,14 @@ import Button from '../../common/Button/Button';
 import InputField from '../../common/InputField/InputField';
 import FileUploader from '../FileUploader/FileUploader';
 import { StatusModal } from '../StatusModal/StatusModal';
-import { creditApplications } from '../../../data/creditApplications';
+import { uploadImage } from '../../../services/cloudinaryService';
+import { addCreditApplication } from '../../../services/creditService';
 
 const Credito = () => {
     const [showModal, setShowModal] = useState(false);
     const [files, setFiles] = useState<File[]>([]);     
-    const [isStatusModalOpen, setIsStatusModalOpen] = useState(false); 
+    const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+    const [enviando, setEnviando] = useState(false); 
 
     const [formData, setFormData] = useState({
         nombres: '',
@@ -61,13 +63,68 @@ const Credito = () => {
                     </div>
                 </div>
             </div>
-            <form className={styles.right} onSubmit={(e) => { 
+            <form className={styles.right} onSubmit={async (e) => { 
                 e.preventDefault(); 
+                
                 if (files.length === 0) {
                     alert('Por favor adjunta la foto de tu cédula');
                     return;
                 }
-                setShowModal(true); 
+
+                setEnviando(true);
+
+                try {
+                    // 1. Subir las fotos de la cédula a Cloudinary
+                    const fileUrls: string[] = [];
+                    for (const file of files) {
+                        const url = await uploadImage(file, 'autolatino/clientes');
+                        fileUrls.push(url);
+                    }
+
+                    // 2. Preparar los datos de la solicitud
+                    const applicationData = {
+                        nombres: formData.nombres,
+                        cedula: formData.cedula,
+                        celular: formData.celular,
+                        email: formData.email,
+                        ocupacion: formData.ocupacion,
+                        ingresos: formData.ingresos,
+                        refPersonalNombre: formData.refPersonalNombre,
+                        refPersonalTel: formData.refPersonalTel,
+                        refFamiliarNombre: formData.refFamiliarNombre,
+                        refFamiliarTel: formData.refFamiliarTel,
+                        archivos: fileUrls,
+                        estado: 'Inicial' as const,
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString(),
+                    };
+
+                    // 3. Guardar en Firestore
+                    await addCreditApplication(applicationData);
+
+                    // 4. Mostrar mensaje de éxito y limpiar
+                    setShowModal(true);
+                    setFiles([]); 
+                    setFormData({
+                        nombres: '',
+                        cedula: '',
+                        celular: '',
+                        email: '',
+                        ocupacion: '',
+                        ingresos: '',
+                        refPersonalNombre: '',
+                        refPersonalTel: '',
+                        refFamiliarNombre: '',
+                        refFamiliarTel: '',
+                        aceptaTerminos: false,
+                    }); 
+
+                } catch (error) {
+                    console.error("Error al enviar la solicitud:", error);
+                    alert("Hubo un error al enviar tu solicitud. Por favor intenta de nuevo.");
+                } finally {
+                    setEnviando(false);
+                }
             }}>
                 {/* Fila 1: Nombres + Cédula */}
                 <div className={styles.formRow}>
@@ -218,8 +275,8 @@ const Credito = () => {
                             />
                         </div>
 
-                        <button type="submit" className={styles.enviarBtn}>
-                            Enviar
+                        <button type="submit" className={styles.enviarBtn} disabled={enviando}>
+                            {enviando ? 'Enviando...' : 'Enviar'}
                         </button>
                     </div>
                     
@@ -245,7 +302,6 @@ const Credito = () => {
             <StatusModal
                 isOpen={isStatusModalOpen}
                 onClose={() => setIsStatusModalOpen(false)}
-                creditApplications={creditApplications}
             />
         </section>
     );

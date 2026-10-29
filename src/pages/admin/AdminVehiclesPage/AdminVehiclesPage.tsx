@@ -36,7 +36,7 @@ const AdminVehiclesPage = () => {
         <div className={styles.pageContainer}>
             <div className={styles.header}>
                 <h1 className={styles.title}>Gestión de Vehículos</h1>
-                <Button size="medium" onClick={() => window.history.back()}>
+                <Button size="medium" onClick={() => navigate('/admin')}>
                     Volver
                 </Button>
             </div>

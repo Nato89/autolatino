@@ -1,16 +1,22 @@
 import styles from './ClientesContacto.module.css';
-// import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/common/Button/Button';
-import { contacts } from '../../../data/clients';
+import { subscribeToContacts, deleteContact } from '../../../services/clientService';
+import type { Contact } from '../../../types/contact';
 import { Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ConfirmModal from '../../../components/common/ConfirmModal/ConfirmModal';
 
 
-const ClientesContacto = () => {
-    // const navigate = useNavigate();
-    const [clientList, setClientList] = useState(contacts);
-    const [deletingContactId, setDeletingContactId] = useState<number | null>(null);
+const ClientesContacto = () => {        
+    const [clientList, setClientList] = useState<Contact[]>([]);
+
+    useEffect(() => {
+        const unsubscribe = subscribeToContacts((data) => {
+            setClientList(data);
+        });
+        return () => unsubscribe();
+    }, []);
+    const [deletingContactId, setDeletingContactId] = useState<number | string | null>(null);
 
     return (
         <div className={styles.pageContainer}>
@@ -73,10 +79,16 @@ const ClientesContacto = () => {
             { /* Modal de confirmación */ }
             {deletingContactId !== null && (
                 <ConfirmModal
-                    message={`¿Estás seguro de que quieres eliminar la solicitud de ${contacts.find(c => c.id === deletingContactId)?.nombre}?`}
-                    onConfirm={() => {
-                        setClientList((prev) => prev.filter((contact) => contact.id !== deletingContactId));
-                        setDeletingContactId    (null);
+                    message={`¿Estás seguro de que quieres eliminar el contacto de ${clientList.find(c => c.id === deletingContactId)?.nombre}?`}
+                    onConfirm={async () => {
+                        if (deletingContactId !== null) {
+                            try {
+                                await deleteContact(deletingContactId);
+                                setDeletingContactId(null);
+                            } catch (error) {
+                                console.error("Error al eliminar el contacto:", error);
+                            }
+                        }
                     }}
                     onCancel={() => setDeletingContactId(null)}
                 />

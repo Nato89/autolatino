@@ -1,17 +1,20 @@
 import styles from './Contacto.module.css';
 import { useState } from 'react';
 import InputField from '../../common/InputField/InputField';
+import { addContact } from '../../../services/clientService';
 
 const Contacto = () => {
+
+    const [showModal, setShowModal] = useState(false);
+    const [enviando, setEnviando] = useState(false);
+
     const [formData, setFormData] = useState({
         nombre: '',        
         celular: '',
         email: '',
         asunto: '',
         mensaje: '',
-    });
-
-    const [showModal, setShowModal] = useState(false);
+    });    
 
     const handleChange = (field: string, value: string | boolean) => {
         setFormData((prev) => ({
@@ -28,16 +31,34 @@ const Contacto = () => {
                 <p>Nuestros asesores se contactarán para el proceso de compra, venta, financiación o duda que tengas.</p>
             </div>
 
-            <form className={styles.right} onSubmit={(e) => { 
-                e.preventDefault(); 
-                setShowModal(true); 
-                setFormData({
-                    nombre: '',
-                    celular: '',
-                    email: '',
-                    asunto: '',
-                    mensaje: '',
-                });
+            <form className={styles.right} onSubmit={async (e) => { 
+                e.preventDefault();
+                
+                setEnviando(true);
+
+                try {
+                    await addContact({
+                        nombre: formData.nombre,
+                        celular: formData.celular,
+                        email: formData.email,
+                        asunto: formData.asunto,
+                        mensaje: formData.mensaje,
+                    });
+
+                    setShowModal(true); 
+                    setFormData({
+                        nombre: '',
+                        celular: '',
+                        email: '',
+                        asunto: '',
+                        mensaje: '',
+                    });
+                } catch (error) {
+                    console.error("Error al enviar el contacto:", error);
+                    alert("Hubo un error al enviar tu mensaje. Por favor intenta de nuevo.");
+                } finally {
+                    setEnviando(false);
+                }
             }}>
 
                 {/* Fila 1: Nombre */}
@@ -104,9 +125,9 @@ const Contacto = () => {
                             onChange={(val) => handleChange('mensaje', val)}                            
                         />
                 </div>
-
-                <button type="submit" className={styles.enviarBtn}>
-                            Enviar
+                
+                <button disabled={enviando} className={styles.enviarBtn}>
+                    {enviando ? 'Enviando...' : 'Enviar'}
                 </button>
             </form>
 

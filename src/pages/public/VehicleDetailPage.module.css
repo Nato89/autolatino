@@ -17,9 +17,39 @@
     color: var(--gold-primary);
     font-size: 3rem;
     margin-left: 5%;
-    margin-right: 5%;
+    margin-right: 40%;    
+}
+
+.headerRow {
+    display: flex;    
+    align-items: center;
+    width: 90%;
+    margin: 0 auto;
     border-bottom: 2px solid var(--gold-primary);
     padding-bottom: 20px;
+     margin-bottom: 2rem;
+}
+
+.backToListBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: transparent;
+    color: var(--gold-primary);
+    border: 2px solid var(--gold-primary);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.backToListBtn:hover {
+    background-color: var(--gold-primary);
+    color: var(--text-dark);
+    transform: scale(1.05);
 }
 
 .mainContent {
@@ -324,6 +354,10 @@
    ============================================ */
 
 @media (max-width: 768px) {
+     .backToListBtn {
+        margin-right: 5%;  /* Un poco de margen a la izquierda para que no se pegue al título */
+     }
+
     .arrowLeft,
     .arrowRight {
         display: none;
@@ -348,6 +382,14 @@
 }
 
 @media (max-width: 460px) {
+    .headerRow {
+        gap: 1rem;
+    }
+    
+    .titulo {
+        margin-right: 0;
+    }
+
     .yearKmRow {
         flex-wrap: wrap;
         gap: 0.5rem;

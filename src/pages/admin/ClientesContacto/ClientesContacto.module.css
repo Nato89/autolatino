@@ -53,7 +53,15 @@
     border-collapse: collapse;
 }
 
-.table th,
+/* Los TÍTULOS JAMÁS saltan de línea bajo ninguna circunstancia */
+.table th {
+    background-color: #F5F5F5;
+    font-weight: 700;
+    color: #020D22;
+    white-space: nowrap; 
+}
+
+/* En pantalla completa los datos fluyen normal sin saltos */
 .table td {
     padding: 0.8rem;
     text-align: left;
@@ -61,12 +69,35 @@
     color: #333333;
     font-family: 'Open Sans', sans-serif;
     font-size: 0.95rem;
+    white-space: nowrap; 
 }
 
-.table th {
-    background-color: #F5F5F5;
-    font-weight: 700;
-    color: #020D22;
+/* El mensaje siempre tiene permiso de saltar y ajustarse */
+.table th:nth-child(5),
+.table td:nth-child(5) {
+    white-space: normal;
+    word-break: break-word;
+}
+
+.table tr:hover {
+    background-color: #F9F9F9;
+}
+
+/* ============================================
+   AJUSTE INTERMEDIO: Cuando la pantalla se pone angosta
+   (El mensaje ya no basta y los datos largos ceden y saltan de línea)
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .table td {
+        white-space: normal;
+        word-break: break-word;
+    }
+    
+    /* El correo largo se rompe ordenadamente para no desbordar */
+    .table td:nth-child(3) {
+        word-break: break-all;
+    }
 }
 
 /* ============================================
@@ -92,9 +123,6 @@
     align-items: center;
     justify-content: center;
     transition: transform 0.2s ease;
-}
-
-.deleteBtn {
     color: #DC2626;
 }
 
@@ -103,7 +131,7 @@
 }
 
 /* ============================================
-   RESPONSIVE DESIGN
+   RESPONSIVE DESIGN (Móvil - 768px para abajo)
    ============================================ */
 
 @media (max-width: 768px) {
@@ -144,6 +172,7 @@
     .table td {
         display: block;
         width: 100%;
+        white-space: normal;
     }
 
     .table tr {
@@ -160,6 +189,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        word-break: break-word;
     }
 
     .table td::before {
@@ -167,6 +197,7 @@
         font-weight: 700;
         color: #020D22;
         margin-right: 1rem;
+        white-space: nowrap;
     }
 
     .table td[data-label="Mensaje"] {

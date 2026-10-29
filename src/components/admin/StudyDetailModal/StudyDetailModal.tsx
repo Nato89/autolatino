@@ -14,19 +14,19 @@ const StudyDetailModal = ({ application, onClose }: StudyDetailModalProps) => {
 
     const handleEnviarWhatsApp = () => {
         const message = `
-Solicitud de crédito:
-Nombre: ${application.nombres}
-Cédula: ${application.cedula}
-Celular: ${application.celular}
-Email: ${application.email}
-Ocupación: ${application.ocupacion}
-Ingresos: ${application.ingresos}
-Ref. Personal: ${application.refPersonalNombre} - ${application.refPersonalTel}
-Ref. Familiar: ${application.refFamiliarNombre} - ${application.refFamiliarTel}
+            Solicitud de crédito:
+            Nombre: ${application.nombres}
+            Cédula: ${application.cedula}
+            Celular: ${application.celular}
+            Email: ${application.email}
+            Ocupación: ${application.ocupacion}
+            Ingresos: ${application.ingresos}
+            Ref. Personal: ${application.refPersonalNombre} - ${application.refPersonalTel}
+            Ref. Familiar: ${application.refFamiliarNombre} - ${application.refFamiliarTel}
         `.trim();
 
         window.open(`https://wa.me/573162489745?text=${encodeURIComponent(message)}`, '_blank');
-    };
+    };   
 
        return (
             <div className={styles.modalOverlay}>
@@ -66,11 +66,14 @@ Ref. Familiar: ${application.refFamiliarNombre} - ${application.refFamiliarTel}
                                             onClick={() => setFullImage(archivo)}
                                         />
                                     )}
+                                    
+                                    {/* Cambiamos la etiqueta <a> por un botón con onClick */}
                                     <a 
                                         href={archivo} 
-                                        download 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
                                         className={styles.downloadBtn}
-                                        title="Descargar archivo"
+                                        title="Ver archivo"
                                     >
                                         <Download size={20} />
                                     </a>

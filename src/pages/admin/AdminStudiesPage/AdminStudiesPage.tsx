@@ -1,18 +1,26 @@
 import styles from './AdminStudiesPage.module.css';
 import type { CreditApplication } from '../../../types/credit';
-import { creditApplications } from '../../../data/creditApplications';
+import { subscribeToCreditApplications, deleteCreditApplication, updateCreditApplication } from '../../../services/creditService';
 import Button from '../../../components/common/Button/Button';
 import { Eye, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ConfirmModal from '../../../components/common/ConfirmModal/ConfirmModal';
 import StudyDetailModal from '../../../components/admin/StudyDetailModal/StudyDetailModal';
 import NegacionModal from '../../../components/admin/NegacionModal/NegacionModal';
 
 const AdminStudiesPage = () => {
-    const [applications, setApplications] = useState<CreditApplication[]>(creditApplications);
-    const [deletingApplication, setDeletingApplication] = useState<number | null>(null);
-    const [viewingApplication, setViewingApplication] = useState<number | null>(null);
-    const [negatingApplication, setNegatingApplication] = useState<number | null>(null);
+    const [applications, setApplications] = useState<CreditApplication[]>([]);
+
+        useEffect(() => {
+            const unsubscribe = subscribeToCreditApplications((data) => {
+                setApplications(data);
+            });
+            return () => unsubscribe();
+        }, []);
+
+    const [deletingApplication, setDeletingApplication] = useState<string | number | null>(null);
+    const [viewingApplication, setViewingApplication] = useState<string | number | null>(null);
+    const [negatingApplication, setNegatingApplication] = useState<string | number | null>(null);
 
     const solicitudesNuevas = applications.filter(
         (app) => app.estado === 'Inicial' || app.estado === 'En estudio'
@@ -22,33 +30,36 @@ const AdminStudiesPage = () => {
         (app) => app.estado === 'Aprobado' || app.estado === 'Negado'
     );
 
-    const handleChangeEstado = (id: number, nuevoEstado: CreditApplication['estado']) => {
+    const handleChangeEstado = async (id: string | number, nuevoEstado: CreditApplication['estado']) => {
         if (nuevoEstado === 'Negado') {
             setNegatingApplication(id);
             return;
         }
 
-        setApplications((prev) =>
-            prev.map((app) =>
-                app.id === id
-                    ? { ...app, estado: nuevoEstado, updatedAt: new Date().toISOString() }
-                    : app
-            )
-        );
+        try {
+            await updateCreditApplication(id, { 
+                estado: nuevoEstado, 
+                updatedAt: new Date().toISOString() 
+            });
+            
+        } catch (error) {
+            console.error("Error al cambiar el estado:", error);
+        }
     };
 
-    const handleConfirmNegacion = (razon: string) => {
+    const handleConfirmNegacion = async (razon: string) => {
         if (negatingApplication === null) return;
 
-        setApplications((prev) =>
-            prev.map((app) =>
-                app.id === negatingApplication
-                    ? { ...app, estado: 'Negado', razonNegacion: razon, updatedAt: new Date().toISOString() }
-                    : app
-            )
-        );
-
-        setNegatingApplication(null);
+        try {
+            await updateCreditApplication(negatingApplication, {
+                estado: 'Negado',
+                razonNegacion: razon,
+                updatedAt: new Date().toISOString()
+            });            
+            setNegatingApplication(null);
+        } catch (error) {
+            console.error("Error al negar la solicitud:", error);
+        }
     };
 
     return (
@@ -186,9 +197,15 @@ const AdminStudiesPage = () => {
             {deletingApplication !== null && (
                 <ConfirmModal
                     message={`¿Estás seguro de que quieres eliminar la solicitud de ${applications.find(a => a.id === deletingApplication)?.nombres}?`}
-                    onConfirm={() => {
-                        setApplications((prev) => prev.filter((app) => app.id !== deletingApplication));
-                        setDeletingApplication(null);
+                    onConfirm={async () => {
+                        if (deletingApplication !== null) {
+                            try {
+                                await deleteCreditApplication(deletingApplication);                                
+                                setDeletingApplication(null);
+                            } catch (error) {
+                                console.error("Error al eliminar la solicitud:", error);
+                            }
+                        }
                     }}
                     onCancel={() => setDeletingApplication(null)}
                 />

@@ -6,14 +6,12 @@ AutoLatino es una aplicación web para la comercialización de vehículos y la g
 
 ## Estado del proyecto y hoja de ruta
 
-> **Estado actual: Prototipo Frontend con integración parcial de Firebase.** El catálogo público consulta vehículos desde Firestore, el formulario administrativo de alta crea documentos en la colección `vehicles` y la página de detalle permite editar y eliminar vehículos mediante Firestore. La autenticación está conectada con Firebase. La tabla administrativa de vehículos y los módulos de solicitudes de crédito y clientes siguen usando datos simulados.
+> **Estado actual: Aplicación conectada a Firebase y Cloudinary.** Los flujos activos consultan y gestionan en Firestore los vehículos, contactos y solicitudes de crédito; los archivos e imágenes se suben a Cloudinary; y el inicio de sesión utiliza Firebase Authentication. Los archivos con datos de ejemplo en `src/data/` están comentados y no se usan en la aplicación.
 
-La integración pendiente incluye conectar a persistencia real las entidades y flujos que aún son simulados:
+Antes de usar la aplicación en producción todavía se requiere revisar y verificar:
 
-- `vehicles`
-- `auth`
-- `creditApplications`
-- `clients`
+- las reglas de acceso y la autorización efectiva para las operaciones de Firebase;
+- el tratamiento seguro de solicitudes, datos personales, documentos e imágenes.
 
 ## Acceso de prueba
 
@@ -23,13 +21,13 @@ Cuando la aplicación esté lista para pruebas, se proporcionarán las credencia
 
 - **Catálogo de vehículos:** listado consultado desde Firestore, filtros y acceso a páginas de detalle.
 - **Panel de administración:** navegación a los módulos de gestión de vehículos, procesos de crédito y clientes para contactar.
-- **Gestión de vehículos:** la tabla administrativa muestra datos mock del arreglo local `vehicles`; desde allí, editar y eliminar son acciones simuladas. El modal de alta sí crea vehículos en Firestore, pero guarda `images: []` y la tabla no refleja esas altas. En la página de detalle, editar y eliminar sí usan Firestore.
-- **Formulario de crédito:** interfaz para recopilar datos de la solicitud y documentos asociados.
-- **Procesos de crédito:** listado de solicitudes por revisar y gestionadas, cambio de estado, consulta de detalle y acciones de aprobación o negación simuladas sobre el estado local.
-- **Clientes y contacto:** tabla de leads con datos simulados, enlace para iniciar contacto por WhatsApp y eliminación de filas durante la sesión.
-- **Acceso administrativo:** inicio de sesión conectado con Firebase; las credenciales de prueba se proporcionarán cuando la aplicación esté lista para pruebas.
+- **Gestión de vehículos:** el catálogo, el detalle y la tabla administrativa consultan vehículos desde Firestore. El alta, la edición y la eliminación se guardan en Firestore; las imágenes se suben a Cloudinary.
+- **Formulario de crédito:** guarda la solicitud en Firestore y sube los archivos adjuntos a Cloudinary.
+- **Procesos de crédito:** listado en tiempo real desde Firestore, con detalle, actualización de estado, motivo de negación y eliminación persistentes.
+- **Clientes y contacto:** los envíos del formulario se guardan en Firestore y aparecen en la tabla administrativa; se puede abrir WhatsApp y eliminar contactos de forma persistente.
+- **Acceso administrativo:** inicio de sesión mediante Firebase Authentication. `localStorage` conserva el perfil del asesor para la interfaz, pero no sustituye las reglas de acceso ni la autorización.
 
-Por lo tanto, no todas las operaciones administrativas son simuladas: las altas de vehículos y las ediciones/eliminaciones desde el detalle se guardan en Firestore. Las acciones mock y los cambios locales de los demás módulos no se guardan en un servidor y pueden perderse al recargar.
+Los archivos `src/data/vehicles.ts`, `src/data/clients.ts` y `src/data/creditApplications.ts` conservan ejemplos comentados, pero no son importados por los flujos activos. `src/data/auth.ts` conserva una constante antigua de usuario mock que tampoco se importa: el inicio de sesión usa Firebase Authentication. No se cargan esos datos mock en ejecución. Antes de producción aún se deben validar los controles de acceso y el tratamiento de datos.
 
 ## Stack tecnológico
 
@@ -37,7 +35,8 @@ Por lo tanto, no todas las operaciones administrativas son simuladas: las altas 
 - **TypeScript** `~6.0.2`
 - **Vite** `^8.2.0` con `@vitejs/plugin-react` `^6.0.4`
 - **React Router DOM** `^7.18.3` para navegación
-- **Firebase / Firestore** para la lectura y algunas operaciones del inventario de vehículos
+- **Firebase / Firestore** para vehículos, contactos y solicitudes de crédito
+- **Cloudinary** para almacenar imágenes de vehículos y archivos adjuntos de las solicitudes de crédito
 - **CSS Modules** y hojas globales para estilos
 - **Lucide React** `^1.30.0` para iconografía
 - **Oxlint** `^1.75.0` para linting

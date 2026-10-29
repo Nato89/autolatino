@@ -1,5 +1,5 @@
 export interface CreditApplication {
-    id: number;
+    id: string | number;
     nombres: string;
     cedula: string;
     celular: string;

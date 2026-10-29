@@ -5,7 +5,7 @@ import flechaIzquierda from '../../assets/images/Iconos/arrow-prev.svg';
 import flechaDerecha from '../../assets/images/Iconos/arrow-next.svg';
 import flechaVolver from '../../assets/images/Iconos/arrow-return.svg';
 import Button from '../../components/common/Button/Button';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, List } from 'lucide-react';
 import EditVehicleModal from '../../components/admin/EditVehicleModal/EditVehicleModal';
 import ConfirmModal from '../../components/common/ConfirmModal/ConfirmModal';
 import type { Vehicle } from '../../types/vehicle';
@@ -87,7 +87,20 @@ const VehicleDetailPage = () => {
 
     return (
         <div className={styles.detailPage}>
-            <h1 className={styles.titulo}>Catálogo</h1>
+            <div className={styles.headerRow}>
+                <h1 className={styles.titulo}>Catálogo</h1>
+                
+                {isLoggedIn && (
+                    <button 
+                        className={styles.backToListBtn} 
+                        onClick={() => navigate('/admin/vehiculos')}
+                        title="Regresar a la lista de vehículos"
+                    >
+                        <List size={20} />
+                        Regresar a la lista
+                    </button>
+                )}
+            </div>
             <div className={styles.mainContent}>
                 {/* Galería de imágenes */}
                 <div className={styles.gallery}>

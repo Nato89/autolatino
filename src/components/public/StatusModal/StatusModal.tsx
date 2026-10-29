@@ -1,17 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './StatusModal.module.css';
+import { subscribeToCreditApplications } from '../../../services/creditService';
 import type { CreditApplication } from '../../../types/credit';
 
 export interface StatusModalProps {
     isOpen: boolean;
-    onClose: () => void;
-    creditApplications: CreditApplication[];
+    onClose: () => void;   
 }
 
-export const StatusModal = ({ isOpen, onClose, creditApplications }: StatusModalProps) => {
+export const StatusModal = ({ isOpen, onClose }: StatusModalProps) => {
+    const [applications, setApplications] = useState<CreditApplication[]>([]);
     const [cedulaInput, setCedulaInput] = useState('');
     const [foundApp, setFoundApp] = useState<CreditApplication | null>(null);
     const [errorMsg, setErrorMsg] = useState('');
+
+    useEffect(() => {
+        const unsubscribe = subscribeToCreditApplications((data) => {
+            setApplications(data);
+        });
+        return () => unsubscribe();
+    }, []);
 
     if (!isOpen) return null;
 
@@ -26,7 +34,7 @@ export const StatusModal = ({ isOpen, onClose, creditApplications }: StatusModal
             return;
         }
 
-        const match = creditApplications.find(app => app.cedula === trimmedCedula);
+        const match = applications.find(app => app.cedula === trimmedCedula);
 
         if (match) {
             setFoundApp(match);
