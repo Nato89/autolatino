@@ -12,7 +12,7 @@
 //         refPersonalNombre: 'María López',
 //         refPersonalTel: '3009876543',
 //         refFamiliarNombre: 'Pedro Pérez',
-//         refFamiliarTel: 'Pedro Pérez',
+//         refFamiliarTel: '3009876542',
 //         archivos: ['/src/assets/images/Catalogo/renault-sandero1.jpg'],
 //         estado: 'Inicial',
 //         createdAt: '2026-10-01T10:00:00',

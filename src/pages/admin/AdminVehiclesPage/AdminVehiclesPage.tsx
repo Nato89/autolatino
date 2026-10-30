@@ -124,7 +124,10 @@ const AdminVehiclesPage = () => {
             {editingVehicle !== null && (
                 <EditVehicleModal
                     vehicle={vehicles.find(v => v.id === editingVehicle)!}
-                    onClose={() => setEditingVehicle(null)}
+                    onClose={() => {
+                        setEditingVehicle(null);
+                        fetchVehicles(); 
+                    }}
                 />
             )}
             

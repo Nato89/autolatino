@@ -1,74 +1,115 @@
 # AutoLatino
 
-AutoLatino es una aplicación web para la comercialización de vehículos y la gestión de oportunidades de financiación. Reúne un catálogo público con una experiencia administrativa para revisar vehículos, solicitudes de crédito y clientes interesados.
+Aplicación web para una concesionaria de vehículos. Permite explorar el inventario, enviar solicitudes de contacto y crédito, y administrar vehículos, solicitudes y contactos desde un panel interno.
 
-**Demo en vivo:** [Próximamente en vivo]
+> **Demo:** Próximamente se publicará el enlace de la demo.
+>
+> **Cuentas de prueba:** Próximamente se compartirán las credenciales de acceso.
 
-## Estado del proyecto y hoja de ruta
+## Funcionalidades
 
-> **Estado actual: Aplicación conectada a Firebase y Cloudinary.** Los flujos activos consultan y gestionan en Firestore los vehículos, contactos y solicitudes de crédito; los archivos e imágenes se suben a Cloudinary; y el inicio de sesión utiliza Firebase Authentication. Los archivos con datos de ejemplo en `src/data/` están comentados y no se usan en la aplicación.
+- Catálogo público de vehículos con filtros y páginas de detalle.
+- Formulario de contacto con seguimiento de los mensajes desde el panel.
+- Solicitudes de crédito con archivos adjuntos y consulta del estado del proceso.
+- Panel administrativo para gestionar vehículos, solicitudes de crédito y contactos.
+- Inicio de sesión mediante Firebase Authentication.
 
-Antes de usar la aplicación en producción todavía se requiere revisar y verificar:
+## Arquitectura y tecnologías
 
-- las reglas de acceso y la autorización efectiva para las operaciones de Firebase;
-- el tratamiento seguro de solicitudes, datos personales, documentos e imágenes.
+- **Frontend:** React 19, TypeScript, Vite 8 y React Router DOM 7.
+- **Datos:** Firebase Firestore para vehículos, contactos y solicitudes de crédito.
+- **Autenticación:** Firebase Authentication.
+- **Archivos:** Cloudinary almacena imágenes públicas de vehículos y archivos privados de solicitudes.
+- **Backend:** ASP.NET Core Minimal API sobre .NET 10. Se encarga de subir, firmar, descargar y eliminar archivos privados de Cloudinary; Firestore sigue siendo la capa de datos de la aplicación.
+- **Estilos y calidad:** CSS Modules y Oxlint.
 
-## Acceso de prueba
+## Requisitos
 
-Cuando la aplicación esté lista para pruebas, se proporcionarán las credenciales de acceso correspondientes.
+- Node.js y npm.
+- .NET 10 SDK.
+- Un proyecto de Firebase con Authentication y Firestore configurados.
+- Una cuenta de Cloudinary.
 
-## Funcionalidades y módulos activos
+## Configuración local
 
-- **Catálogo de vehículos:** listado consultado desde Firestore, filtros y acceso a páginas de detalle.
-- **Panel de administración:** navegación a los módulos de gestión de vehículos, procesos de crédito y clientes para contactar.
-- **Gestión de vehículos:** el catálogo, el detalle y la tabla administrativa consultan vehículos desde Firestore. El alta, la edición y la eliminación se guardan en Firestore; las imágenes se suben a Cloudinary.
-- **Formulario de crédito:** guarda la solicitud en Firestore y sube los archivos adjuntos a Cloudinary.
-- **Procesos de crédito:** listado en tiempo real desde Firestore, con detalle, actualización de estado, motivo de negación y eliminación persistentes.
-- **Clientes y contacto:** los envíos del formulario se guardan en Firestore y aparecen en la tabla administrativa; se puede abrir WhatsApp y eliminar contactos de forma persistente.
-- **Acceso administrativo:** inicio de sesión mediante Firebase Authentication. `localStorage` conserva el perfil del asesor para la interfaz, pero no sustituye las reglas de acceso ni la autorización.
+El frontend y el backend se ejecutan en terminales separadas.
 
-Los archivos `src/data/vehicles.ts`, `src/data/clients.ts` y `src/data/creditApplications.ts` conservan ejemplos comentados, pero no son importados por los flujos activos. `src/data/auth.ts` conserva una constante antigua de usuario mock que tampoco se importa: el inicio de sesión usa Firebase Authentication. No se cargan esos datos mock en ejecución. Antes de producción aún se deben validar los controles de acceso y el tratamiento de datos.
+### 1. Configurar Firebase
 
-## Stack tecnológico
+1. Crea o selecciona un proyecto en Firebase y registra una aplicación web.
+2. Habilita el proveedor de inicio de sesión que utilizará la aplicación (actualmente, Firebase Authentication).
+3. Crea la base de datos de Firestore y configura sus reglas de acceso.
+4. Copia los valores de configuración de la aplicación web para completar las variables `VITE_FIREBASE_*` del siguiente paso.
 
-- **React** `^19.2.8` y **React DOM** `^19.2.8`
-- **TypeScript** `~6.0.2`
-- **Vite** `^8.2.0` con `@vitejs/plugin-react` `^6.0.4`
-- **React Router DOM** `^7.18.3` para navegación
-- **Firebase / Firestore** para vehículos, contactos y solicitudes de crédito
-- **Cloudinary** para almacenar imágenes de vehículos y archivos adjuntos de las solicitudes de crédito
-- **CSS Modules** y hojas globales para estilos
-- **Lucide React** `^1.30.0` para iconografía
-- **Oxlint** `^1.75.0` para linting
+### 2. Configurar el frontend
 
-## Flujo de trabajo Git
+Copia `.env.example` a `.env`, reemplaza los valores de Firebase y Cloudinary, y agrega la URL local del backend:
 
-El flujo de ramas del proyecto organiza el desarrollo de la siguiente manera:
+```dotenv
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+VITE_CLOUDINARY_CLOUD_NAME=
+VITE_CLOUDINARY_UPLOAD_PRESET=
+VITE_API_URL=http://localhost:5022
+```
 
-- `main`: versión estable destinada a producción.
-- `develop`: integración y validación de los cambios antes de publicarlos.
-- `feature/*`: ramas de trabajo para módulos, funcionalidades y tareas específicas; una vez listas, se integran en `develop`.
+Configura un preset de carga de Cloudinary para las imágenes públicas de vehículos. Las variables `VITE_*` se incluyen en el código del navegador; no pongas secretos en ellas.
 
-Los cambios validados en `develop` se promueven a `main` para una entrega estable.
+### 3. Configurar Cloudinary para el backend
 
-## Ejecución local
+El backend necesita el nombre de la nube, la API key y el API secret. Configúralos como variables de entorno en la terminal donde iniciarás la API. En PowerShell:
 
-Requisitos: Node.js y npm instalados.
+```powershell
+$env:CloudinarySettings__CloudName = "tu-cloud-name"
+$env:CloudinarySettings__ApiKey = "tu-api-key"
+$env:CloudinarySettings__ApiSecret = "tu-api-secret"
+```
+
+No guardes credenciales reales en `appsettings.json` ni las subas al repositorio.
+
+### 4. Iniciar la aplicación
+
+Terminal del frontend:
 
 ```bash
-# Instalar dependencias
 npm install
-
-# Iniciar el servidor de desarrollo
 npm run dev
 ```
 
-Vite mostrará en la terminal la dirección local para abrir la aplicación en el navegador.
-
-Otros comandos disponibles:
+Terminal del backend: configura primero las variables de Cloudinary en esa misma terminal y luego ejecuta:
 
 ```bash
-npm run build    # Verificar tipos y generar la compilación de producción
-npm run lint     # Ejecutar Oxlint
-npm run preview  # Previsualizar localmente la compilación
+dotnet run --project backend/backend.csproj --launch-profile http
 ```
+
+El backend local escucha en `http://localhost:5022`, que debe coincidir con `VITE_API_URL`. CORS está configurado para los orígenes locales `http://localhost:5173` y `http://localhost:3000`. Si cambias variables del frontend, reinicia Vite para que las vuelva a cargar.
+
+## Scripts del frontend
+
+```bash
+npm run dev      # Inicia el servidor de desarrollo
+npm run build    # Verifica TypeScript y genera la compilación
+npm run lint     # Ejecuta Oxlint
+npm run preview  # Previsualiza la compilación
+```
+
+## API de archivos
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `POST` | `/api/upload/cedula` | Sube un archivo privado a Cloudinary. |
+| `GET` | `/api/cedula-url/{publicId}` | Genera una URL firmada para un archivo privado. |
+| `GET` | `/api/download/{publicId}` | Descarga un archivo privado. |
+| `POST` | `/api/delete` | Elimina un archivo de Cloudinary. |
+
+## Antes de usar en producción
+
+- Revisar y probar las reglas de Firestore: el frontend accede directamente a sus colecciones.
+- Implementar y verificar autorización para operaciones administrativas y endpoints del backend. CORS y el estado de sesión del frontend no sustituyen autorización.
+- Reemplazar los orígenes CORS locales por los dominios del despliegue.
+- Validar los archivos recibidos y el tratamiento de datos personales, especialmente documentos de crédito.
+- Mantener las credenciales de Cloudinary en configuración protegida del servidor.

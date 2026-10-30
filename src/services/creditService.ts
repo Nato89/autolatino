@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import type { CreditApplication } from "../types/credit";
 
@@ -87,6 +87,26 @@ export const updateCreditApplication = async (id: string | number, applicationDa
 export const deleteCreditApplication = async (id: string | number) => {
     try {
         const applicationRef = doc(db, "creditApplications", String(id));
+        
+        // 1. Buscamos la solicitud
+        const docSnap = await getDoc(applicationRef);
+        
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            const archivos = data.archivos || [];
+            const API_URL = import.meta.env.VITE_API_URL;
+
+            // 2. Borramos los archivos (fotos y PDFs)
+            for (const publicId of archivos) {
+                await fetch(`${API_URL}/api/delete`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ publicId: publicId })
+                });
+            }
+        }
+
+        // 3. Borramos de Firestore
         await deleteDoc(applicationRef);
     } catch (error) {
         console.error("Error al eliminar la solicitud:", error);

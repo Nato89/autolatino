@@ -29,8 +29,33 @@ export const updateVehicle = async (id: string | number, vehicleData: Partial<Ve
 export const deleteVehicle = async (id: string | number) => {
   try {
     const vehicleRef = doc(db, "vehicles", String(id));
+    
+    // 1. Buscamos los datos del vehículo para obtener sus imágenes
+    const vehicleDoc = await getDocs(collection(db, "vehicles"));
+    const vehicleData = vehicleDoc.docs.find(d => d.id === String(id))?.data();
+    
+    // 2. Si tiene imágenes, las borramos a través del backend
+    if (vehicleData && vehicleData.images && vehicleData.images.length > 0) {
+      const API_URL = import.meta.env.VITE_API_URL;
+      
+      for (const imageUrl of vehicleData.images) {
+        // Extraemos el nombre del archivo y forzamos la ruta de los carros
+        const parts = imageUrl.split('/');
+        const fileName = parts.pop()?.split('.')[0] || ''; 
+        const publicId = `autolatino/vehiculos/${fileName}`;
+
+        // Enviamos el JSON al nuevo endpoint POST
+        await fetch(`${API_URL}/api/delete`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ publicId: publicId })
+        });
+      }
+    }
+
+    // 3. Finalmente, borramos el documento de Firestore
     await deleteDoc(vehicleRef);
-    console.log("Vehículo eliminado con éxito");
+    console.log("Vehículo eliminado con éxito y fotos borradas de Cloudinary");
   } catch (error) {
     console.error("Error al eliminar el vehículo:", error);
     throw error;

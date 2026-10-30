@@ -75,10 +75,10 @@ const Credito = () => {
 
                 try {
                     // 1. Subir las fotos de la cédula a Cloudinary
-                    const fileUrls: string[] = [];
+                    const fileIds: string[] = [];
                     for (const file of files) {
-                        const url = await uploadImage(file, 'autolatino/clientes');
-                        fileUrls.push(url);
+                        const publicId = await uploadImage(file, 'autolatino/clientes');
+                        fileIds.push(publicId);
                     }
 
                     // 2. Preparar los datos de la solicitud
@@ -93,7 +93,7 @@ const Credito = () => {
                         refPersonalTel: formData.refPersonalTel,
                         refFamiliarNombre: formData.refFamiliarNombre,
                         refFamiliarTel: formData.refFamiliarTel,
-                        archivos: fileUrls,
+                        archivos: fileIds,
                         estado: 'Inicial' as const,
                         createdAt: new Date().toISOString(),
                         updatedAt: new Date().toISOString(),

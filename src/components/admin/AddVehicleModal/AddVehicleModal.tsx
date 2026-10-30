@@ -4,7 +4,7 @@ import Button from '../../common/Button/Button';
 import InputField from '../../common/InputField/InputField';
 import FileUploader from '../../public/FileUploader/FileUploader';
 import { addVehicle } from '../../../services/vehicleService';
-import { uploadImage } from '../../../services/cloudinaryService';
+import { uploadPublicImage } from '../../../services/cloudinaryService';
 
 interface AddVehicleModalProps {
     onClose: () => void;
@@ -37,7 +37,7 @@ const AddVehicleModal = ({ onClose }: AddVehicleModalProps) => {
         // Subir cada imagen a Cloudinary y obtener las URLs
         const imageUrls: string[] = [];
         for (const file of files) {
-            const url = await uploadImage(file, 'autolatino/vehiculos');
+            const url = await uploadPublicImage(file, 'autolatino/vehiculos');
             imageUrls.push(url);
         }
         const vehiclePayload = {
