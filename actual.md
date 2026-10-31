@@ -270,3 +270,4 @@ npm run preview  # Previsualiza la compilación
 - Mantener las credenciales de Cloudinary únicamente en configuración protegida del servidor.
 - Probar responsive, accesibilidad y experiencia de usuario en los entornos de despliegue.
 - Definir integraciones con CRM o correo si entran en el alcance.
+

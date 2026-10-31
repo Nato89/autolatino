@@ -1,38 +1,23 @@
 import styles from './Credito.module.css';
-import { useState } from 'react';
 import Button from '../../common/Button/Button';
 import InputField from '../../common/InputField/InputField';
 import FileUploader from '../FileUploader/FileUploader';
 import { StatusModal } from '../StatusModal/StatusModal';
-import { uploadImage } from '../../../services/cloudinaryService';
-import { addCreditApplication } from '../../../services/creditService';
+import { useCreditForm } from '../../../hooks/useCreditForm';
 
 const Credito = () => {
-    const [showModal, setShowModal] = useState(false);
-    const [files, setFiles] = useState<File[]>([]);     
-    const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
-    const [enviando, setEnviando] = useState(false); 
-
-    const [formData, setFormData] = useState({
-        nombres: '',
-        cedula: '',
-        celular: '',
-        email: '',
-        ocupacion: '',
-        ingresos: '',
-        refPersonalNombre: '',
-        refPersonalTel: '',
-        refFamiliarNombre: '',
-        refFamiliarTel: '',
-        aceptaTerminos: false,
-    });      
-    
-    const handleChange = (field: string, value: string | boolean) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
-    };
+    const {
+        showModal,
+        setShowModal,
+        files,
+        setFiles,
+        isStatusModalOpen,
+        setIsStatusModalOpen,
+        enviando,
+        formData,
+        handleChange,
+        handleSubmit,
+    } = useCreditForm();    
     
     return (
         <section className={styles.credito}>
@@ -63,69 +48,7 @@ const Credito = () => {
                     </div>
                 </div>
             </div>
-            <form className={styles.right} onSubmit={async (e) => { 
-                e.preventDefault(); 
-                
-                if (files.length === 0) {
-                    alert('Por favor adjunta la foto de tu cédula');
-                    return;
-                }
-
-                setEnviando(true);
-
-                try {
-                    // 1. Subir las fotos de la cédula a Cloudinary
-                    const fileIds: string[] = [];
-                    for (const file of files) {
-                        const publicId = await uploadImage(file, 'autolatino/clientes');
-                        fileIds.push(publicId);
-                    }
-
-                    // 2. Preparar los datos de la solicitud
-                    const applicationData = {
-                        nombres: formData.nombres,
-                        cedula: formData.cedula,
-                        celular: formData.celular,
-                        email: formData.email,
-                        ocupacion: formData.ocupacion,
-                        ingresos: formData.ingresos,
-                        refPersonalNombre: formData.refPersonalNombre,
-                        refPersonalTel: formData.refPersonalTel,
-                        refFamiliarNombre: formData.refFamiliarNombre,
-                        refFamiliarTel: formData.refFamiliarTel,
-                        archivos: fileIds,
-                        estado: 'Inicial' as const,
-                        createdAt: new Date().toISOString(),
-                        updatedAt: new Date().toISOString(),
-                    };
-
-                    // 3. Guardar en Firestore
-                    await addCreditApplication(applicationData);
-
-                    // 4. Mostrar mensaje de éxito y limpiar
-                    setShowModal(true);
-                    setFiles([]); 
-                    setFormData({
-                        nombres: '',
-                        cedula: '',
-                        celular: '',
-                        email: '',
-                        ocupacion: '',
-                        ingresos: '',
-                        refPersonalNombre: '',
-                        refPersonalTel: '',
-                        refFamiliarNombre: '',
-                        refFamiliarTel: '',
-                        aceptaTerminos: false,
-                    }); 
-
-                } catch (error) {
-                    console.error("Error al enviar la solicitud:", error);
-                    alert("Hubo un error al enviar tu solicitud. Por favor intenta de nuevo.");
-                } finally {
-                    setEnviando(false);
-                }
-            }}>
+            <form className={styles.right} onSubmit={handleSubmit}>
                 {/* Fila 1: Nombres + Cédula */}
                 <div className={styles.formRow}>
                     <div className={styles.formCol}>
