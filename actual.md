@@ -4,7 +4,7 @@
 
 AutoLatino es una aplicación web para una concesionaria de vehículos. Incluye un sitio público, un panel administrativo y un backend para operaciones con archivos privados. Los flujos principales de vehículos, contactos y solicitudes de crédito están conectados a servicios persistentes.
 
-La aplicación todavía necesita trabajo antes de considerarse lista para producción: ampliar la organización de la lógica de React en hooks reutilizables y revisar la autorización, las reglas de acceso y el tratamiento de datos personales.
+La lógica de React está más modularizada: además de los hooks del catálogo y del formulario de crédito, la administración de solicitudes y los flujos de detalle y edición de vehículos ya cuentan con hooks propios. Antes de producción todavía se deben revisar la autorización, las reglas de acceso y el tratamiento de datos personales.
 
 ## Arquitectura actual
 
@@ -35,6 +35,8 @@ La aplicación todavía necesita trabajo antes de considerarse lista para produc
 │  ├─ Program.cs
 │  ├─ backend.csproj
 │  ├─ appsettings.json
+│  ├─ appsettings.Development.json
+│  ├─ backend.http
 │  └─ Properties/
 │     └─ launchSettings.json
 ├─ public/
@@ -48,6 +50,7 @@ La aplicación todavía necesita trabajo antes de considerarse lista para produc
    ├─ main.tsx
    ├─ assets/
    │  ├─ images/
+   │  │  ├─ perfil_asesor.png
    │  │  ├─ Catalogo/
    │  │  │  ├─ Autolatino-logo.jpg
    │  │  │  ├─ renault-reverse.jpg
@@ -153,8 +156,11 @@ La aplicación todavía necesita trabajo antes de considerarse lista para produc
    │  ├─ creditApplications.ts
    │  └─ vehicles.ts
    ├─ hooks/
+   │  ├─ useAdminCreditApplications.ts
    │  ├─ useCreditForm.ts
-   │  └─ useVehicleCatalog.ts
+   │  ├─ useVehicleCatalog.ts
+   │  ├─ useVehicleDetail.ts
+   │  └─ useVehicleEditor.ts
    ├─ pages/
    │  ├─ admin/
    │  │  ├─ AdminDashboard/
@@ -184,7 +190,7 @@ La aplicación todavía necesita trabajo antes de considerarse lista para produc
       └─ vehicle.ts
 ```
 
-El árbol enumera archivos no vacíos que forman parte de la aplicación, su configuración, documentación y recursos estáticos. Se omiten las carpetas vacías, dependencias instaladas (`node_modules`), el resultado generado de compilación (`dist`) y la carpeta de material archivado `borrar/`. `src/components/common/RangeFilter/` implementa el control reutilizable para rangos del catálogo, y `src/components/public/FileUploader/` ofrece selección/arrastre de archivos y se reutiliza en el formulario de crédito y el modal para agregar vehículos. `Empaquetado.md` describe una estructura objetivo/futura y no debe tomarse como prueba de que esos módulos ya existen.
+El árbol enumera archivos no vacíos que forman parte de la aplicación, su configuración, documentación y recursos estáticos. Se omiten las carpetas vacías, dependencias instaladas (`node_modules`), artefactos generados (`dist`, `backend/bin/` y `backend/obj/`) y la carpeta de material archivado `borrar/`. `src/components/common/RangeFilter/` implementa el control reutilizable para rangos del catálogo, y `src/components/public/FileUploader/` ofrece selección/arrastre de archivos y se reutiliza en el formulario de crédito y el modal para agregar vehículos. `Empaquetado.md` describe una estructura objetivo/futura y no debe tomarse como prueba de que esos módulos ya existen.
 
 ### Endpoints del backend
 
@@ -213,7 +219,15 @@ Los archivos de ejemplo en `src/data/` no son la fuente de los flujos activos. L
 
 ## Hooks de React
 
-Actualmente existen dos hooks propios en `src/hooks/`: `useCreditForm` encapsula el estado y el envío del formulario de crédito, incluida la subida de archivos y el guardado de la solicitud; `useVehicleCatalog` gestiona la suscripción al catálogo, los filtros y estados de interfaz, y expone la acción de eliminar vehículos. La extracción de lógica a hooks está iniciada, pero parte de la lógica de estado y efectos sigue en componentes y páginas; se puede continuar refactorizando esa lógica como tarea de mantenimiento.
+La carpeta `src/hooks/` contiene cinco hooks propios:
+
+- `useCreditForm` encapsula el estado y el envío del formulario de crédito, incluida la subida de archivos y el guardado de la solicitud.
+- `useVehicleCatalog` gestiona la suscripción al catálogo, los filtros y estados de interfaz, y expone la acción de eliminar vehículos.
+- `useAdminCreditApplications` gestiona la suscripción a solicitudes de crédito en el panel, las agrupa por estado y expone las acciones para cambiar estados y eliminar solicitudes.
+- `useVehicleDetail` concentra la carga y navegación entre vehículos, además de los estados de zoom, sesión y modales de la página de detalle.
+- `useVehicleEditor` administra el formulario de edición, las imágenes nuevas y existentes, y el guardado y eliminación de imágenes.
+
+Estos hooks son utilizados por `AdminStudiesPage`, `VehicleDetailPage` y `EditVehicleModal`, respectivamente. La extracción de lógica sigue siendo parcial: otros componentes y páginas aún mantienen su propio estado y efectos.
 
 ## Configuración y ejecución local
 
@@ -283,4 +297,3 @@ npm run preview  # Previsualiza la compilación
 - Mantener las credenciales de Cloudinary únicamente en configuración protegida del servidor.
 - Probar responsive, accesibilidad y experiencia de usuario en los entornos de despliegue.
 - Definir integraciones con CRM o correo si entran en el alcance.
-

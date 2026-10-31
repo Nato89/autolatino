@@ -1,11 +1,9 @@
-import { useState, useRef, } from 'react';
 import { PlusCircle } from 'lucide-react';
 import styles from './EditVehicleModal.module.css';
 import Button from '../../common/Button/Button';
 import InputField from '../../common/InputField/InputField';
+import { useVehicleEditor } from '../../../hooks/useVehicleEditor';
 import type { Vehicle } from '../../../types/vehicle';
-import { updateVehicle } from '../../../services/vehicleService';
-import { uploadPublicImage } from '../../../services/cloudinaryService';
 
 interface EditVehicleModalProps {
     vehicle: Vehicle;
@@ -13,84 +11,18 @@ interface EditVehicleModalProps {
 }
 
 const EditVehicleModal = ({ vehicle, onClose }: EditVehicleModalProps) => {
-    const [formData, setFormData] = useState({
-        brand: vehicle.brand,
-        model: vehicle.model,
-        year: vehicle.year,
-        price: vehicle.price,
-        km: vehicle.km,
-        transmission: vehicle.transmission,
-        features: vehicle.features || '',
-    });
-
-    const handleChange = (field: string, value: string) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
-    };
-
-    const handleSave = async () => {
-        try {
-            setLoading(true);
-
-            // 1. Subir las imágenes nuevas a Cloudinary
-            const newImageUrls: string[] = [];
-            for (const file of files) {
-                const url = await uploadPublicImage(file);
-                newImageUrls.push(url);
-            }
-
-           // 2. Filtrar las URLs temporales (blob:) y combinar con las nuevas
-            const validExistingImages = existingImages.filter(img => !img.startsWith('blob:'));
-            const allImages = [...validExistingImages, ...newImageUrls];
-
-            // 3. Preparar los datos a actualizar
-            const vehiclePayload = {
-                brand: formData.brand,
-                model: formData.model,
-                year: Number(formData.year),
-                price: Number(formData.price),
-                km: Number(formData.km),
-                transmission: formData.transmission,
-                features: formData.features,
-                images: allImages
-            };
-
-            // 4. Actualizar en Firestore
-            await updateVehicle(vehicle.id, vehiclePayload);
-            console.log('Vehículo actualizado exitosamente');
-            onClose();
-        } catch (error) {
-            console.error('Error al actualizar el vehículo:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleRemoveExistingImage = (index: number) => {
-        setExistingImages(existingImages.filter((_, i) => i !== index));
-    };
-
-    const handleAddImages = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const newFiles = Array.from(e.target.files);
-            const newImageUrls = newFiles.map(file => URL.createObjectURL(file));
-            
-            // Guardar los archivos reales para subirlos a Cloudinary
-            setFiles(prev => [...prev, ...newFiles]);
-
-            // Mostrar las URLs temporales en la vista previa
-            const totalImages = [...existingImages, ...newImageUrls].slice(0, 5);
-            setExistingImages(totalImages);
-        }
-    };
-    
-    const [existingImages, setExistingImages] = useState<string[]>(vehicle.images);
-    const fileInputRef = useRef<HTMLInputElement>(null);  
-    const [files, setFiles] = useState<File[]>([]);
-    const [loading, setLoading] = useState(false);
-
+    const {
+        formData,
+        handleChange,
+        existingImages,
+        handleRemoveExistingImage,
+        handleAddImages,
+        fileInputRef,
+        loading,
+        saveError,
+        handleSave
+    } = useVehicleEditor(vehicle, onClose);    
+       
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
@@ -185,6 +117,7 @@ const EditVehicleModal = ({ vehicle, onClose }: EditVehicleModalProps) => {
                                     <button 
                                         className={styles.removeExistingImageBtn}
                                         onClick={() => handleRemoveExistingImage(index)}
+                                        disabled={loading}
                                     >
                                         ✕
                                     </button>
@@ -195,6 +128,7 @@ const EditVehicleModal = ({ vehicle, onClose }: EditVehicleModalProps) => {
                                 <button 
                                     className={styles.addImageBtn}
                                     onClick={() => fileInputRef.current?.click()}
+                                    disabled={loading}
                                 >
                                     <PlusCircle size={40} />
                                 </button>
@@ -211,6 +145,8 @@ const EditVehicleModal = ({ vehicle, onClose }: EditVehicleModalProps) => {
                         />
                     </div>
                 </div>                
+
+                {saveError && <p role="alert">{saveError}</p>}
 
                 <div className={styles.buttonsContainer}>
                     <Button size="medium" onClick={handleSave} disabled={loading}>

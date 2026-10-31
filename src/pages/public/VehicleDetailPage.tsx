@@ -1,5 +1,3 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import styles from './VehicleDetailPage.module.css';
 import flechaIzquierda from '../../assets/images/Iconos/arrow-prev.svg';
 import flechaDerecha from '../../assets/images/Iconos/arrow-next.svg';
@@ -8,82 +6,33 @@ import Button from '../../components/common/Button/Button';
 import { Pencil, Trash2, List } from 'lucide-react';
 import EditVehicleModal from '../../components/admin/EditVehicleModal/EditVehicleModal';
 import ConfirmModal from '../../components/common/ConfirmModal/ConfirmModal';
-import type { Vehicle } from '../../types/vehicle';
-import { subscribeToVehicles, deleteVehicle } from '../../services/vehicleService';
+import { useVehicleDetail } from '../../hooks/useVehicleDetail';
 
-const VehicleDetailPage = () => {
-    const { id } = useParams();    
-    const navigate = useNavigate();    
-    const [selectedImage, setSelectedImage] = useState(0);
-    const [isZoomed, setIsZoomed] = useState(false);
-    const [touchStart, setTouchStart] = useState(0);
-    const [touchEnd, setTouchEnd] = useState(0);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-    const [loading, setLoading] = useState(true);
-    const vehicle = vehicles.find(v => v.id === id);
-    const currentIndex = vehicles.findIndex(v => v.id === id);
-    const prevIndex = currentIndex > 0 ? currentIndex - 1 : -1;
-    const nextIndex = currentIndex >= 0 && currentIndex < vehicles.length - 1 ? currentIndex + 1 : -1;      
+const VehicleDetailPage = () => {        
+    const {
+        vehicle,
+        loading,
+        selectedImage,
+        setSelectedImage,
+        isZoomed,
+        setIsZoomed,        
+        setTouchStart,        
+        setTouchEnd,
+        isLoggedIn,
+        showEditModal,
+        setShowEditModal,
+        showDeleteModal,
+        setShowDeleteModal,
+        vehicles,
+        prevIndex,
+        nextIndex,
+        handleTouchEnd,
+        deleteVehicle,
+        navigate
+    } = useVehicleDetail();
 
-    useEffect(() => {
-        const unsubscribe = subscribeToVehicles((data) => {
-            setVehicles(data);
-            setLoading(false);
-        });
-
-        return () => unsubscribe();
-    }, []);
-
-    const handleTouchEnd = () => {
-        const distance = touchStart - touchEnd;
-        const minSwipeDistance = 50;
-
-        if (distance > minSwipeDistance) {
-            // Deslizó hacia la izquierda → siguiente vehículo
-            if (nextIndex < vehicles.length) {
-                navigate(`/vehiculo/${vehicles[nextIndex].id}`);
-            }
-        } else if (distance < -minSwipeDistance) {
-            // Deslizó hacia la derecha → vehículo anterior
-            if (prevIndex >= 0) {
-                navigate(`/vehiculo/${vehicles[prevIndex].id}`);
-            }
-        }
-    };
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
-
-    useEffect(() => {
-        const storedUser = localStorage.getItem('autolatino_user');
-        if (storedUser) {
-            setIsLoggedIn(true);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (isZoomed) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
-        }
-
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
-    }, [isZoomed]);
-
-    if (loading) {
-        return <div className={styles.loadingText}>Cargando vehículo...</div>;
-    }
-
-    if (!vehicle) {
-        return <p>Vehículo no encontrado</p>;
-    }
+    if (loading) return <div className={styles.loadingText}>Cargando vehículo...</div>;
+    if (!vehicle) return <p>Vehículo no encontrado</p>;
 
     return (
         <div className={styles.detailPage}>

@@ -30,3 +30,18 @@ export const uploadPublicImage = async (file: File): Promise<string> => {
     const data = await response.json();
     return data.secure_url; 
 };
+
+export const deletePublicImage = async (imageUrl: string): Promise<void> => {
+    if (!API_URL) throw new Error('Falta la URL del backend en el .env');
+
+    const response = await fetch(`${API_URL}/api/delete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ publicId: imageUrl }),
+    });
+
+    if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage || `Error al eliminar la imagen (${response.status})`);
+    }
+};

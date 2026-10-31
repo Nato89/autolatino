@@ -1,66 +1,27 @@
 import styles from './AdminStudiesPage.module.css';
 import type { CreditApplication } from '../../../types/credit';
-import { subscribeToCreditApplications, deleteCreditApplication, updateCreditApplication } from '../../../services/creditService';
 import Button from '../../../components/common/Button/Button';
 import { Eye, Trash2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
 import ConfirmModal from '../../../components/common/ConfirmModal/ConfirmModal';
 import StudyDetailModal from '../../../components/admin/StudyDetailModal/StudyDetailModal';
 import NegacionModal from '../../../components/admin/NegacionModal/NegacionModal';
+import { useAdminCreditApplications } from '../../../hooks/useAdminCreditApplications';
 
 const AdminStudiesPage = () => {
-    const [applications, setApplications] = useState<CreditApplication[]>([]);
-
-        useEffect(() => {
-            const unsubscribe = subscribeToCreditApplications((data) => {
-                setApplications(data);
-            });
-            return () => unsubscribe();
-        }, []);
-
-    const [deletingApplication, setDeletingApplication] = useState<string | number | null>(null);
-    const [viewingApplication, setViewingApplication] = useState<string | number | null>(null);
-    const [negatingApplication, setNegatingApplication] = useState<string | number | null>(null);
-
-    const solicitudesNuevas = applications.filter(
-        (app) => app.estado === 'Inicial' || app.estado === 'En estudio'
-    );
-
-    const solicitudesGestionadas = applications.filter(
-        (app) => app.estado === 'Aprobado' || app.estado === 'Negado'
-    );
-
-    const handleChangeEstado = async (id: string | number, nuevoEstado: CreditApplication['estado']) => {
-        if (nuevoEstado === 'Negado') {
-            setNegatingApplication(id);
-            return;
-        }
-
-        try {
-            await updateCreditApplication(id, { 
-                estado: nuevoEstado, 
-                updatedAt: new Date().toISOString() 
-            });
-            
-        } catch (error) {
-            console.error("Error al cambiar el estado:", error);
-        }
-    };
-
-    const handleConfirmNegacion = async (razon: string) => {
-        if (negatingApplication === null) return;
-
-        try {
-            await updateCreditApplication(negatingApplication, {
-                estado: 'Negado',
-                razonNegacion: razon,
-                updatedAt: new Date().toISOString()
-            });            
-            setNegatingApplication(null);
-        } catch (error) {
-            console.error("Error al negar la solicitud:", error);
-        }
-    };
+        const {
+        solicitudesNuevas,
+        solicitudesGestionadas,
+        applications,
+        deletingApplication,
+        setDeletingApplication,
+        viewingApplication,
+        setViewingApplication,
+        negatingApplication,
+        setNegatingApplication,
+        handleChangeEstado,
+        handleConfirmNegacion,
+        deleteCreditApplication
+    } = useAdminCreditApplications();    
 
     return (
         <div className={styles.pageContainer}>
