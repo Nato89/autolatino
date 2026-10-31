@@ -157,6 +157,7 @@ La lógica de React está más modularizada: además de los hooks del catálogo 
    │  └─ vehicles.ts
    ├─ hooks/
    │  ├─ useAdminCreditApplications.ts
+   │  ├─ useAdminVehicles.ts
    │  ├─ useCreditForm.ts
    │  ├─ useVehicleCatalog.ts
    │  ├─ useVehicleDetail.ts
@@ -219,15 +220,16 @@ Los archivos de ejemplo en `src/data/` no son la fuente de los flujos activos. L
 
 ## Hooks de React
 
-La carpeta `src/hooks/` contiene cinco hooks propios:
+La carpeta `src/hooks/` contiene seis hooks propios:
 
+- `useAdminVehicles` carga la lista de vehículos del panel y centraliza los estados de edición, eliminación y alta, además de las acciones para recargar y eliminar vehículos.
 - `useCreditForm` encapsula el estado y el envío del formulario de crédito, incluida la subida de archivos y el guardado de la solicitud.
 - `useVehicleCatalog` gestiona la suscripción al catálogo, los filtros y estados de interfaz, y expone la acción de eliminar vehículos.
 - `useAdminCreditApplications` gestiona la suscripción a solicitudes de crédito en el panel, las agrupa por estado y expone las acciones para cambiar estados y eliminar solicitudes.
 - `useVehicleDetail` concentra la carga y navegación entre vehículos, además de los estados de zoom, sesión y modales de la página de detalle.
 - `useVehicleEditor` administra el formulario de edición, las imágenes nuevas y existentes, y el guardado y eliminación de imágenes.
 
-Estos hooks son utilizados por `AdminStudiesPage`, `VehicleDetailPage` y `EditVehicleModal`, respectivamente. La extracción de lógica sigue siendo parcial: otros componentes y páginas aún mantienen su propio estado y efectos.
+`useAdminVehicles`, `useAdminCreditApplications`, `useVehicleDetail` y `useVehicleEditor` son utilizados por `AdminVehiclesPage`, `AdminStudiesPage`, `VehicleDetailPage` y `EditVehicleModal`, respectivamente. La extracción de lógica sigue siendo parcial: otros componentes y páginas aún mantienen su propio estado y efectos.
 
 ## Configuración y ejecución local
 

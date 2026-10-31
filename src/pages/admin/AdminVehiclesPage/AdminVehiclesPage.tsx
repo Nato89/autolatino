@@ -2,35 +2,26 @@ import styles from './AdminVehiclesPage.module.css';
 import Button from '../../../components/common/Button/Button';
 import { Pencil, Trash2, PlusCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import EditVehicleModal from '../../../components/admin/EditVehicleModal/EditVehicleModal';
 import ConfirmModal from '../../../components/common/ConfirmModal/ConfirmModal';
 import AddVehicleModal from '../../../components/admin/AddVehicleModal/AddVehicleModal';
-import type { Vehicle } from '../../../types/vehicle';
-import { getVehicles, deleteVehicle } from '../../../services/vehicleService';
+import { useAdminVehicles } from '../../../hooks/useAdminVehicles';
 
 const AdminVehiclesPage = () => {
-    const navigate = useNavigate();
-    const [editingVehicle, setEditingVehicle] = useState<string | number | null>(null);
-    const [deletingVehicle, setDeletingVehicle] = useState<string | number | null>(null);
-    const [showAddModal, setShowAddModal] = useState(false);
-    const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-    const [loading, setLoading] = useState(true);
-    
-    const fetchVehicles = async () => {
-        try {
-            const data = await getVehicles();
-            setVehicles(data);
-        } catch (error) {
-            console.error('Error al cargar vehículos:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+        const {
+        vehicles,
+        loading,
+        fetchVehicles,
+        editingVehicle,
+        setEditingVehicle,
+        deletingVehicle,
+        setDeletingVehicle,
+        showAddModal,
+        setShowAddModal,
+        handleDelete,
+    } = useAdminVehicles();
 
-    useEffect(() => {
-        fetchVehicles();
-    }, []);    
+    const navigate = useNavigate();           
 
     return (
         <div className={styles.pageContainer}>
@@ -134,20 +125,10 @@ const AdminVehiclesPage = () => {
             {deletingVehicle !== null && (
                 <ConfirmModal
                     message={`¿Estás seguro de que quieres eliminar el vehículo ${vehicles.find(v => v.id === deletingVehicle)?.brand} ${vehicles.find(v => v.id === deletingVehicle)?.model}?`}
-                    onConfirm={async () => {
-                        if (deletingVehicle !== null) {
-                            try {
-                                await deleteVehicle(deletingVehicle);
-                                setVehicles(prev => prev.filter(v => v.id !== deletingVehicle));
-                                setDeletingVehicle(null);
-                            } catch (error) {
-                                console.error("Error al eliminar:", error);
-                            }
-                        }
-                    }}
+                    onConfirm={handleDelete}
                     onCancel={() => setDeletingVehicle(null)}
                 />
-            )}          
+            )}              
         </div>
     );
 };
