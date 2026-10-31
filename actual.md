@@ -4,7 +4,7 @@
 
 AutoLatino es una aplicación web para una concesionaria de vehículos. Incluye un sitio público, un panel administrativo y un backend para operaciones con archivos privados. Los flujos principales de vehículos, contactos y solicitudes de crédito están conectados a servicios persistentes.
 
-La aplicación todavía necesita trabajo antes de considerarse lista para producción: organizar la lógica de React en hooks reutilizables y revisar la autorización, las reglas de acceso y el tratamiento de datos personales.
+La aplicación todavía necesita trabajo antes de considerarse lista para producción: ampliar la organización de la lógica de React en hooks reutilizables y revisar la autorización, las reglas de acceso y el tratamiento de datos personales.
 
 ## Arquitectura actual
 
@@ -152,6 +152,9 @@ La aplicación todavía necesita trabajo antes de considerarse lista para produc
    │  ├─ clients.ts
    │  ├─ creditApplications.ts
    │  └─ vehicles.ts
+   ├─ hooks/
+   │  ├─ useCreditForm.ts
+   │  └─ useVehicleCatalog.ts
    ├─ pages/
    │  ├─ admin/
    │  │  ├─ AdminDashboard/
@@ -187,18 +190,19 @@ El árbol enumera archivos no vacíos que forman parte de la aplicación, su con
 
 | Método | Ruta | Uso |
 |---|---|---|
-| `POST` | `/api/upload/cedula` | Sube un archivo privado a Cloudinary y devuelve su `publicId` y tipo de recurso. |
+| `POST` | `/api/upload/cedula` | Sube una imagen o un PDF privado a Cloudinary y devuelve su `publicId` y tipo de recurso. |
+| `POST` | `/api/upload/vehiculo` | Sube una imagen pública de vehículo y devuelve su URL segura. |
 | `GET` | `/api/cedula-url/{publicId}` | Devuelve una URL firmada para un archivo privado. |
 | `GET` | `/api/download/{publicId}` | Descarga un archivo privado. |
 | `POST` | `/api/delete` | Solicita eliminar un archivo de Cloudinary. |
 
-El backend configura CORS para `http://localhost:5173` y `http://localhost:3000`. CORS no sustituye autenticación ni autorización. La configuración de Cloudinary se lee desde `CloudinarySettings` (`CloudName`, `ApiKey` y `ApiSecret`).
+El endpoint `/api/delete` usa el tipo `upload` para las URLs de imágenes públicas de vehículos y `private` para las imágenes privadas de cédulas. Los PDFs de cédula se eliminan como recurso `raw` de tipo `private`. El backend configura CORS para `http://localhost:5173` y `http://localhost:3000`; CORS no sustituye autenticación ni autorización. La configuración de Cloudinary se lee desde `CloudinarySettings` (`CloudName`, `ApiKey` y `ApiSecret`).
 
 ## Funcionalidades implementadas
 
 - **Sitio público:** página principal, navegación, catálogo y detalle de vehículos.
 - **Catálogo:** consulta vehículos desde Firestore y permite filtrar por transmisión, precio, modelo/año y kilometraje.
-- **Administración de vehículos:** consulta, alta, edición y eliminación de vehículos desde el panel. Las imágenes se suben a Cloudinary.
+- **Administración de vehículos:** consulta, alta, edición y eliminación de vehículos desde el panel. Las imágenes se suben a Cloudinary mediante el backend y se eliminan al borrar el vehículo.
 - **Solicitudes de crédito:** el formulario guarda los datos en Firestore y envía los archivos al backend para almacenarlos de forma privada en Cloudinary.
 - **Procesos de crédito:** panel con solicitudes en tiempo real, detalle, actualización de estado y eliminación. Incluye acceso a los archivos mediante las rutas del backend.
 - **Consulta del estado:** permite buscar una solicitud por cédula y mostrar su estado.
@@ -207,9 +211,9 @@ El backend configura CORS para `http://localhost:5173` y `http://localhost:3000`
 
 Los archivos de ejemplo en `src/data/` no son la fuente de los flujos activos. Los ejemplos de vehículos, contactos y solicitudes permanecen comentados; el inicio de sesión tampoco utiliza el usuario mock conservado en `src/data/auth.ts`.
 
-## Pendiente: organizar los hooks
+## Hooks de React
 
-La lógica de estado y efectos de React sigue distribuida en componentes y páginas. No hay una capa organizada de hooks propios para encapsular, por ejemplo, suscripciones a Firestore, estados de carga o formularios. Esta es una tarea pendiente de mantenimiento; no significa que los flujos descritos estén pendientes de implementación.
+Actualmente existen dos hooks propios en `src/hooks/`: `useCreditForm` encapsula el estado y el envío del formulario de crédito, incluida la subida de archivos y el guardado de la solicitud; `useVehicleCatalog` gestiona la suscripción al catálogo, los filtros y estados de interfaz, y expone la acción de eliminar vehículos. La extracción de lógica a hooks está iniciada, pero parte de la lógica de estado y efectos sigue en componentes y páginas; se puede continuar refactorizando esa lógica como tarea de mantenimiento.
 
 ## Configuración y ejecución local
 
@@ -224,12 +228,10 @@ Se requieren Node.js, npm y .NET 10. El frontend y el backend se ejecutan en ter
    VITE_FIREBASE_STORAGE_BUCKET=
    VITE_FIREBASE_MESSAGING_SENDER_ID=
    VITE_FIREBASE_APP_ID=
-   VITE_CLOUDINARY_CLOUD_NAME=
-   VITE_CLOUDINARY_UPLOAD_PRESET=
    VITE_API_URL=http://localhost:5022
    ```
 
-   El preset de Cloudinary del frontend se utiliza para las imágenes públicas. No guardes secretos de Cloudinary en variables `VITE_*`, porque se incluyen en el cliente.
+   Las subidas de archivos del frontend se realizan mediante el backend; no coloques secretos de Cloudinary en variables `VITE_*`, porque se incluyen en el cliente.
 
 2. Configura el backend mediante variables de entorno de .NET:
    - `CloudinarySettings__CloudName`
@@ -252,6 +254,17 @@ Se requieren Node.js, npm y .NET 10. El frontend y el backend se ejecutan en ter
    ```
 
    El perfil local de desarrollo publica HTTP en `http://localhost:5022`, que debe coincidir con `VITE_API_URL`.
+
+   En VS Code también puedes iniciar la API con **F5** si el proyecto `backend` está seleccionado para depuración. **Shift+F5** detiene la API; mientras esté detenida, el frontend no podrá subir ni descargar archivos y puede mostrar `ERR_CONNECTION_REFUSED`. Presiona **F5** para iniciarla de nuevo.
+
+### Diagnóstico básico con el depurador de C# Dev Kit
+
+1. Abre `backend/Program.cs` y haz clic en el margen junto a una línea para poner un breakpoint (punto rojo).
+2. Presiona **F5** para iniciar la API bajo el depurador y realiza en la app la acción que quieres investigar.
+3. Cuando la ejecución se detenga, la línea amarilla indica dónde está pausado el programa. **F10** ejecuta esa línea y avanza sin entrar en funciones; **F5** continúa hasta el siguiente breakpoint.
+4. En **Variables** o **Watch**, inspecciona valores solo después de que el programa haya ejecutado la línea que los asigna. Por ejemplo, en `/api/delete`, `path` se calcula antes de llamar a Cloudinary y `imgResult` solo existe después de ejecutar `await cloudinary.DestroyAsync(imgParams)`.
+5. Para el borrado de imágenes, comprueba `path`, `imgParams.Type` e `imgResult.Result`. `ok` indica que Cloudinary completó el borrado; `not found` indica que no encontró un recurso con ese identificador y tipo.
+6. Al terminar, usa **Shift+F5** para detener la depuración. Recuerda que esto apaga la API local.
 
 Comandos del frontend:
 

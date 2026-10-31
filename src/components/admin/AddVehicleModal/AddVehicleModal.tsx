@@ -37,7 +37,7 @@ const AddVehicleModal = ({ onClose }: AddVehicleModalProps) => {
         // Subir cada imagen a Cloudinary y obtener las URLs
         const imageUrls: string[] = [];
         for (const file of files) {
-            const url = await uploadPublicImage(file, 'autolatino/vehiculos');
+            const url = await uploadPublicImage(file);
             imageUrls.push(url);
         }
         const vehiclePayload = {

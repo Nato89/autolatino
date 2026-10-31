@@ -155,10 +155,32 @@ app.MapPost("/api/delete", async (HttpRequest request, Cloudinary cloudinary) =>
     if (string.IsNullOrEmpty(publicId))
         return Results.BadRequest("El publicId es requerido.");
 
-    var path = publicId.Replace("_", "/");
+        var path = publicId;
+        // Si nos llega una URL completa, extraemos solo la ruta del archivo
+        if (path.StartsWith("http"))
+        {
+            var parts = path.Split(new[] { "/upload/" }, StringSplitOptions.None);
+            if (parts.Length > 1)
+            {
+                path = parts[1];
+                // Quitamos la versión (v12345/) si existe
+                if (path.StartsWith("v") && path.Contains("/"))
+                {
+                    path = path.Substring(path.IndexOf("/") + 1);
+                }
+            }
+        }
+        // Si nos mandan el ID con extensión, a veces Cloudinary se enoja. Le quitamos el .jpg/.png
+        if (path.EndsWith(".jpg") || path.EndsWith(".png") || path.EndsWith(".jpeg"))
+        {
+            path = path.Substring(0, path.LastIndexOf("."));
+        }
 
-    // 1. Intentamos borrar como imagen (por si es foto de carro o foto de cédula)
-    var imgParams = new DeletionParams(path) { ResourceType = ResourceType.Image, Type = "private" };
+    // Las fotos de vehículos llegan como URL pública; las cédulas llegan como publicId privado.
+    var imageType = publicId.Contains("/image/upload/", StringComparison.OrdinalIgnoreCase)
+        ? "upload"
+        : "private";
+    var imgParams = new DeletionParams(path) { ResourceType = ResourceType.Image, Type = imageType };
     var imgResult = await cloudinary.DestroyAsync(imgParams);
     
     if (imgResult.Result == "ok") 
@@ -172,7 +194,24 @@ app.MapPost("/api/delete", async (HttpRequest request, Cloudinary cloudinary) =>
         return Results.Ok(new { message = "PDF eliminado." });
 
     // 3. Si ambos fallan, el archivo no existía.
-    return Results.BadRequest(new { message = "No se pudo eliminar el archivo." });
+    return Results.BadRequest(new { 
+        message = "No se pudo eliminar.", 
+        errorImagen = imgResult.Error?.Message, 
+        errorPdf = rawResult.Error?.Message 
+    });
 });
+
+app.MapPost("/api/upload/vehiculo", async (IFormFile file, Cloudinary cloudinary) =>
+{
+    using var stream = file.OpenReadStream();
+    var uploadParams = new ImageUploadParams
+    {
+        File = new FileDescription(file.FileName, stream),
+        Folder = "autolatino/vehiculos",
+        Type = "upload"
+    };
+    var uploadResult = await cloudinary.UploadAsync(uploadParams);
+    return Results.Ok(new { secure_url = uploadResult.SecureUrl.ToString() });
+}).DisableAntiforgery();
 
 app.Run();

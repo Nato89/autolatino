@@ -39,16 +39,11 @@ export const deleteVehicle = async (id: string | number) => {
       const API_URL = import.meta.env.VITE_API_URL;
       
       for (const imageUrl of vehicleData.images) {
-        // Extraemos el nombre del archivo y forzamos la ruta de los carros
-        const parts = imageUrl.split('/');
-        const fileName = parts.pop()?.split('.')[0] || ''; 
-        const publicId = `autolatino/vehiculos/${fileName}`;
-
-        // Enviamos el JSON al nuevo endpoint POST
+        // Le mandamos la URL COMPLETA al backend
         await fetch(`${API_URL}/api/delete`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ publicId: publicId })
+          body: JSON.stringify({ publicId: imageUrl })
         });
       }
     }
