@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { subscribeToVehicles, deleteVehicle } from '../services/vehicleService';
-import type { Vehicle } from '../types/vehicle';
+import { deleteVehicle } from '../services/vehicleService';
 import { useAuth } from '../context/AuthContext';
+import { useVehicles } from '../context/VehicleContext';
 
 export const useVehicleDetail = () => {
     // 1. Aquí van los estados
@@ -13,8 +13,7 @@ export const useVehicleDetail = () => {
     const { isLoggedIn } = useAuth();
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { vehicles, loading } = useVehicles();
     
     // 2. Aquí va la lógica derivada (vehicle, currentIndex, etc.)
     const { id } = useParams();
@@ -25,15 +24,6 @@ export const useVehicleDetail = () => {
     const nextIndex = currentIndex >= 0 && currentIndex < vehicles.length - 1 ? currentIndex + 1 : -1;
     
     // 3. Aquí van los useEffect y handleTouchEnd
-    useEffect(() => {
-        const unsubscribe = subscribeToVehicles((data) => {
-            setVehicles(data);
-            setLoading(false);
-        });
-
-        return () => unsubscribe();
-    }, []);
-
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);    

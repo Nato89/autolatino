@@ -11,7 +11,6 @@ const AdminVehiclesPage = () => {
         const {
         vehicles,
         loading,
-        fetchVehicles,
         editingVehicle,
         setEditingVehicle,
         deletingVehicle,
@@ -107,7 +106,6 @@ const AdminVehiclesPage = () => {
                 <AddVehicleModal 
                     onClose={() => {
                         setShowAddModal(false);
-                        fetchVehicles(); 
                     }} 
                 />
             )}
@@ -117,7 +115,6 @@ const AdminVehiclesPage = () => {
                     vehicle={vehicles.find(v => v.id === editingVehicle)!}
                     onClose={() => {
                         setEditingVehicle(null);
-                        fetchVehicles(); 
                     }}
                 />
             )}

@@ -15,7 +15,6 @@ const Catalogo = () => {
     // Consumimos todo lo que nos devuelve el hook
     const {
         vehicles,
-        setVehicles,
         loadingVehicles,
         transmision,
         setTransmision,
@@ -35,6 +34,7 @@ const Catalogo = () => {
         deletingVehicle,
         setDeletingVehicle,
         vehiculosAMostrar,
+        resetFilters,
         deleteVehicle,
     } = useVehicleCatalog();
 
@@ -59,7 +59,13 @@ const Catalogo = () => {
                         ✕
                     </button>
                     <div className={styles.filtros}>
-                        <h2>Filtros</h2>
+                        <button
+                            type="button"
+                            className={styles.resetFiltersButton}
+                            onClick={resetFilters}
+                        >
+                            Filtros
+                        </button>
                         <div className={styles.buttonGroup}>
                             <button 
                                 className={`${styles.filterBtn} ${transmision === 'todos' ? styles.active : ''}`}
@@ -206,7 +212,6 @@ const Catalogo = () => {
                         if (deletingVehicle !== null) {
                             try {
                                 await deleteVehicle(deletingVehicle);
-                                setVehicles(prev => prev.filter(v => v.id !== deletingVehicle));
                                 setDeletingVehicle(null);
                             } catch (error) {
                                 console.error("Error al eliminar:", error);
