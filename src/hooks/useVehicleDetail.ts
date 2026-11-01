@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { subscribeToVehicles, deleteVehicle } from '../services/vehicleService';
 import type { Vehicle } from '../types/vehicle';
+import { useAuth } from '../context/AuthContext';
 
 export const useVehicleDetail = () => {
     // 1. Aquí van los estados
@@ -9,7 +10,7 @@ export const useVehicleDetail = () => {
     const [isZoomed, setIsZoomed] = useState(false);
     const [touchStart, setTouchStart] = useState(0);
     const [touchEnd, setTouchEnd] = useState(0);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { isLoggedIn } = useAuth();
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -35,14 +36,7 @@ export const useVehicleDetail = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, []);
-
-    useEffect(() => {
-        const storedUser = localStorage.getItem('autolatino_user');
-        if (storedUser) {
-            setIsLoggedIn(true);
-        }
-    }, []);
+    }, []);    
 
     useEffect(() => {
         if (isZoomed) {

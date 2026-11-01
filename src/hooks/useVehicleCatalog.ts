@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Vehicle } from '../types/vehicle';
 import { subscribeToVehicles, deleteVehicle } from '../services/vehicleService';
+import { useAuth } from '../context/AuthContext';
 
 export const useVehicleCatalog = () => {
     // 1. Todos los estados originales del catálogo
@@ -12,7 +13,7 @@ export const useVehicleCatalog = () => {
     const [kilometraje, setKilometraje] = useState({ min: 0, max: 200000 });
     const [mostrarTodos, setMostrarTodos] = useState(false);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);    
+    const { isLoggedIn } = useAuth();   
     const [editingVehicle, setEditingVehicle] = useState<string | number | null>(null);
     const [deletingVehicle, setDeletingVehicle] = useState<string | number | null>(null);
 
@@ -24,24 +25,9 @@ export const useVehicleCatalog = () => {
         });
 
         return () => unsubscribe();
-    }, []);
+    }, []);   
 
-    // 3. Efecto para verificar el estado de sesión del usuario
-    useEffect(() => {
-        const checkAuth = () => {
-            const storedUser = localStorage.getItem('autolatino_user');
-            setIsLoggedIn(!!storedUser);
-        };
-
-        checkAuth();
-        window.addEventListener('authChange', checkAuth);
-
-        return () => {
-            window.removeEventListener('authChange', checkAuth);
-        };
-    }, []);
-
-    // 4. Lógica de filtrado de vehículos
+    // 3. Lógica de filtrado de vehículos
     const vehiclesFiltrados = vehicles.filter((vehicle) => {
         const cumpleTransmision = transmision === 'todos' || vehicle.transmission === transmision;
         const cumplePrecio = vehicle.price >= precio.min && vehicle.price <= precio.max;
@@ -50,10 +36,10 @@ export const useVehicleCatalog = () => {
         return cumpleTransmision && cumplePrecio && cumpleModelo && cumpleKilometraje;
     });
 
-    // 5. Control de cuántos vehículos se muestran en pantalla
+    // 4. Control de cuántos vehículos se muestran en pantalla
     const vehiculosAMostrar = mostrarTodos ? vehiclesFiltrados : vehiclesFiltrados.slice(0, 4);
 
-    // 6. Retornamos todo lo que el componente visual necesita usar
+    // 5. Retornamos todo lo que el componente visual necesita usar
     return {
         vehicles,
         setVehicles,
