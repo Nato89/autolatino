@@ -5,26 +5,30 @@ import facebookIcon from '../../../assets/images/Iconos/facebook.svg';
 import avatarIcon from '../../../assets/images/Iconos/avatar.svg';
 import cameraIcon from '../../../assets/images/Iconos/camera-icon.svg';
 import Button from '../Button/Button';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import LoginModal from '../../admin/LoginModal/LoginModal';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
 
 const Footer = () => {
     const [showLogin, setShowLogin] = useState(false);
-    const [user, setUser] = useState<{ name?: string; adminName?: string; avatar?: string } | null>(null);
+    const { isLoggedIn, logout } = useAuth(); // Usamos el Contexto para saber si está logueado
+    const [avatar, setAvatar] = useState<string | null>(null); // Solo para la foto
     const navigate = useNavigate();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {        
+    // Este efecto solo es para cargar la foto del localStorage si existe
+    useState(() => {
         const storedUser = localStorage.getItem('autolatino_user');
         if (storedUser) {
-            try {                
-                setUser(JSON.parse(storedUser));
+            try {
+                const parsed = JSON.parse(storedUser);
+                if (parsed.avatar) setAvatar(parsed.avatar);
             } catch (e) {
                 console.error("Error al leer el usuario", e);
             }
         }
-    }, []);
+    });
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -32,21 +36,19 @@ const Footer = () => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64String = reader.result as string;                
-                const updatedUser = {
-                    ...(user || { name: 'Asesor' }),
-                    avatar: base64String
-                };
-                setUser(updatedUser);
-                localStorage.setItem('autolatino_user', JSON.stringify(updatedUser));
+                setAvatar(base64String);
+                // Guardamos en localStorage para que no se pierda al recargar
+                const storedUser = localStorage.getItem('autolatino_user');
+                const userData = storedUser ? JSON.parse(storedUser) : { name: 'Asesor' };
+                localStorage.setItem('autolatino_user', JSON.stringify({ ...userData, avatar: base64String }));
             };
             reader.readAsDataURL(file);
         }
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem('autolatino_user');
-        setUser(null);
-        window.dispatchEvent(new Event('authChange'));
+    const handleLogout = async () => {
+        await logout(); // Usamos la función del Contexto
+        setAvatar(null);
         navigate('/');
     };
 
@@ -93,13 +95,13 @@ const Footer = () => {
                 </div>
 
                 <div className={styles.colEmpleados}>
-                    {user ? (
+                    {isLoggedIn ? ( // Usamos isLoggedIn del Contexto
                         <>
-                            <h3>{user.name || user.adminName}</h3>
+                            <h3>Asesor</h3>
                             <div className={styles.avatarContainer}>
                                 <img 
-                                    src={user.avatar || avatarIcon} 
-                                    alt={user.name || user.adminName} 
+                                    src={avatar || avatarIcon} 
+                                    alt="Asesor" 
                                     className={styles.avatar} 
                                 />
                                 <div 

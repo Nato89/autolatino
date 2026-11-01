@@ -1,40 +1,18 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Button from '../../../components/common/Button/Button';
 import styles from './AdminDashboard.module.css';
+import { useAuth } from '../../../context/AuthContext';
 
 const AdminDashboard = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
+    const navigate = useNavigate();    
+    const { isLoggedIn, adminName, logout, loading } = useAuth();   
     
     useEffect(() => {
-        const storedUser = localStorage.getItem('autolatino_user');        
-            if (!location.state?.adminName && !storedUser) {
-                navigate('/');
-            }
-    }, [navigate, location]);
-
-    const getStoredAdminName = () => {
-        if (location.state?.adminName) return location.state.adminName;
-        
-        const storedUser = localStorage.getItem('autolatino_user');
-            if (storedUser) {
-                try {
-                    const parsedUser = JSON.parse(storedUser);
-                    return parsedUser.name || 'Asesor';
-                } catch (e) {
-                    return 'Asesor';
-                }
-            }
-            return 'Asesor';
-    };
-
-    const adminName = getStoredAdminName();
-
-    const handleLogout = () => {        
-        localStorage.removeItem('autolatino_user');
-        navigate('/');
-    };
+        if (!loading && !isLoggedIn) {
+            navigate('/');
+        }
+    }, [isLoggedIn, loading, navigate]);
 
     return (
         <div className={styles.dashboardContainer}>
@@ -42,7 +20,7 @@ const AdminDashboard = () => {
                 <h1 className={styles.title}>Panel de Administración - AutoLatino</h1>
                 <Button 
                     size="medium" 
-                    onClick={handleLogout}                    
+                    onClick={async () => { await logout(); navigate('/'); }}                   
                 >
                     Cerrar Sesión
                 </Button>
@@ -50,7 +28,7 @@ const AdminDashboard = () => {
             
             {/* Tarjeta de bienvenida original */}
             <div className={styles.contentCard}>
-                <h2 className={styles.welcomeTitle}>Bienvenido, {adminName}</h2>
+                <h2 className={styles.welcomeTitle}>Bienvenido, {adminName || 'Asesor'}</h2>
                 <p className={styles.description}>
                     Este es el panel de control. Próximamente aquí podrás ver y gestionar las solicitudes de crédito de los clientes y administrar el catálogo de vehículos.
                 </p>
