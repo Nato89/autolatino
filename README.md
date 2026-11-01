@@ -1,18 +1,35 @@
 # AutoLatino
 
-Aplicación web para una concesionaria de vehículos. Permite explorar el inventario, enviar solicitudes de contacto y crédito, y administrar vehículos, solicitudes y contactos desde un panel interno.
+![React 19](https://img.shields.io/badge/React-19-20232A?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite)
+![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet)
+![Firebase](https://img.shields.io/badge/Firebase-Firestore%20%2B%20Auth-FFCA28?logo=firebase)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-Media%20Storage-3448C5?logo=cloudinary)
 
-> **Demo:** Próximamente se publicará el enlace de la demo.
+Aplicación web para una concesionaria de vehículos. AutoLatino permite explorar el inventario, enviar solicitudes de contacto y crédito, y administrar vehículos, solicitudes y contactos desde un panel interno.
+
+> **Estado:** El desarrollo funcional está terminado. La prueba de despliegue está pendiente.
 >
-> **Cuentas de prueba:** Próximamente se compartirán las credenciales de acceso.
+> **Demo y cuentas de prueba:** El enlace de la demo y el usuario y contraseña se publicarán después de validar el despliegue.
 
 ## Funcionalidades
 
 - Catálogo público de vehículos con filtros y páginas de detalle.
-- Formulario de contacto con seguimiento de los mensajes desde el panel.
+- Formulario de contacto con seguimiento de mensajes desde el panel.
 - Solicitudes de crédito con archivos adjuntos y consulta del estado del proceso.
 - Panel administrativo para gestionar vehículos, solicitudes de crédito y contactos.
 - Inicio de sesión mediante Firebase Authentication.
+
+## Capturas de pantalla
+
+Reemplaza estas rutas con las capturas del proyecto cuando estén disponibles:
+
+![Catálogo de vehículos](./docs/catalogo.PNG)
+
+![Detalle de vehículo](./docs/detalle-vehiculo.PNG)
+
+![Panel administrativo](./docs/panel-admin.PNG)
 
 ## Arquitectura y tecnologías
 
@@ -22,6 +39,13 @@ Aplicación web para una concesionaria de vehículos. Permite explorar el invent
 - **Archivos:** Cloudinary almacena imágenes públicas de vehículos y archivos privados de solicitudes.
 - **Backend:** ASP.NET Core Minimal API sobre .NET 10. Se encarga de subir, firmar, descargar y eliminar archivos privados de Cloudinary; Firestore sigue siendo la capa de datos de la aplicación.
 - **Estilos y calidad:** CSS Modules y Oxlint.
+
+## Estructura del proyecto
+
+- `src/`: aplicación frontend en React y TypeScript (componentes, páginas, contextos, hooks, servicios y tipos).
+- `backend/`: API ASP.NET Core Minimal API para operaciones de archivos con Cloudinary.
+
+La estructura completa del proyecto está documentada en [`actual.md`](./actual.md).
 
 ## Requisitos
 
@@ -34,16 +58,9 @@ Aplicación web para una concesionaria de vehículos. Permite explorar el invent
 
 El frontend y el backend se ejecutan en terminales separadas.
 
-### 1. Configurar Firebase
+### 1. Configurar Firebase y el frontend
 
-1. Crea o selecciona un proyecto en Firebase y registra una aplicación web.
-2. Habilita el proveedor de inicio de sesión que utilizará la aplicación (actualmente, Firebase Authentication).
-3. Crea la base de datos de Firestore y configura sus reglas de acceso.
-4. Copia los valores de configuración de la aplicación web para completar las variables `VITE_FIREBASE_*` del siguiente paso.
-
-### 2. Configurar el frontend
-
-Copia `.env.example` a `.env`, reemplaza los valores de Firebase y Cloudinary, y agrega la URL local del backend:
+Crea un archivo `.env` en la raíz y configura los valores de la aplicación web de Firebase y la URL local del backend:
 
 ```dotenv
 VITE_FIREBASE_API_KEY=
@@ -52,26 +69,16 @@ VITE_FIREBASE_PROJECT_ID=
 VITE_FIREBASE_STORAGE_BUCKET=
 VITE_FIREBASE_MESSAGING_SENDER_ID=
 VITE_FIREBASE_APP_ID=
-VITE_CLOUDINARY_CLOUD_NAME=
-VITE_CLOUDINARY_UPLOAD_PRESET=
 VITE_API_URL=http://localhost:5022
 ```
 
-Configura un preset de carga de Cloudinary para las imágenes públicas de vehículos. Las variables `VITE_*` se incluyen en el código del navegador; no pongas secretos en ellas.
+Habilita Firebase Authentication y configura las reglas de Firestore para tu proyecto. Las variables `VITE_*` se incluyen en el código del navegador; no pongas secretos en ellas.
 
-### 3. Configurar Cloudinary para el backend
+### 2. Configurar Cloudinary para el backend
 
-El backend necesita el nombre de la nube, la API key y el API secret. Configúralos como variables de entorno en la terminal donde iniciarás la API. En PowerShell:
+Configura las variables `CloudinarySettings__CloudName`, `CloudinarySettings__ApiKey` y `CloudinarySettings__ApiSecret` en el entorno donde ejecutarás la API. No guardes credenciales reales en `appsettings.json` ni las subas al repositorio.
 
-```powershell
-$env:CloudinarySettings__CloudName = "tu-cloud-name"
-$env:CloudinarySettings__ApiKey = "tu-api-key"
-$env:CloudinarySettings__ApiSecret = "tu-api-secret"
-```
-
-No guardes credenciales reales en `appsettings.json` ni las subas al repositorio.
-
-### 4. Iniciar la aplicación
+### 3. Iniciar la aplicación
 
 Terminal del frontend:
 
@@ -80,7 +87,7 @@ npm install
 npm run dev
 ```
 
-Terminal del backend: configura primero las variables de Cloudinary en esa misma terminal y luego ejecuta:
+Terminal del backend, con las variables de Cloudinary configuradas:
 
 ```bash
 dotnet run --project backend/backend.csproj --launch-profile http
@@ -106,10 +113,21 @@ npm run preview  # Previsualiza la compilación
 | `GET` | `/api/download/{publicId}` | Descarga un archivo privado. |
 | `POST` | `/api/delete` | Elimina un archivo de Cloudinary. |
 
-## Antes de usar en producción
+## Flujo de ramas
 
-- Revisar y probar las reglas de Firestore: el frontend accede directamente a sus colecciones.
-- Implementar y verificar autorización para operaciones administrativas y endpoints del backend. CORS y el estado de sesión del frontend no sustituyen autorización.
+- `main`: versión estable del proyecto.
+- `develop`: rama de integración para el trabajo en curso.
+- `feature/*`: crea una rama por funcionalidad a partir de `develop`; al terminar, intégrala en `develop`. Cuando la integración esté lista para publicarse, pasa los cambios de `develop` a `main`.
+
+## Validación pendiente para el despliegue
+
+- Validar las reglas de Firestore: el frontend accede directamente a sus colecciones.
+- Verificar la autorización para operaciones administrativas y endpoints del backend. CORS y el estado de sesión del frontend no sustituyen autorización.
 - Reemplazar los orígenes CORS locales por los dominios del despliegue.
 - Validar los archivos recibidos y el tratamiento de datos personales, especialmente documentos de crédito.
 - Mantener las credenciales de Cloudinary en configuración protegida del servidor.
+- Después de la prueba de despliegue, publicar el enlace de la demo y las credenciales de prueba.
+
+## Licencia
+
+Proyecto privado. Todos los derechos reservados.

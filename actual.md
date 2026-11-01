@@ -2,15 +2,16 @@
 
 ## Resumen
 
-AutoLatino es una aplicación web para una concesionaria de vehículos. Incluye un sitio público, un panel administrativo y un backend para operaciones con archivos privados. Los flujos principales de vehículos, contactos y solicitudes de crédito están conectados a servicios persistentes.
+AutoLatino es una aplicación web terminada para una concesionaria de vehículos. Incluye un sitio público, un panel administrativo y un backend para operaciones con archivos privados. Los flujos de vehículos, contactos y solicitudes de crédito están conectados a servicios persistentes. La prueba de despliegue está pendiente; el usuario y la contraseña de prueba se publicarán después de validar el despliegue.
 
-La lógica de React está más modularizada: además de los hooks del catálogo y del formulario de crédito, la administración de solicitudes y los flujos de detalle y edición de vehículos ya cuentan con hooks propios. Antes de producción todavía se deben revisar la autorización, las reglas de acceso y el tratamiento de datos personales.
+La lógica reutilizable de React está organizada en hooks y contextos. La preparación para producción todavía requiere validar el despliegue, las reglas de acceso, la autorización y el tratamiento de datos personales.
 
 ## Arquitectura actual
 
 - **Frontend:** React 19, TypeScript, Vite 8 y React Router DOM 7.
 - **Datos de la aplicación:** Firebase Firestore almacena vehículos, contactos y solicitudes de crédito. El frontend se conecta directamente mediante los servicios en `src/services/`.
 - **Inicio de sesión:** Firebase Authentication. El nombre del asesor también se conserva en `localStorage` para mostrarlo en la interfaz; ese dato local no es un mecanismo de autorización.
+- **Estado compartido:** `src/context/AuthContext.tsx` expone el usuario autenticado y las acciones de sesión. `src/context/VehicleContext.tsx` comparte el inventario, el estado de carga y los filtros del catálogo mediante `useVehicles`; también expone `resetFilters` para restablecer los filtros a sus valores iniciales.
 - **Archivos:** Cloudinary almacena imágenes públicas de vehículos. El backend recibe los archivos privados de las solicitudes y genera enlaces firmados o los descarga.
 - **Backend:** ASP.NET Core Minimal API sobre .NET 10, en `backend/Program.cs`. Su responsabilidad actual es el manejo de archivos en Cloudinary; no reemplaza Firestore ni centraliza las operaciones de datos.
 - **Estilos:** CSS Modules y hojas globales.
@@ -150,6 +151,9 @@ La lógica de React está más modularizada: además de los hooks del catálogo 
    │     └─ StatusModal/
    │        ├─ StatusModal.module.css
    │        └─ StatusModal.tsx
+   ├─ context/
+   │  ├─ AuthContext.tsx
+   │  └─ VehicleContext.tsx
    ├─ data/
    │  ├─ auth.ts
    │  ├─ clients.ts
@@ -214,7 +218,7 @@ El endpoint `/api/delete` usa el tipo `upload` para las URLs de imágenes públi
 ## Funcionalidades implementadas
 
 - **Sitio público:** página principal, navegación, catálogo y detalle de vehículos.
-- **Catálogo:** consulta vehículos desde Firestore y permite filtrar por transmisión, precio, modelo/año y kilometraje.
+- **Catálogo:** consulta vehículos desde `VehicleContext` y permite filtrar por transmisión, precio, modelo/año y kilometraje. El botón **«Filtros»** del panel restablece todos los filtros con un clic.
 - **Administración de vehículos:** consulta, alta, edición y eliminación de vehículos desde el panel. Las imágenes se suben a Cloudinary mediante el backend y se eliminan al borrar el vehículo.
 - **Solicitudes de crédito:** el formulario guarda los datos en Firestore y envía los archivos al backend para almacenarlos de forma privada en Cloudinary.
 - **Procesos de crédito:** panel con solicitudes en tiempo real, detalle, actualización de estado y eliminación. Al cambiar una solicitud de «Negado» a otro estado, se elimina la razón de negación anterior. Incluye acceso a los archivos mediante las rutas del backend.
@@ -226,22 +230,24 @@ Los archivos de ejemplo en `src/data/` no son la fuente de los flujos activos. L
 
 ## Hooks de React
 
-La carpeta `src/hooks/` contiene doce hooks propios:
+La carpeta `src/hooks/` contiene doce hooks propios que completan la extracción de lógica reutilizable:
 
 - `useAdminContacts` mantiene la suscripción a contactos del panel y gestiona la selección y eliminación de un contacto.
 - `useAdminCreditApplications` gestiona la suscripción a solicitudes de crédito en el panel, las agrupa por estado y expone las acciones para cambiar estados y eliminar solicitudes.
 - `useAdminLogin` administra las credenciales, el inicio de sesión con Firebase Authentication y la navegación al panel.
-- `useAdminVehicles` carga la lista de vehículos del panel y centraliza los estados de edición, eliminación y alta, además de las acciones para recargar y eliminar vehículos.
+- `useAdminVehicles` obtiene los vehículos y el estado de carga de `VehicleContext` mediante `useVehicles`; usa el servicio de vehículos para eliminarlos y mantiene los estados de edición y modales del panel.
 - `useContactForm` administra los datos, el envío y el estado de confirmación del formulario público de contacto.
 - `useCreditForm` encapsula el estado y el envío del formulario de crédito, incluida la subida de archivos y el guardado de la solicitud.
 - `useCreditStatus` consulta las solicitudes para buscar por cédula y administra los resultados y estados del modal de consulta.
 - `useStudyDocuments` obtiene URLs firmadas para los documentos de una solicitud y prepara el envío de sus datos por WhatsApp.
-- `useVehicleCatalog` gestiona la suscripción al catálogo, los filtros y estados de interfaz, y expone la acción de eliminar vehículos.
-- `useVehicleDetail` concentra la carga y navegación entre vehículos, además de los estados de zoom, sesión y modales de la página de detalle.
+- `useVehicleCatalog` obtiene vehículos, carga y filtros de `VehicleContext` mediante `useVehicles`; además expone `resetFilters` y las acciones de interfaz del catálogo.
+- `useVehicleDetail` obtiene la lista de vehículos y el estado de carga de `VehicleContext` mediante `useVehicles`; utiliza el servicio de vehículos para la acción de eliminación y gestiona el detalle y su navegación.
 - `useVehicleForm` controla el formulario de alta de vehículos y la subida de sus imágenes.
 - `useVehicleEditor` administra el formulario de edición, las imágenes nuevas y existentes, y el guardado y eliminación de imágenes.
 
-Estos hooks son utilizados por `ClientesContacto` (`useAdminContacts`), `AdminStudiesPage` (`useAdminCreditApplications`), `LoginModal` (`useAdminLogin`), `AdminVehiclesPage` (`useAdminVehicles`), `Contacto` (`useContactForm`), `Credito` (`useCreditForm`), `StatusModal` (`useCreditStatus`), `StudyDetailModal` (`useStudyDocuments`), `Catalogo` (`useVehicleCatalog`), `VehicleDetailPage` (`useVehicleDetail`), `AddVehicleModal` (`useVehicleForm`) y `EditVehicleModal` (`useVehicleEditor`). La extracción de lógica continúa de forma gradual; otros componentes y páginas aún mantienen su propio estado y efectos.
+Estos hooks son utilizados por `ClientesContacto` (`useAdminContacts`), `AdminStudiesPage` (`useAdminCreditApplications`), `LoginModal` (`useAdminLogin`), `AdminVehiclesPage` (`useAdminVehicles`), `Contacto` (`useContactForm`), `Credito` (`useCreditForm`), `StatusModal` (`useCreditStatus`), `StudyDetailModal` (`useStudyDocuments`), `Catalogo` (`useVehicleCatalog`), `VehicleDetailPage` (`useVehicleDetail`), `AddVehicleModal` (`useVehicleForm`) y `EditVehicleModal` (`useVehicleEditor`). El estado local de presentación permanece en los componentes cuando corresponde; la lógica reutilizable de estos flujos está centralizada en sus hooks.
+
+Los hooks `useVehicleCatalog`, `useVehicleDetail` y `useAdminVehicles` consumen los datos del inventario desde `VehicleContext` a través de `useVehicles`, en lugar de suscribirse directamente a Firestore. Las operaciones de escritura y eliminación siguen delegándose en los servicios correspondientes.
 
 ## Configuración y ejecución local
 
@@ -266,7 +272,7 @@ Se requieren Node.js, npm y .NET 10. El frontend y el backend se ejecutan en ter
    - `CloudinarySettings__ApiKey`
    - `CloudinarySettings__ApiSecret`
 
-   Mantén las credenciales fuera del control de versiones.
+   Mantén las credenciales fuera del control de versiones. El `.gitignore` excluye `backend/appsettings.Development.json` y las carpetas de compilación `backend/bin/` y `backend/obj/` para evitar versionar configuración local y artefactos generados. No subas secretos al repositorio.
 
 3. En una terminal, instala dependencias e inicia Vite:
 
