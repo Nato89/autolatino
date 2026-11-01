@@ -156,11 +156,17 @@ La lógica de React está más modularizada: además de los hooks del catálogo 
    │  ├─ creditApplications.ts
    │  └─ vehicles.ts
    ├─ hooks/
+   │  ├─ useAdminContacts.ts
    │  ├─ useAdminCreditApplications.ts
+   │  ├─ useAdminLogin.ts
    │  ├─ useAdminVehicles.ts
+   │  ├─ useContactForm.ts
    │  ├─ useCreditForm.ts
+   │  ├─ useCreditStatus.ts
+   │  ├─ useStudyDocuments.ts
    │  ├─ useVehicleCatalog.ts
    │  ├─ useVehicleDetail.ts
+   │  ├─ useVehicleForm.ts
    │  └─ useVehicleEditor.ts
    ├─ pages/
    │  ├─ admin/
@@ -191,7 +197,7 @@ La lógica de React está más modularizada: además de los hooks del catálogo 
       └─ vehicle.ts
 ```
 
-El árbol enumera archivos no vacíos que forman parte de la aplicación, su configuración, documentación y recursos estáticos. Se omiten las carpetas vacías, dependencias instaladas (`node_modules`), artefactos generados (`dist`, `backend/bin/` y `backend/obj/`) y la carpeta de material archivado `borrar/`. `src/components/common/RangeFilter/` implementa el control reutilizable para rangos del catálogo, y `src/components/public/FileUploader/` ofrece selección/arrastre de archivos y se reutiliza en el formulario de crédito y el modal para agregar vehículos. `Empaquetado.md` describe una estructura objetivo/futura y no debe tomarse como prueba de que esos módulos ya existen.
+El árbol enumera archivos no vacíos que forman parte de la aplicación, su configuración, documentación y recursos estáticos. Se omiten las carpetas vacías, dependencias instaladas (`node_modules`), artefactos generados (`dist`, `backend/bin/` y `backend/obj/`) y la carpeta de material archivado `borrar/`. `src/components/common/RangeFilter/` implementa el control reutilizable para rangos del catálogo, y `src/components/public/FileUploader/` ofrece selección/arrastre de archivos y se reutiliza en el formulario de crédito y el modal para agregar vehículos. `Empaquetado.md` es una propuesta inicial elaborada antes de comenzar el proyecto; se menciona como referencia histórica, no como descripción de la estructura implementada.
 
 ### Endpoints del backend
 
@@ -211,7 +217,7 @@ El endpoint `/api/delete` usa el tipo `upload` para las URLs de imágenes públi
 - **Catálogo:** consulta vehículos desde Firestore y permite filtrar por transmisión, precio, modelo/año y kilometraje.
 - **Administración de vehículos:** consulta, alta, edición y eliminación de vehículos desde el panel. Las imágenes se suben a Cloudinary mediante el backend y se eliminan al borrar el vehículo.
 - **Solicitudes de crédito:** el formulario guarda los datos en Firestore y envía los archivos al backend para almacenarlos de forma privada en Cloudinary.
-- **Procesos de crédito:** panel con solicitudes en tiempo real, detalle, actualización de estado y eliminación. Incluye acceso a los archivos mediante las rutas del backend.
+- **Procesos de crédito:** panel con solicitudes en tiempo real, detalle, actualización de estado y eliminación. Al cambiar una solicitud de «Negado» a otro estado, se elimina la razón de negación anterior. Incluye acceso a los archivos mediante las rutas del backend.
 - **Consulta del estado:** permite buscar una solicitud por cédula y mostrar su estado.
 - **Contactos:** el formulario guarda los mensajes en Firestore; el panel permite consultar los contactos, abrir WhatsApp y eliminarlos.
 - **Acceso administrativo:** inicio de sesión con Firebase Authentication y navegación al panel.
@@ -220,16 +226,22 @@ Los archivos de ejemplo en `src/data/` no son la fuente de los flujos activos. L
 
 ## Hooks de React
 
-La carpeta `src/hooks/` contiene seis hooks propios:
+La carpeta `src/hooks/` contiene doce hooks propios:
 
-- `useAdminVehicles` carga la lista de vehículos del panel y centraliza los estados de edición, eliminación y alta, además de las acciones para recargar y eliminar vehículos.
-- `useCreditForm` encapsula el estado y el envío del formulario de crédito, incluida la subida de archivos y el guardado de la solicitud.
-- `useVehicleCatalog` gestiona la suscripción al catálogo, los filtros y estados de interfaz, y expone la acción de eliminar vehículos.
+- `useAdminContacts` mantiene la suscripción a contactos del panel y gestiona la selección y eliminación de un contacto.
 - `useAdminCreditApplications` gestiona la suscripción a solicitudes de crédito en el panel, las agrupa por estado y expone las acciones para cambiar estados y eliminar solicitudes.
+- `useAdminLogin` administra las credenciales, el inicio de sesión con Firebase Authentication y la navegación al panel.
+- `useAdminVehicles` carga la lista de vehículos del panel y centraliza los estados de edición, eliminación y alta, además de las acciones para recargar y eliminar vehículos.
+- `useContactForm` administra los datos, el envío y el estado de confirmación del formulario público de contacto.
+- `useCreditForm` encapsula el estado y el envío del formulario de crédito, incluida la subida de archivos y el guardado de la solicitud.
+- `useCreditStatus` consulta las solicitudes para buscar por cédula y administra los resultados y estados del modal de consulta.
+- `useStudyDocuments` obtiene URLs firmadas para los documentos de una solicitud y prepara el envío de sus datos por WhatsApp.
+- `useVehicleCatalog` gestiona la suscripción al catálogo, los filtros y estados de interfaz, y expone la acción de eliminar vehículos.
 - `useVehicleDetail` concentra la carga y navegación entre vehículos, además de los estados de zoom, sesión y modales de la página de detalle.
+- `useVehicleForm` controla el formulario de alta de vehículos y la subida de sus imágenes.
 - `useVehicleEditor` administra el formulario de edición, las imágenes nuevas y existentes, y el guardado y eliminación de imágenes.
 
-`useAdminVehicles`, `useAdminCreditApplications`, `useVehicleDetail` y `useVehicleEditor` son utilizados por `AdminVehiclesPage`, `AdminStudiesPage`, `VehicleDetailPage` y `EditVehicleModal`, respectivamente. La extracción de lógica sigue siendo parcial: otros componentes y páginas aún mantienen su propio estado y efectos.
+Estos hooks son utilizados por `ClientesContacto` (`useAdminContacts`), `AdminStudiesPage` (`useAdminCreditApplications`), `LoginModal` (`useAdminLogin`), `AdminVehiclesPage` (`useAdminVehicles`), `Contacto` (`useContactForm`), `Credito` (`useCreditForm`), `StatusModal` (`useCreditStatus`), `StudyDetailModal` (`useStudyDocuments`), `Catalogo` (`useVehicleCatalog`), `VehicleDetailPage` (`useVehicleDetail`), `AddVehicleModal` (`useVehicleForm`) y `EditVehicleModal` (`useVehicleEditor`). La extracción de lógica continúa de forma gradual; otros componentes y páginas aún mantienen su propio estado y efectos.
 
 ## Configuración y ejecución local
 

@@ -1,66 +1,22 @@
-import { useState } from 'react';
 import styles from './AddVehicleModal.module.css';
 import Button from '../../common/Button/Button';
 import InputField from '../../common/InputField/InputField';
 import FileUploader from '../../public/FileUploader/FileUploader';
-import { addVehicle } from '../../../services/vehicleService';
-import { uploadPublicImage } from '../../../services/cloudinaryService';
+import { useVehicleForm } from '../../../hooks/useVehicleForm';
 
 interface AddVehicleModalProps {
     onClose: () => void;
 }
 
 const AddVehicleModal = ({ onClose }: AddVehicleModalProps) => {
-    const [formData, setFormData] = useState({
-        brand: '',
-        model: '',
-        year: '',
-        price: '',
-        km: '',
-        transmission: '',
-        features: '',
-    });
-    const [files, setFiles] = useState<File[]>([]);    
-
-    const handleChange = (field: string, value: string) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
-    };
-
-    const [loading, setLoading] = useState(false);
-
-    const handleSave = async () => {
-        try {
-        setLoading(true);
-        // Subir cada imagen a Cloudinary y obtener las URLs
-        const imageUrls: string[] = [];
-        for (const file of files) {
-            const url = await uploadPublicImage(file);
-            imageUrls.push(url);
-        }
-        const vehiclePayload = {
-            id: Date.now(), 
-                brand: formData.brand,
-                model: formData.model,
-                year: Number(formData.year),
-                price: Number(formData.price),
-                km: Number(formData.km),
-                transmission: formData.transmission,
-                features: formData.features,
-                images: imageUrls
-            };
-
-            await addVehicle(vehiclePayload);
-            console.log('Vehículo guardado exitosamente en Firestore');
-            onClose();
-        } catch (error) {
-            console.error('Error al guardar el vehículo:', error);
-        } finally {
-            setLoading(false);
-        }    
-    };
+    const { 
+        formData, 
+        handleChange, 
+        files, 
+        setFiles, 
+        loading, 
+        handleSave 
+    } = useVehicleForm(onClose);    
 
     return (
         <div className={styles.modalOverlay}>

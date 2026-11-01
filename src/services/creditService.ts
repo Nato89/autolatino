@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, onSnapshot, deleteField } from "firebase/firestore";
 import { db } from "../firebase";
 import type { CreditApplication } from "../types/credit";
 
@@ -77,7 +77,12 @@ export const subscribeToCreditApplications = (callback: (applications: CreditApp
 export const updateCreditApplication = async (id: string | number, applicationData: Partial<CreditApplication>) => {
     try {
         const applicationRef = doc(db, "creditApplications", String(id));
-        await updateDoc(applicationRef, applicationData);
+        const updateData = { ...applicationData };
+        if (applicationData.estado && applicationData.estado !== 'Negado') {
+            await updateDoc(applicationRef, { ...updateData, razonNegacion: deleteField() });
+            return;
+        }
+        await updateDoc(applicationRef, updateData);
     } catch (error) {
         console.error("Error al actualizar la solicitud:", error);
         throw error;

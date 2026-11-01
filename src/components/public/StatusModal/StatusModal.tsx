@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react';
 import styles from './StatusModal.module.css';
-import { subscribeToCreditApplications } from '../../../services/creditService';
-import type { CreditApplication } from '../../../types/credit';
+import { useCreditStatus } from '../../../hooks/useCreditStatus';
 
 export interface StatusModalProps {
     isOpen: boolean;
@@ -9,55 +7,18 @@ export interface StatusModalProps {
 }
 
 export const StatusModal = ({ isOpen, onClose }: StatusModalProps) => {
-    const [applications, setApplications] = useState<CreditApplication[]>([]);
-    const [cedulaInput, setCedulaInput] = useState('');
-    const [foundApp, setFoundApp] = useState<CreditApplication | null>(null);
-    const [errorMsg, setErrorMsg] = useState('');
-
-    useEffect(() => {
-        const unsubscribe = subscribeToCreditApplications((data) => {
-            setApplications(data);
-        });
-        return () => unsubscribe();
-    }, []);
+        const {
+        cedulaInput,
+        setCedulaInput,
+        foundApp,
+        errorMsg,
+        handleBuscar,
+        handleCloseModal,
+        getStatusClass
+    } = useCreditStatus(onClose);  
 
     if (!isOpen) return null;
-
-    const handleBuscar = (e: React.SyntheticEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setErrorMsg('');
-        setFoundApp(null);
-
-        const trimmedCedula = cedulaInput.trim();
-        if (!trimmedCedula) {
-            setErrorMsg('Por favor ingresa un número de documento válido.');
-            return;
-        }
-
-        const match = applications.find(app => app.cedula === trimmedCedula);
-
-        if (match) {
-            setFoundApp(match);
-        } else {
-            setErrorMsg('No se encontró ninguna solicitud registrada con este número de cédula.');
-        }
-    };
-
-    const handleCloseModal = () => {
-        setCedulaInput('');
-        setFoundApp(null);
-        setErrorMsg('');
-        onClose();
-    };
-
-    // Retorna clase solo si es aprobado o negado; deja el color original para los demás
-    const getStatusClass = (estado: string) => {
-        const est = estado.toLowerCase().trim();
-        if (est === 'aprobado') return styles.statusAprobado;
-        if (est === 'negado') return styles.statusNegado;
-        return ''; 
-    };
-
+    
     const estadoNormalizado = foundApp ? foundApp.estado.toLowerCase().trim() : '';
 
     return (
@@ -91,7 +52,7 @@ export const StatusModal = ({ isOpen, onClose }: StatusModalProps) => {
                         
                         <p>
                             <strong>Estado actual:</strong>{' '}
-                            <span className={`${styles.statusText} ${getStatusClass(foundApp.estado)}`}>
+                            <span className={`${styles.statusText} ${styles[getStatusClass(foundApp.estado) as keyof typeof styles] || ''}`}>
                                 {foundApp.estado}
                             </span>
                         </p>
@@ -102,9 +63,9 @@ export const StatusModal = ({ isOpen, onClose }: StatusModalProps) => {
                             </p>
                         )}
 
-                        {foundApp.razonNegacion && (
+                        {estadoNormalizado === 'negado' && foundApp.razonNegacion?.trim() && (
                             <p>
-                                <strong>Motivo:</strong> {foundApp.razonNegacion}
+                                <strong>Motivo:</strong> {foundApp.razonNegacion.trim()}
                             </p>
                         )}
                     </div>
