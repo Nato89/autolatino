@@ -9,9 +9,13 @@
 
 Aplicación web para una concesionaria de vehículos. AutoLatino permite explorar el inventario, enviar solicitudes de contacto y crédito, y administrar vehículos, solicitudes y contactos desde un panel interno.
 
-> **Estado:** El desarrollo funcional está terminado. La prueba de despliegue está pendiente.
->
-> **Demo y cuentas de prueba:** El enlace de la demo y el usuario y contraseña se publicarán después de validar el despliegue.
+> **Estado:** Versión 1.0 desplegada en producción.
+
+## Demo y cuentas de prueba
+
+- **Demo en vivo:** [https://autolatino-9da6c.web.app](https://autolatino-9da6c.web.app/)
+- **Usuario de prueba:** elnatodel89@gmail.com
+- **Contraseña de prueba:** 123456
 
 ## Funcionalidades
 
@@ -37,7 +41,7 @@ Reemplaza estas rutas con las capturas del proyecto cuando estén disponibles:
 - **Datos:** Firebase Firestore para vehículos, contactos y solicitudes de crédito.
 - **Autenticación:** Firebase Authentication.
 - **Archivos:** Cloudinary almacena imágenes públicas de vehículos y archivos privados de solicitudes.
-- **Backend:** ASP.NET Core Minimal API sobre .NET 10. Se encarga de subir, firmar, descargar y eliminar archivos privados de Cloudinary; Firestore sigue siendo la capa de datos de la aplicación.
+- **Backend:** ASP.NET Core Minimal API sobre .NET 10, desplegado en [https://autolatino-api.onrender.com](https://autolatino-api.onrender.com). Se encarga de subir, firmar, descargar y eliminar archivos privados de Cloudinary; Firestore sigue siendo la capa de datos de la aplicación.
 - **Estilos y calidad:** CSS Modules y Oxlint.
 
 ## Estructura del proyecto
@@ -119,14 +123,13 @@ npm run preview  # Previsualiza la compilación
 - `develop`: rama de integración para el trabajo en curso.
 - `feature/*`: crea una rama por funcionalidad a partir de `develop`; al terminar, intégrala en `develop`. Cuando la integración esté lista para publicarse, pasa los cambios de `develop` a `main`.
 
-## Validación pendiente para el despliegue
+## Consideraciones de seguridad y operación
 
 - Validar las reglas de Firestore: el frontend accede directamente a sus colecciones.
 - Verificar la autorización para operaciones administrativas y endpoints del backend. CORS y el estado de sesión del frontend no sustituyen autorización.
-- Reemplazar los orígenes CORS locales por los dominios del despliegue.
+- Configurar CORS con los dominios autorizados para producción.
 - Validar los archivos recibidos y el tratamiento de datos personales, especialmente documentos de crédito.
 - Mantener las credenciales de Cloudinary en configuración protegida del servidor.
-- Después de la prueba de despliegue, publicar el enlace de la demo y las credenciales de prueba.
 
 ## Licencia
 

@@ -2,18 +2,18 @@
 
 ## Resumen
 
-AutoLatino es una aplicación web terminada para una concesionaria de vehículos. Incluye un sitio público, un panel administrativo y un backend para operaciones con archivos privados. Los flujos de vehículos, contactos y solicitudes de crédito están conectados a servicios persistentes. La prueba de despliegue está pendiente; el usuario y la contraseña de prueba se publicarán después de validar el despliegue.
+AutoLatino es una aplicación web para una concesionaria de vehículos. La versión 1.0 está desplegada y funcional en producción, con el frontend en Firebase Hosting y el backend en Render. Incluye un sitio público, un panel administrativo y un backend para operaciones con archivos privados. Los flujos de vehículos, contactos y solicitudes de crédito están conectados a servicios persistentes.
 
-La lógica reutilizable de React está organizada en hooks y contextos. La preparación para producción todavía requiere validar el despliegue, las reglas de acceso, la autorización y el tratamiento de datos personales.
+La lógica reutilizable de React está organizada en hooks y contextos. La seguridad, las reglas de acceso y el tratamiento de datos personales deben seguir revisándose y manteniéndose.
 
 ## Arquitectura actual
 
-- **Frontend:** React 19, TypeScript, Vite 8 y React Router DOM 7.
+- **Frontend:** React 19, TypeScript, Vite 8 y React Router DOM 7. Desplegado en [https://autolatino-9da6c.web.app](https://autolatino-9da6c.web.app).
 - **Datos de la aplicación:** Firebase Firestore almacena vehículos, contactos y solicitudes de crédito. El frontend se conecta directamente mediante los servicios en `src/services/`.
 - **Inicio de sesión:** Firebase Authentication. El nombre del asesor también se conserva en `localStorage` para mostrarlo en la interfaz; ese dato local no es un mecanismo de autorización.
 - **Estado compartido:** `src/context/AuthContext.tsx` expone el usuario autenticado y las acciones de sesión. `src/context/VehicleContext.tsx` comparte el inventario, el estado de carga y los filtros del catálogo mediante `useVehicles`; también expone `resetFilters` para restablecer los filtros a sus valores iniciales.
 - **Archivos:** Cloudinary almacena imágenes públicas de vehículos. El backend recibe los archivos privados de las solicitudes y genera enlaces firmados o los descarga.
-- **Backend:** ASP.NET Core Minimal API sobre .NET 10, en `backend/Program.cs`. Su responsabilidad actual es el manejo de archivos en Cloudinary; no reemplaza Firestore ni centraliza las operaciones de datos.
+- **Backend:** ASP.NET Core Minimal API sobre .NET 10, en `backend/Program.cs`, desplegado en [https://autolatino-api.onrender.com](https://autolatino-api.onrender.com). Su responsabilidad actual es el manejo de archivos en Cloudinary; no reemplaza Firestore ni centraliza las operaciones de datos.
 - **Estilos:** CSS Modules y hojas globales.
 
 ## Estructura actual del proyecto
@@ -22,9 +22,12 @@ La lógica reutilizable de React está organizada en hooks y contextos. La prepa
 .
 ├─ .gitignore
 ├─ .oxlintrc.json
+├─ .env.example
+├─ .firebaserc
 ├─ Empaquetado.md
 ├─ README.md
 ├─ actual.md
+├─ firebase.json
 ├─ index.html
 ├─ package.json
 ├─ package-lock.json
@@ -33,13 +36,17 @@ La lógica reutilizable de React está organizada en hooks y contextos. La prepa
 ├─ tsconfig.node.json
 ├─ vite.config.ts
 ├─ backend/
+│  ├─ Dockerfile
 │  ├─ Program.cs
 │  ├─ backend.csproj
 │  ├─ appsettings.json
-│  ├─ appsettings.Development.json
 │  ├─ backend.http
 │  └─ Properties/
 │     └─ launchSettings.json
+├─ docs/
+│  ├─ catalogo.PNG
+│  ├─ detalle-vehiculo.PNG
+│  └─ panel-admin.PNG
 ├─ public/
 │  └─ SVG/
 │     ├─ favicon.svg
@@ -201,7 +208,7 @@ La lógica reutilizable de React está organizada en hooks y contextos. La prepa
       └─ vehicle.ts
 ```
 
-El árbol enumera archivos no vacíos que forman parte de la aplicación, su configuración, documentación y recursos estáticos. Se omiten las carpetas vacías, dependencias instaladas (`node_modules`), artefactos generados (`dist`, `backend/bin/` y `backend/obj/`) y la carpeta de material archivado `borrar/`. `src/components/common/RangeFilter/` implementa el control reutilizable para rangos del catálogo, y `src/components/public/FileUploader/` ofrece selección/arrastre de archivos y se reutiliza en el formulario de crédito y el modal para agregar vehículos. `Empaquetado.md` es una propuesta inicial elaborada antes de comenzar el proyecto; se menciona como referencia histórica, no como descripción de la estructura implementada.
+El árbol enumera archivos no vacíos que forman parte de la aplicación, su configuración, documentación y recursos estáticos. Se omiten las carpetas vacías, la configuración local excluida por Git, dependencias instaladas (`node_modules`), artefactos generados (`.firebase/`, `dist`, `backend/bin/` y `backend/obj/`) y la carpeta de material archivado `borrar/`. `src/components/common/RangeFilter/` implementa el control reutilizable para rangos del catálogo, y `src/components/public/FileUploader/` ofrece selección/arrastre de archivos y se reutiliza en el formulario de crédito y el modal para agregar vehículos. `Empaquetado.md` es una propuesta inicial elaborada antes de comenzar el proyecto; se menciona como referencia histórica, no como descripción de la estructura implementada.
 
 ### Endpoints del backend
 
@@ -213,7 +220,7 @@ El árbol enumera archivos no vacíos que forman parte de la aplicación, su con
 | `GET` | `/api/download/{publicId}` | Descarga un archivo privado. |
 | `POST` | `/api/delete` | Solicita eliminar un archivo de Cloudinary. |
 
-El endpoint `/api/delete` usa el tipo `upload` para las URLs de imágenes públicas de vehículos y `private` para las imágenes privadas de cédulas. Los PDFs de cédula se eliminan como recurso `raw` de tipo `private`. El backend configura CORS para `http://localhost:5173` y `http://localhost:3000`; CORS no sustituye autenticación ni autorización. La configuración de Cloudinary se lee desde `CloudinarySettings` (`CloudName`, `ApiKey` y `ApiSecret`).
+El endpoint `/api/delete` usa el tipo `upload` para las URLs de imágenes públicas de vehículos y `private` para las imágenes privadas de cédulas. Los PDFs de cédula se eliminan como recurso `raw` de tipo `private`. El backend configura CORS para `http://localhost:5173`, `http://localhost:3000` y los dominios de producción `https://autolatino-9da6c.web.app` y `https://autolatino-9da6c.firebaseapp.com`; CORS no sustituye autenticación ni autorización. La configuración de Cloudinary se lee desde `CloudinarySettings` (`CloudName`, `ApiKey` y `ApiSecret`).
 
 ## Funcionalidades implementadas
 
@@ -267,6 +274,8 @@ Se requieren Node.js, npm y .NET 10. El frontend y el backend se ejecutan en ter
 
    Las subidas de archivos del frontend se realizan mediante el backend; no coloques secretos de Cloudinary en variables `VITE_*`, porque se incluyen en el cliente.
 
+   En producción, `VITE_API_URL` apunta a Render (`https://autolatino-api.onrender.com`) y el CORS del backend acepta los dominios de Firebase Hosting (`https://autolatino-9da6c.web.app` y `https://autolatino-9da6c.firebaseapp.com`).
+
 2. Configura el backend mediante variables de entorno de .NET:
    - `CloudinarySettings__CloudName`
    - `CloudinarySettings__ApiKey`
@@ -308,11 +317,11 @@ npm run lint     # Ejecuta Oxlint
 npm run preview  # Previsualiza la compilación
 ```
 
-## Antes de producción
+## Consideraciones de seguridad y operación
 
 - Revisar las reglas de Firestore: el frontend accede directamente a sus colecciones.
 - Implementar y verificar autorización para operaciones administrativas y endpoints del backend; la presencia de un perfil en `localStorage` o una restricción CORS no protege esos recursos.
-- Configurar orígenes CORS adecuados para el despliegue; los orígenes actuales son locales.
+- Mantener los orígenes CORS alineados con los dominios locales y de producción autorizados.
 - Validar tipos, tamaños y tratamiento de archivos y datos personales, especialmente documentos de crédito.
 - Mantener las credenciales de Cloudinary únicamente en configuración protegida del servidor.
 - Probar responsive, accesibilidad y experiencia de usuario en los entornos de despliegue.

@@ -36,3 +36,6 @@ borrar/
 backend/bin/
 backend/obj/
 backend/appsettings.Development.json
+
+# Documentos a ignorar
+CHEATSHEET.md
