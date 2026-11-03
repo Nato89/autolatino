@@ -4,6 +4,7 @@ import InputField from '../../common/InputField/InputField';
 import FileUploader from '../FileUploader/FileUploader';
 import { StatusModal } from '../StatusModal/StatusModal';
 import { useCreditForm } from '../../../hooks/useCreditForm';
+import waIcon from '../../../assets/images/Iconos/wa.png';
 
 const Credito = () => {
     const {
@@ -40,7 +41,7 @@ const Credito = () => {
                         >
                             Tienes alguna duda?
                             <img 
-                                src="/src/assets/images/Iconos/wa.png" 
+                                src={waIcon}
                                 alt="WhatsApp" 
                                 className={styles.whatsappIconFloat}
                             />

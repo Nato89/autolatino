@@ -1,4 +1,5 @@
 import styles from './whatsAppButton.module.css'
+import waIcon from '../../../assets/images/Iconos/wa.png';
 
 const WhatsAppButton = () => {
     return (
@@ -8,7 +9,7 @@ const WhatsAppButton = () => {
             rel="noopener noreferrer"
             className={styles.waButton}
         >
-            <img src="/src/assets/images/Iconos/wa.png" alt="WhatsApp" />
+            <img src={waIcon} alt="WhatsApp" />
         </a>
     );
 };

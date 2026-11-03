@@ -1,5 +1,6 @@
 import styles from './Slide.module.css';
 import Button from '../../common/Button/Button.tsx';
+import waIcon from '../../../assets/images/Iconos/wa.png';
 
 interface SlideProps {
   title: string;
@@ -45,7 +46,7 @@ const Slide = ({ title, title2, subtitle, buttonText, buttonAction, hasIcon, ima
                         {buttonText}
                         {hasIcon && (
                             <img 
-                                src="/src/assets/images/Iconos/wa.png" 
+                                src={waIcon}
                                 alt="whatsapp ícono" 
                                 className={styles.whatsappIconFloat}
                             />

@@ -14,7 +14,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
+        policy.WithOrigins(
+            "http://localhost:5173", 
+            "http://localhost:3000", 
+            "https://autolatino-9da6c.web.app",
+            "https://autolatino-9da6c.firebaseapp.com"
+        )
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -90,6 +95,7 @@ app.MapGet("/api/cedula-url/{publicId}", (string publicId, Cloudinary cloudinary
     var signedUrl = cloudinary.Api.UrlImgUp
         .Type("private")
         .Signed(true)
+        .Secure(true)
         .BuildUrl(path);
 
     return Results.Ok(new { url = signedUrl });

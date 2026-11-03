@@ -2,6 +2,7 @@ import styles from './VehicleDetailPage.module.css';
 import flechaIzquierda from '../../assets/images/Iconos/arrow-prev.svg';
 import flechaDerecha from '../../assets/images/Iconos/arrow-next.svg';
 import flechaVolver from '../../assets/images/Iconos/arrow-return.svg';
+import waIcon from '../../assets/images/Iconos/wa.png';
 import Button from '../../components/common/Button/Button';
 import { Pencil, Trash2, List } from 'lucide-react';
 import EditVehicleModal from '../../components/admin/EditVehicleModal/EditVehicleModal';
@@ -154,7 +155,7 @@ const VehicleDetailPage = () => {
                             >
                                 Contacta a un asesor
                                 <img 
-                                    src="/src/assets/images/Iconos/wa.png" 
+                                    src={waIcon}
                                     alt="WhatsApp" 
                                     className={styles.whatsappIconFloat}
                                 />

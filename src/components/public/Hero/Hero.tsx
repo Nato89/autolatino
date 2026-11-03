@@ -1,6 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 import styles from './Hero.module.css';
 import Slide from './Slide.tsx';
+import autoImage from '../../../assets/images/hero/auto.png';
+import financiacionImage from '../../../assets/images/hero/financiacion.png';
+import seguroImage from '../../../assets/images/hero/seguro.png';
+import venderImage from '../../../assets/images/hero/vender.png';
+import contactoImage from '../../../assets/images/hero/contacto.png';
 
 const Hero = () => {
   
@@ -14,7 +19,7 @@ const Hero = () => {
         subtitle: 'Compra, vende o financia tu vehículo con las mejores condiciones del mercado. Más de 200 vehículos disponibles y créditos desde el 1.4% mensual.',
         buttonText: 'VER CATÁLOGO',
         buttonAction: 'catalogo',
-        image: '/src/assets/images/hero/auto.png',
+        image: autoImage,
         hasIcon: false,
     },
     {
@@ -23,7 +28,7 @@ const Hero = () => {
         subtitle: 'Has la viabilidad ya mismo, sin costo alguno, y te damos respuesta de 1 a 2 días hábiles.',
         buttonText: 'REALÍZALA AQUÍ',
         buttonAction: 'credito',
-        image: '/src/assets/images/hero/financiacion.png',
+        image: financiacionImage,
         hasIcon: false,
     },
     {
@@ -32,7 +37,7 @@ const Hero = () => {
         subtitle: 'Has la viabilidad ya mismo, sin costo alguno, y te damos respuesta de 1 a 2 días hábiles.',
         buttonText: 'COTIZA AQUÍ',
         buttonAction: 'whatsapp-seguro',
-        image: '/src/assets/images/hero/seguro.png',
+        image: seguroImage,
         hasIcon: false,
     },
     {
@@ -41,7 +46,7 @@ const Hero = () => {
         title2: '<span class="gold">nosotros te ayudamos!!!</span>',
         buttonText: 'VENDE AQUÍ',
         buttonAction: 'whatsapp-vende',
-        image: '/src/assets/images/hero/vender.png',
+        image: venderImage,
         hasIcon: true,
     },
     {
@@ -50,7 +55,7 @@ const Hero = () => {
         title2: '<span class="gold">Te esperamos!</span>',
         buttonText: 'CONTÁCTANOS',
         buttonAction: 'contacto',
-        image: '/src/assets/images/hero/contacto.png',
+        image: contactoImage,
         hasIcon: false,
     }
 ];
@@ -125,4 +130,3 @@ const Hero = () => {
 }   
 
 export default Hero;
-
